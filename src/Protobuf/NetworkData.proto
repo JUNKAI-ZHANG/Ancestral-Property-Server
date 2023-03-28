@@ -1,0 +1,110 @@
+syntax ="proto3";
+
+package Net;
+
+message LoginData
+{
+    string username = 1;
+    string passwd = 2;
+    enum Operation
+    {
+        Login = 0;
+        Register = 1;
+    }
+
+    Operation opt = 3;
+}
+
+message LoginResponse
+{
+    bool result = 1;
+    string msg = 2;
+    string userid = 3;
+    uint32 token = 4;
+
+    enum Operation
+    {
+        Login = 0;
+        Register = 1;
+    }
+
+    Operation opt = 5;
+}
+
+message CharacterData
+{
+    enum MoveOpt
+    {
+        NONE = 0;
+        UP = 1;
+        DOWN = 2;
+        LEFT = 3;
+        RIGHT = 4;
+    }
+
+    MoveOpt move = 1;
+
+    enum AbilityOpt
+    {
+        None = 0;
+        Attack = 1;
+    }
+
+    AbilityOpt Skill = 2;
+
+    string userid = 3;
+}
+
+message UserMoney{
+    string userid = 1;
+    int32 money = 2;
+    enum Operation
+    {
+        Get = 0;
+        Add = 1;
+        Sub = 2;
+    }
+    Operation opt = 3;
+}
+
+message LoginOut
+{
+    string userid = 1;
+    string reason = 2;
+}
+
+message GameState
+{
+    int32 bGameStart = 1;
+}
+
+message Frame
+{
+    int64 time = 1;
+}
+
+message HashString
+{
+    int32 frame = 1;
+    string hash = 2;
+}
+
+message ServerInfo
+{
+    string ip = 1;
+    int32 port = 2;
+    int32 server_free_level = 3;
+    int32 server_type = 4;
+
+    enum Operation
+    {
+        Register = 0;
+        RequstAssgin = 1;
+        Connect = 2;
+    }
+
+    Operation opt = 5;
+}
+
+
+

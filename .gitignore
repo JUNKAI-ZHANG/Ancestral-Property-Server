@@ -1,2 +1,10 @@
-/cmake-*/
-.idea
+.vscode
+src/CMakeFiles
+src/lib
+src/cmake_install.cmake
+src/CMakeCache.txt
+src/CenterServer
+src/DBServer
+src/GateServer
+src/LogicServer
+Makefile

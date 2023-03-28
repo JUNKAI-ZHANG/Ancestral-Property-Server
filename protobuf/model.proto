@@ -1,7 +1,0 @@
-syntax = "proto3";
-
-message UserModel{
-  int32 id = 1;
-  string username = 2;
-  string password = 3;
-}

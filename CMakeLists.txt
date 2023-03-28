@@ -1,32 +1,66 @@
-cmake_minimum_required(VERSION 3.16)
-project(homework-network)
+cmake_minimum_required(VERSION 3.3.2)
 
-set(CMAKE_CXX_STANDARD 14)
-link_directories(/usr/local/lib)
+set(CMAKE_CXX_STANDARD 11)
 
-include_directories(${PROJECT_SOURCE_DIR}/lib)
-include_directories(${PROJECT_SOURCE_DIR}/logic)
-include_directories(${PROJECT_SOURCE_DIR}/protobuf/proto_out_c)
-include_directories(${PROJECT_SOURCE_DIR}/protobuf)
-include_directories(${PROJECT_SOURCE_DIR}/mysqllib)
-include_directories(${PROJECT_SOURCE_DIR}/model)
-include_directories(${PROJECT_SOURCE_DIR}/network)
-aux_source_directory(${PROJECT_SOURCE_DIR}/logic logic)
-aux_source_directory(${PROJECT_SOURCE_DIR}/protobuf/proto_out_c proto)
-aux_source_directory(${PROJECT_SOURCE_DIR}/mysqllib mysqllib)
-aux_source_directory(${PROJECT_SOURCE_DIR}/model model)
-aux_source_directory(${PROJECT_SOURCE_DIR}/network network)
+# 设置静态库的输出目录
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
-add_executable(client client.cpp ${network} ${proto})
-target_link_libraries(client protobuf)
+# 设置动态库的输出目录
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/dll)
 
-add_executable(logic_server logic_server.cpp ${network} ${proto} ${logic})
-target_link_libraries(logic_server protobuf)
+project(Holy)
 
-add_executable(dbserver dbserver.cpp ${network} ${mysqllib} ${proto})
-target_link_libraries(dbserver mysqlclient protobuf hiredis)
+# ADD DLL-PATH
+link_directories(/usr/lib64/mysql)
 
-add_executable(gate_server gate_server.cpp ${network} ${proto})
-target_link_libraries(gate_server protobuf)
+add_library(ProtoUtilLib STATIC
+    ./Protobuf/NetworkData.pb.cc
+    ./Tool/ProtoUtil.cpp
+)
 
-add_compile_options(PUBLIC -g)
+add_library(CommonUtilLib STATIC
+    ./Tool/EpollMgr.cpp 
+    ./Tool/Event.cpp 
+    ./Tool/RingBuffer.cpp 
+    ./Tool/Timer.cpp 
+)
+
+add_library(BaseObj OBJECT
+    ./Source/ServerBase.cpp
+    ./Source/FuncServer.cpp
+)
+
+set(libraries_to_link
+    protobuf
+    pthread
+    mysqlclient
+    hiredis
+    CommonUtilLib
+    ProtoUtilLib
+)
+
+# include_directories(./Header)
+
+add_executable(CenterServer
+    $<TARGET_OBJECTS:BaseObj>
+    ./Source/CenterServer.cpp
+)
+target_link_libraries(CenterServer  ${libraries_to_link})
+
+add_executable(DBServer
+    $<TARGET_OBJECTS:BaseObj>
+    ./Source/DBServer.cpp
+)
+target_link_libraries(DBServer  ${libraries_to_link})
+
+add_executable(GateServer
+    $<TARGET_OBJECTS:BaseObj>
+    ./Source/GateServer.cpp 
+)
+target_link_libraries(GateServer  ${libraries_to_link})
+
+add_executable(LogicServer
+    $<TARGET_OBJECTS:BaseObj>
+    ./Source/LogicServer.cpp
+)
+target_link_libraries(LogicServer  ${libraries_to_link})
