@@ -1,8 +1,9 @@
 #ifndef ENCRYPTION_HPP
 #define ENCRYPTION_HPP
 
-#include <stdint.h>
+#include <chrono>
 #include <string>
+#include <stdint.h>
 
 class Encryption
 {
@@ -11,6 +12,9 @@ public:
     {
         std::string _suffix = GenerationSuffix(_username, _passwd);
         uint32_t _hash_redix_ = 1, _hash_ret_ = 0;
+
+        std::mt19937 rng(chrono::system_clock::now().time_since_epoch().count());
+
         for (const auto &it : _username)
         {
             _hash_ret_ += _hash_redix_ * (uint32_t)it;
@@ -27,7 +31,7 @@ public:
             _hash_ret_ += _hash_redix_ * (uint32_t)it;
             _hash_redix_ *= 114514;
         }
-        return _hash_ret_;
+        return _hash_ret_ * (rng() % uint32_t);
     }
     static std::string GenerationSuffix(const std::string &_username, const std::string &_passwd)
     {
