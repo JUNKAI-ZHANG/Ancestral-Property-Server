@@ -20,6 +20,7 @@ ServerBase::~ServerBase()
 
 int ServerBase::StartListener(int port)
 {
+
     // 创建 非阻塞监听socket
     listen_fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
     if (listen_fd == -1)
@@ -110,11 +111,13 @@ void ServerBase::HandleConnEvent(std::map<int, RingBuffer *> &conn, int conn_fd)
     }
 
     // Receive data from client
+
     while ((tmp_received = recv(conn_fd, tmp, TMP_BUFFER_SIZE, MSG_DONTWAIT)) > 0)
     {
         if (!conn[conn_fd]->AddBuffer(tmp, tmp_received))
         {
             std::cerr << "Client Read Buffer is Full" << std::endl;
+
         }
     }
 
@@ -122,6 +125,7 @@ void ServerBase::HandleConnEvent(std::map<int, RingBuffer *> &conn, int conn_fd)
     {
         if (errno == EAGAIN || errno == EWOULDBLOCK)
         {
+
             // std::cout << "data read over" << std::endl;
             HandleReceivedMsg(conn[conn_fd], conn_fd);
         }
@@ -298,7 +302,6 @@ void ServerBase::BootServer(int port)
             close(listen_fd);
             return;
         }
-        std::cout << "123SBSB" << std::endl;
         // 主线程处理监听epoll
         listen_epoll->WaitEpollEvent(&ServerBase::HandleListenerEvent, this, ref(connections));
     }

@@ -4,7 +4,7 @@
 #define HEAD_SIZE       12
 #define MAX_CLIENTS     128
 #define TMP_BUFFER_SIZE 1024
-#define MAX_BUFFER_SIZE 1048576
+#define MAX_BUFFER_SIZE 131072
 
 /*
  * @brief 服务器类型

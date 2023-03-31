@@ -70,6 +70,7 @@ static Message *NewLoginResponseMessage(bool ret, std::string msg, std::string u
     Message *message = new Message;
 
     LoginProto::LoginResponse *body = new LoginProto::LoginResponse;
+    message->body = new MessageBody;
     body->set_result(ret);
     body->set_msg(msg);
     body->set_userid(userid);
@@ -77,10 +78,9 @@ static Message *NewLoginResponseMessage(bool ret, std::string msg, std::string u
     body->set_opt(opt);
     message->body->message = body;
 
-    MessageHead *head = new MessageHead;
-    head->m_packageSize = message->body->length();
-    head->m_packageType = BODYTYPE::LoginResponse;
-    message->head = head;
+    message->head = new MessageHead;
+    message->head->m_packageSize = message->body->length();
+    message->head->m_packageType = BODYTYPE::LoginResponse;
 
     return message;
 }
@@ -91,6 +91,7 @@ static Message *NewServerInfoMessage(std::string ip, int port, SERVER_TYPE type,
     Message *message = new Message;
 
     ServerProto::ServerInfo *body = new ServerProto::ServerInfo;
+    message->body = new MessageBody;
     body->set_ip(ip);
     body->set_port(port);
     body->set_server_type(type);
@@ -98,10 +99,9 @@ static Message *NewServerInfoMessage(std::string ip, int port, SERVER_TYPE type,
     body->set_server_free_level(level);
     message->body->message = body;
 
-    MessageHead *head = new MessageHead;
-    head->m_packageSize = message->body->length();
-    head->m_packageType = BODYTYPE::ServerInfo;
-    message->head = head;
+    message->head = new MessageHead;
+    message->head->m_packageSize = message->body->length();
+    message->head->m_packageType = BODYTYPE::ServerInfo;
 
     return message;
 }
