@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package ServerProto;
+
+message ServerInfo
+{
+    string ip = 1;
+    int32 port = 2;
+    int32 server_free_level = 3;
+    int32 server_type = 4;
+
+    enum Operation
+    {
+        Register = 0;
+        RequstAssgin = 1;
+        Connect = 2;
+    }
+
+    Operation opt = 5;
+}
+

@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package FrameProto;
+
+enum OperateType {
+  EnterRoom = 0;
+  Keyboard = 1; // keycodes
+}
+
+message PlayerOperate {
+  int32 uid = 1;
+  OperateType type = 2;
+  repeated int32 data = 3;
+}
+
+message GameReplay {
+  repeated Frame frames = 1;
+}
+
+message CharacterData
+{
+    enum MoveOpt
+    {
+        NONE = 0;
+        UP = 1;
+        DOWN = 2;
+        LEFT = 3;
+        RIGHT = 4;
+    }
+
+    MoveOpt move = 1;
+
+    enum AbilityOpt
+    {
+        None = 0;
+        Attack = 1;
+    }
+
+    AbilityOpt Skill = 2;
+
+    string userid = 3;
+}
+
+message Frame
+{
+    int64 time = 1;
+}
+
+message HashString
+{
+    int32 frame = 1;
+    string hash = 2;
+}
