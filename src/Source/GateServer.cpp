@@ -1,4 +1,3 @@
-
 #include "../Header/GateServer.h"
 
 GateServer::GateServer()
@@ -76,84 +75,46 @@ void GateServer::DisconnectAllClients()
     }
 }
 
-void GateServer::OnMsgBodyAnalysised(Header head, const uint8_t *body, uint32_t length, int fd)
+void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t length, int fd)
 {
-    bool parseRet = false;
-    BODYTYPE type = head.type;
+    ServerBase::OnMsgBodyAnalysised(msg, body, length, fd);
 
-    Net::LoginData loginData;
-    Net::LoginResponse loginResp;
-    Net::ServerInfo server_info;
-    Net::UserMoney userMoney;
-
-    switch (type)
+    switch (msg->head->m_packageType)
     {
-    case BODYTYPE::LoginData:
-        loginData = ProtoUtil::ParseBodyToLoginData(body, length, parseRet);
-
-        // false 的情况已在util的函数里处理
-        if (parseRet)
-        {
-            user_fd_record[loginData.username()] = fd;
-            // 转发给db server处理
-            SendMsg(BODYTYPE::LoginData, length, body, db_server_client);
-        }
-
-        break;
-    case BODYTYPE::LoginResponse:
-        loginResp = ProtoUtil::ParseBodyToLoginResponse(body, length, parseRet);
-
-        // false 的情况已在util的函数里处理
-        if (parseRet)
-        {
-            if (!user_fd_record.count(loginResp.userid()))
-            {
-                return;
-            }
-
-            int client_fd = user_fd_record[loginResp.userid()];
-            SendMsg(BODYTYPE::LoginResponse, length, body, client_fd);
-
-            if (loginResp.opt() == Net::LoginResponse_Operation_Register)
-            {
-                // 注册操作 移除临时record
-                user_fd_record.erase(loginResp.userid());
-            }
-            else if (!loginResp.result())
-            {
-                // 登录失败 移除record
-                user_fd_record.erase(loginResp.userid());
-            }
-        }
-
-        break;
-    case BODYTYPE::UserMoney:
-        /* code */
-        userMoney = ProtoUtil::ParseBodyToUserMoney(body, length, parseRet);
-
-        // false 的情况已在util的函数里处理
-        if (parseRet && fd != db_server_client)
-        {
-            // 转发给db server处理
-            SendMsg(BODYTYPE::UserMoney, length, body, db_server_client);
-        }
-        else
-        {
-            if (!user_fd_record.count(userMoney.userid()))
-            {
-                return;
-            }
-            int client_fd = user_fd_record[userMoney.userid()];
-            SendMsg(BODYTYPE::UserMoney, length, body, client_fd);
-        }
-
-        break;
-    default:
-
+    case BODYTYPE::LoginRequest:
+    {
+        LoginProto::LoginRequest *body1 = reinterpret_cast<LoginProto::LoginRequest *>(msg->body->message);
+        user_fd_record[body1->username()] = fd;
+        // 转发给db server处理
+        SendMsg(msg, db_server_client);
         break;
     }
+    case BODYTYPE::LoginResponse:
+    {
+        LoginProto::LoginResponse *body2 = reinterpret_cast<LoginProto::LoginResponse *>(msg->body->message);
+        if (!user_fd_record.count(body2->userid()))
+        {
+            return;
+        }
 
-    FuncServer::OnMsgBodyAnalysised(head, body, length, fd);
+        int client_fd = user_fd_record[body2->userid()];
+        SendMsg(msg, client_fd);
+
+        if (body2->opt() == LoginProto::LoginResponse_Operation_Register)
+        {
+            // 注册操作 移除临时record
+            user_fd_record.erase(body2->userid());
+        }
+        else if (!(body2->result()))
+        {
+            // 登录失败 移除record
+            user_fd_record.erase(body2->userid());
+        }
+        break;
+    }
+    }
+
+    FuncServer::OnMsgBodyAnalysised(msg, body, length, fd);
 }
 
 int main(int argc, char **argv)

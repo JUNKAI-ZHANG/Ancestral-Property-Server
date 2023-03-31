@@ -2,8 +2,9 @@
 #define _DBSERVER_H
 
 #include <mysql/mysql.h>
-#include <hiredis/hiredis.h>
 #include <hiredis/async.h>
+#include <hiredis/hiredis.h>
+
 #include "FuncServer.h"
 
 class DBServer : public FuncServer
@@ -27,9 +28,7 @@ private:
     redisContext *redis = nullptr;
 
 private:
-    void HandleUserLogin(Net::LoginData &data, int fd);
-
-    void HandleUserMoney(Net::UserMoney &data, int fd);
+    void HandleUserLogin(Message *msg, int fd);
 
     /* 尝试连接其他类型功能服务器 */
     virtual void TryToConnectAvailabeServer();
@@ -51,10 +50,7 @@ protected:
 
     bool ChangeUserMoney(std::string username, int money, int&);
 
-    virtual void OnMsgBodyAnalysised(Header head,
-                                     const uint8_t *body,
-                                     uint32_t length,
-                                     int fd);
+    virtual void OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t length, int fd);
 
                                      
 public:

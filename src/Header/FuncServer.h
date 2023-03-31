@@ -24,7 +24,7 @@ protected:
     int db_server_client = -1;
 
 private:
-    void HandleServerInfo(Net::ServerInfo &data, int fd);
+    void HandleServerInfo(Message *msg, int fd);
 
 protected:
     /* 尝试连接其他类型功能服务器 */
@@ -33,10 +33,7 @@ protected:
     /* 申请一个服务器 */
     void ApplyServerByType(SERVER_TYPE);
 
-    virtual void OnMsgBodyAnalysised(Header head,
-                                     const uint8_t *body,
-                                     uint32_t length,
-                                     int fd);
+    virtual void OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t length, int fd);
 
     /*
      * @brief 连接到center server后进行的初始化操作

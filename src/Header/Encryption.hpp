@@ -2,6 +2,7 @@
 #define ENCRYPTION_HPP
 
 #include <chrono>
+#include <random>
 #include <string>
 #include <stdint.h>
 
@@ -13,7 +14,7 @@ public:
         std::string _suffix = GenerationSuffix(_username, _passwd);
         uint32_t _hash_redix_ = 1, _hash_ret_ = 0;
 
-        std::mt19937 rng(chrono::system_clock::now().time_since_epoch().count());
+        std::mt19937 rng(std::chrono::system_clock::now().time_since_epoch().count());
 
         for (const auto &it : _username)
         {
@@ -31,7 +32,7 @@ public:
             _hash_ret_ += _hash_redix_ * (uint32_t)it;
             _hash_redix_ *= 114514;
         }
-        return _hash_ret_ * (rng() % uint32_t);
+        return _hash_ret_ * rng();
     }
     static std::string GenerationSuffix(const std::string &_username, const std::string &_passwd)
     {

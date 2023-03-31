@@ -33,20 +33,12 @@ void FuncServer::CloseServer()
 
 void FuncServer::ApplyServerByType(SERVER_TYPE InType)
 {
-    uint8_t *msg = nullptr;
     int msg_length = 0;
 
-    msg = ProtoUtil::SerializeServerInfoToArray("",
-                                                0,
-                                                InType,
-                                                Net::ServerInfo_Operation_RequstAssgin,
-                                                SERVER_FREE_LEVEL::FREE,
-                                                msg_length);
+    Message *msg = NewServerInfoMessage("", 0, InType, ServerProto::ServerInfo_Operation_RequstAssgin, SERVER_FREE_LEVEL::FREE);
 
-    if (msg == nullptr)
-        return;
+    SendMsg(msg, center_server_client);
 
-    SendMsg(BODYTYPE::ServerInfo, msg_length, msg, center_server_client);
     delete msg;
 }
 
@@ -56,21 +48,15 @@ void FuncServer::OnConnectToCenterServer()
 
 void FuncServer::SendSelfInfoToCenter()
 {
-    uint8_t *msg = nullptr;
     int msg_length = 0;
 
-    msg = ProtoUtil::SerializeServerInfoToArray("127.0.0.1",
-                                                this->listen_port,
-                                                server_type,
-                                                Net::ServerInfo_Operation_Register,
-                                                SERVER_FREE_LEVEL::FREE,
-                                                msg_length);
+    Message *msg = NewServerInfoMessage("127.0.0.1", this->listen_port, server_type, ServerProto::ServerInfo_Operation_Register, SERVER_FREE_LEVEL::FREE );
 
     if (msg == nullptr)
         return;
 
     // 如果发送失败 意味和center server断开连接 尝试重连
-    if (!SendMsg(BODYTYPE::ServerInfo, msg_length, msg, center_server_client))
+    if (!SendMsg(msg, center_server_client))
     {
         // 连接中心服务器
         if (!ConnectToOtherServer(center_ip, center_port, center_server_client))
@@ -107,35 +93,25 @@ bool FuncServer::OnListenerStart()
     return true;
 }
 
-void FuncServer::OnMsgBodyAnalysised(Header head, const uint8_t *body, uint32_t length, int fd)
+void FuncServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t length, int fd)
 {
-    bool parseRet = false;
-    BODYTYPE type = head.type;
-    
-    Net::ServerInfo server_info;
-    switch (type)
+    switch (msg->head->m_packageType)
     {
     case BODYTYPE::ServerInfo:
-        /* code */
-        server_info = ProtoUtil::ParseBodyToServerInfo(body, length, parseRet);
-
-        // false 的情况已在util的函数里处理
-        if (parseRet)
-        {
-            HandleServerInfo(server_info, fd);
-        }
+    {
+        HandleServerInfo(msg, fd);
 
         break;
-    default:
-        break;
+    }
     }
 }
 
-void FuncServer::HandleServerInfo(Net::ServerInfo &data, int fd)
+void FuncServer::HandleServerInfo(Message *msg, int fd)
 {
-    if (data.opt() == Net::ServerInfo_Operation_Connect)
+    ServerProto::ServerInfo *body = reinterpret_cast<ServerProto::ServerInfo *>(msg->body->message);
+    if (msg->head->m_packageType == ServerProto::ServerInfo_Operation_Connect)
     {
-        if (static_cast<SERVER_TYPE>(data.server_type()) == SERVER_TYPE::LOGIC)
+        if (static_cast<SERVER_TYPE>(body->server_type()) == SERVER_TYPE::LOGIC)
         {
             // 如果连接已存在 return
             if (logic_server_client != -1)
@@ -143,7 +119,7 @@ void FuncServer::HandleServerInfo(Net::ServerInfo &data, int fd)
                 return;
             }
 
-            if (!ConnectToOtherServer(data.ip(), data.port(), logic_server_client))
+            if (!ConnectToOtherServer(body->ip(), body->port(), logic_server_client))
             {
                 std::cerr << "Failed to connect Logic server, boot it first\n";
                 return;
@@ -159,7 +135,7 @@ void FuncServer::HandleServerInfo(Net::ServerInfo &data, int fd)
             printf("connect to logic server success \n");
         }
 
-        else if (static_cast<SERVER_TYPE>(data.server_type()) == SERVER_TYPE::DATABASE)
+        else if (static_cast<SERVER_TYPE>(body->server_type()) == SERVER_TYPE::DATABASE)
         {
             // 如果连接已存在 return
             if (db_server_client != -1)
@@ -167,7 +143,7 @@ void FuncServer::HandleServerInfo(Net::ServerInfo &data, int fd)
                 return;
             }
 
-            if (!ConnectToOtherServer(data.ip(), data.port(), db_server_client))
+            if (!ConnectToOtherServer(body->ip(), body->port(), db_server_client))
             {
                 std::cerr << "Failed to connect database server, boot it first\n";
                 return;

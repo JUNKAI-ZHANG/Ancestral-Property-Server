@@ -1,12 +1,12 @@
-
 #ifndef _EPOLLMGR_H_
 #define _EPOLLMGR_H_
 
 #include <iostream>
-#include <sys/epoll.h>
 #include <unistd.h>
 #include <functional>
-#include "../Header/profile.h"
+#include <sys/epoll.h>
+
+#include "../Header/Profile.h"
 
 /*
  * Epoll 实例管理类
@@ -42,7 +42,7 @@ public:
         epoll_fd = epoll_create(1);
         if (epoll_fd == -1)
         {
-            std::cerr << "Failed to create epoll instance\n";
+            std::cerr << "Failed to create epoll instance" << std::endl;
             return -1;
         }
 
@@ -60,7 +60,7 @@ public:
 
         if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, fd, &event) == -1)
         {
-            std::cerr << "Failed to add connection_fd to epoll instance\n";
+            std::cerr << "Failed to add connection_fd to epoll instance" << std::endl;
             return -1;
         }
 
@@ -87,7 +87,7 @@ public:
             int nfds = epoll_wait(epoll_fd, events, 10, -1);
             if (nfds == -1)
             {
-                std::cerr << "Failed to wait for events\n";
+                std::cerr << "Failed to wait for events" << std::endl;
                 break;
             }
 

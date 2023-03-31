@@ -26,20 +26,15 @@ void LogicServer::OnConnectToCenterServer()
     TryToConnectAvailabeServer();
 }
 
-void LogicServer::OnMsgBodyAnalysised(Header head, const uint8_t *body, uint32_t length, int fd)
+void LogicServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t length, int fd)
 {
-    // code
-    bool parseRet = false;
-    BODYTYPE type = head.type;
-
-    switch (type)
+    switch (msg->head->m_packageType)
     {
     default:
-
         break;
     }
 
-    FuncServer::OnMsgBodyAnalysised(head, body, length, fd);
+    FuncServer::OnMsgBodyAnalysised(msg, body, length, fd);
 }
 
 void LogicServer::TryToConnectAvailabeServer()

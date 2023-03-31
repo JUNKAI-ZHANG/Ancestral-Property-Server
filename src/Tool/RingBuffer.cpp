@@ -3,8 +3,8 @@
 #include <iostream>
 #include <memory>
 
-#include "RingBuffer.h"
-#include "../Header/profile.h"
+#include "../Header/Profile.h"
+#include "../Header/RingBuffer.h"
 
 RingBuffer::RingBuffer()
 {

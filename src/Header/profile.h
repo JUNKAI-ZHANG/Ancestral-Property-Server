@@ -1,14 +1,13 @@
 #ifndef _PROFILE_H
 #define _PROFILE_H
 
-#define MAX_CLIENTS 100
-#define MAX_BUFFER_SIZE 1048576
-#define HEAD_SIZE 12
+#define HEAD_SIZE       12
+#define MAX_CLIENTS     128
 #define TMP_BUFFER_SIZE 1024
+#define MAX_BUFFER_SIZE 1048576
 
 /*
- * @brief
- * 服务器类型
+ * @brief 服务器类型
  */
 enum SERVER_TYPE
 {
@@ -20,8 +19,7 @@ enum SERVER_TYPE
 };
 
 /*
- * @brief
- * 服务器繁忙程度
+ * @brief 服务器繁忙程度
  */
 enum SERVER_FREE_LEVEL
 {
@@ -29,6 +27,23 @@ enum SERVER_FREE_LEVEL
     COMMON = 1,
     BUSY = 2,
     DOWN = 3 //宕机
+};
+
+/*
+ * @brief 包体类型
+ */
+enum BODYTYPE
+{
+    ErrorPackage = -1,
+    LoginRequest = 0,
+    LoginResponse,
+    LoginOut,
+    Frame,
+    GameState,
+    HashString,
+
+    /* server之间通信协议 */
+    ServerInfo = 100
 };
 
 #endif

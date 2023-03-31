@@ -4,11 +4,18 @@
 #include <map>
 #include <vector>
 #include <cstring>
-#include "profile.h"
-#include "../Tool/RingBuffer.h"
-#include "../Tool/EpollMgr.cpp"
-#include "../Tool/ProtoUtil.cpp"
+#include <iostream>
+#include <unistd.h>
+#include <arpa/inet.h>
+#include <sys/socket.h>
+
+#include "Profile.h"
+#include "RingBuffer.h"
+#include "MessageUtils.h"
+
 #include "../Tool/Timer.cpp"
+#include "../Tool/EpollMgr.cpp"
+
 
 class ServerBase
 {
@@ -57,7 +64,7 @@ protected:
 protected:
     bool ConnectToOtherServer(std::string ip, int port, int &fd);
 
-    bool SendMsg(BODYTYPE type, size_t totalSize, const uint8_t *data_array, int fd);
+    bool SendMsg(Message *msg, int fd);
 
     // if hasSelf = false, multicast will not send to self
     void MulticastMsg(size_t totalSize, uint8_t *data_array, int self_fd, bool hasSelf = true);
@@ -68,11 +75,9 @@ protected:
     virtual bool OnListenerStart();
     
     /*
-     * @brief
-     *
-     * 子类可以处理自己想处理的类型, header里包含token信息需要处理
+     * @brief 子类可以处理自己想处理的类型, header里包含token信息需要处理
      */
-    virtual void OnMsgBodyAnalysised(Header head, const uint8_t *body, uint32_t length, int fd) = 0;
+    virtual void OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t length, int fd);
 
 public:
     explicit ServerBase();

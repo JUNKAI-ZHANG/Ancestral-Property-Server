@@ -41,13 +41,10 @@ private:
 
     void RemoveServer(const Server_Info *);
 
-    void HandleServerInfo(Net::ServerInfo &data, int fd);
+    void HandleServerInfo(Message *msg, int fd);
 
 protected:
-    virtual void OnMsgBodyAnalysised(Header head,
-                                     const uint8_t *body,
-                                     uint32_t length,
-                                     int fd);
+    virtual void OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t length, int fd);
 
 public:
     explicit CenterServer();

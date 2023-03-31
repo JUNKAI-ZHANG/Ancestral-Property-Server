@@ -27,63 +27,39 @@ void DBServer::TryToConnectAvailabeServer()
     // DBServer 无需连接其他功能服务器
 }
 
-void DBServer::OnMsgBodyAnalysised(Header head, const uint8_t *body, uint32_t length, int fd)
+void DBServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t length, int fd)
 {
-    bool parseRet = false;
-    BODYTYPE type = head.type;
+    ServerBase::OnMsgBodyAnalysised(msg, body, length, fd);
 
-    Net::LoginData loginData;
-    Net::UserMoney userMoney;
-
-    switch (type)
+    switch (msg->head->m_packageType)
     {
-    case BODYTYPE::LoginData:
-        /* code */
-        loginData = ProtoUtil::ParseBodyToLoginData(body, length, parseRet);
-
-        // false 的情况已在util的函数里处理
-        if (parseRet)
-        {
-            printf("%s %s try to login/register \n", loginData.username().c_str(), loginData.passwd().c_str());
-            HandleUserLogin(loginData, fd);
-        }
-
-        break;
-    case BODYTYPE::UserMoney:
-        /* code */
-        userMoney = ProtoUtil::ParseBodyToUserMoney(body, length, parseRet);
-
-        // false 的情况已在util的函数里处理
-        if (parseRet)
-        {
-            HandleUserMoney(userMoney, fd);
-        }
-
-        break;
-    default:
-
+    case BODYTYPE::LoginRequest:
+    {
+        LoginProto::LoginRequest *body = reinterpret_cast<LoginProto::LoginRequest *>(msg->body->message);
+        printf("%s %s try to login/register \n", body->username().c_str(), body->passwd().c_str());
+        HandleUserLogin(msg, fd);
         break;
     }
+    }
 
-    FuncServer::OnMsgBodyAnalysised(head, body, length, fd);
+    FuncServer::OnMsgBodyAnalysised(msg, body, length, fd);
 }
 
 // ---------------------------------------------------------------------
 // network msg handle
 // ---------------------------------------------------------------------
-void DBServer::HandleUserLogin(Net::LoginData &data, int fd)
+void DBServer::HandleUserLogin(Message *msg, int fd)
 {
-    Net::LoginData_Operation opt = data.opt();
-
+    LoginProto::LoginRequest *body = reinterpret_cast<LoginProto::LoginRequest *>(msg->body->message);
     int ret = -1;
 
-    if (opt == Net::LoginData_Operation_Login)
+    if (msg->head->m_packageType == LoginProto::LoginRequest_Operation_Login)
     {
-        ret = QueryUser(data.username(), data.passwd());
+        ret = QueryUser(body->username(), body->passwd());
     }
-    else if (opt == Net::LoginData_Operation_Register)
+    else if (msg->head->m_packageType == LoginProto::LoginRequest_Operation_Register)
     {
-        ret = InsertUser(data.username(), data.passwd());
+        ret = InsertUser(body->username(), body->passwd());
     }
 
     // 异常错误
@@ -92,48 +68,45 @@ void DBServer::HandleUserLogin(Net::LoginData &data, int fd)
         return;
     }
 
-    uint8_t *response = nullptr;
-    int resp_length = 0;
+    std::string resp_msg;
+    LoginProto::LoginResponse_Operation resp_opt;
 
-    std::string msg;
-    Net::LoginResponse_Operation resp_opt;
-
-    if (opt == Net::LoginData_Operation_Login)
+    if (msg->head->m_packageType == LoginProto::LoginRequest_Operation_Login)
     {
         if (ret == 1)
         {
-            msg = "login success";
+            resp_msg = "login success";
         }
         else if (ret == 0)
         {
-            msg = "passwd error";
+            resp_msg = "passwd error";
         }
-        resp_opt = Net::LoginResponse_Operation_Login;
+        resp_opt = LoginProto::LoginResponse_Operation_Login;
     }
-    else if (opt == Net::LoginData_Operation_Register)
+    else if (msg->head->m_packageType == LoginProto::LoginRequest_Operation_Register)
     {
         if (ret == 1)
         {
-            msg = "register success";
+            resp_msg = "register success";
         }
         else if (ret == 0)
         {
-            msg = "register failed";
+            resp_msg = "register failed";
         }
-        resp_opt = Net::LoginResponse_Operation_Register;
+        resp_opt = LoginProto::LoginResponse_Operation_Register;
     }
 
     uint32_t token = 0;
     if (ret == 1)
     {
-        token = Encryption::GenerateToken(data.username(), data.passwd());
-        redisReply *reply = (redisReply *)redisCommand(redis, "set %s %u", data.username().c_str(), token);
+        token = Encryption::GenerateToken(body->username(), body->passwd());
+        redisReply *reply = (redisReply *)redisCommand(redis, "set %s %u", body->username().c_str(), token);
         if (reply != nullptr)
         {
             // 释放 reply 对象
             freeReplyObject(reply);
 
-            reply = (redisReply *)redisCommand(redis, "EXPIRE %s %d", data.username().c_str(), 600); // 600s过期
+            reply = (redisReply *)redisCommand(redis, "EXPIRE %s %d", body->username().c_str(), 600); // 600s过期
 
             if (reply != nullptr)
             {
@@ -144,46 +117,12 @@ void DBServer::HandleUserLogin(Net::LoginData &data, int fd)
     }
     // std::cout << Encryption::GenerateToken(data.username(), data.passwd()) << std::endl;
 
-    response = ProtoUtil::SerializeLoginResponseToArray(ret, msg, resp_length, data.username(), token, resp_opt);
+    Message *message = NewLoginResponseMessage(ret, resp_msg, body->username(), token, resp_opt);
 
-    if (response != nullptr)
+    if (message != nullptr)
     {
-        SendMsg(BODYTYPE::LoginResponse, resp_length, response, fd);
-        delete response;
-    }
-}
-
-void DBServer::HandleUserMoney(Net::UserMoney &data, int fd)
-{
-    auto opt = data.opt();
-
-    int allMoney = 0;
-
-    int optMoney = data.money();
-
-    if (opt == Net::UserMoney_Operation_Get)
-    {
-        optMoney = 0;
-    }
-    else if (opt == Net::UserMoney_Operation_Sub)
-    {
-        optMoney *= -1;
-    }
-
-    bool ret = ChangeUserMoney(data.userid(), optMoney, allMoney);
-
-    uint8_t *response = nullptr;
-    int resp_length = 0;
-
-    response = ProtoUtil::SerializeUserMoneyToArray(data.userid(),
-                                                    allMoney,
-                                                    Net::UserMoney_Operation_Get,
-                                                    resp_length);
-
-    if (response != nullptr)
-    {
-        SendMsg(BODYTYPE::UserMoney, resp_length, response, fd);
-        delete response;
+        SendMsg(message, fd);
+        delete message;
     }
 }
 

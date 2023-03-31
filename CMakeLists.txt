@@ -14,8 +14,10 @@ project(Holy)
 link_directories(/usr/lib64/mysql)
 
 add_library(ProtoUtilLib STATIC
-    ./Protobuf/NetworkData.pb.cc
-    ./Tool/ProtoUtil.cpp
+    ./Protobuf/Login.pb.cc
+    ./Protobuf/Server.pb.cc
+    ./Protobuf/Frame.pb.cc
+    ./Tool/Message.cpp
 )
 
 add_library(CommonUtilLib STATIC

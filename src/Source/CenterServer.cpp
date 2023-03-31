@@ -7,6 +7,7 @@ CenterServer::CenterServer()
 
 CenterServer::~CenterServer()
 {
+
 }
 
 void CenterServer::CloseClientSocket(int fd)
@@ -117,81 +118,73 @@ void CenterServer::RemoveServer(const Server_Info *info)
     printf("%s:%d is offline\n", info->ip.c_str(), info->port);
 }
 
-void CenterServer::OnMsgBodyAnalysised(Header head, const uint8_t *body, uint32_t length, int fd)
+void CenterServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t length, int fd)
 {
-    bool parseRet = false;
-    BODYTYPE type = head.type;
+    ServerBase::OnMsgBodyAnalysised(msg, body, length, fd);
 
-    Net::ServerInfo server_info;
-
-    switch (type)
+    switch (msg->head->m_packageType)
     {
     case BODYTYPE::ServerInfo:
-        /* code */
-        server_info = ProtoUtil::ParseBodyToServerInfo(body, length, parseRet);
-
-        // false 的情况已在util的函数里处理
-        if (parseRet)
-        {
-            HandleServerInfo(server_info, fd);
-        }
-
-        break;
-    default:
+    {
+        HandleServerInfo(msg, fd);
 
         break;
     }
+    default:
+    {
+
+        break;
+    }
+    }
 }
 
-void CenterServer::HandleServerInfo(Net::ServerInfo &data, int fd)
+void CenterServer::HandleServerInfo(Message *msg, int fd)
 {
-    if (data.opt() == Net::ServerInfo_Operation_Register)
+    // 千万不要delete body;
+    ServerProto::ServerInfo *body = reinterpret_cast<ServerProto::ServerInfo *>(msg->body->message);
+
+    if (msg->head->m_packageType == ServerProto::ServerInfo_Operation_Register)
     {
         Server_Info machine;
-        machine.ip = data.ip();
-        machine.level = static_cast<SERVER_FREE_LEVEL>(data.server_free_level());
+        machine.ip = body->ip();
+        machine.level = static_cast<SERVER_FREE_LEVEL>(body->server_free_level());
 
         // 如果记录不存在 注册一条记录
         if (!MachineRecord.count(fd))
         {
             MachineRecord[fd] = new Server_Info();
-            MachineRecord[fd]->ip = data.ip();
-            MachineRecord[fd]->port = data.port();
-            MachineRecord[fd]->type = static_cast<SERVER_TYPE>(data.server_type());
+            MachineRecord[fd]->ip = body->ip();
+            MachineRecord[fd]->port = body->port();
+            MachineRecord[fd]->type = static_cast<SERVER_TYPE>(body->server_type());
 
             RegisterServer(MachineRecord[fd]);
-            printf("Register server success\n");
+            std::cout << "Register server success" << std::endl;
         }
 
         // 更新服务器状态
-        MachineRecord[fd]->level = static_cast<SERVER_FREE_LEVEL>(data.server_free_level());
+        MachineRecord[fd]->level = static_cast<SERVER_FREE_LEVEL>(body->server_free_level());
     }
 
-    else if (data.opt() == Net::ServerInfo_Operation_RequstAssgin)
+    else if (msg->head->m_packageType == ServerProto::ServerInfo_Operation_RequstAssgin)
     {
-        Server_Info machine = AssignServer(static_cast<SERVER_TYPE>(data.server_type()));
+        Server_Info machine = AssignServer(static_cast<SERVER_TYPE>(body->server_type()));
 
         if (machine.level == SERVER_FREE_LEVEL::DOWN)
         {
-            printf("Assgin server failed, machine is not enough\n");
+            std::cout << "Assgin server failed, machine is not enough" << std::endl;
         }
         else
         {
-            printf("Assgin server success\n");
+            std::cout << "Assgin server success" << std::endl;
         }
 
         uint8_t *msg = nullptr;
         int msg_length = 0;
 
-        msg = ProtoUtil::SerializeServerInfoToArray(machine.ip,
-                                                    machine.port,
-                                                    machine.type,
-                                                    Net::ServerInfo_Operation_Connect,
-                                                    machine.level,
-                                                    msg_length);
+        Message *message = NewServerInfoMessage(machine.ip, machine.port, machine.type, ServerProto::ServerInfo_Operation_Connect, machine.level);
         if (msg != nullptr)
         {
-            SendMsg(BODYTYPE::ServerInfo, msg_length, msg, fd);
+            SendMsg(message, fd);
             delete msg;
         }
     }

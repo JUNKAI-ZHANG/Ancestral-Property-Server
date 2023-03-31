@@ -1,8 +1,3 @@
-#include <iostream>
-#include <cstring>
-#include <sys/epoll.h>
-#include <arpa/inet.h>
-#include <unistd.h>
 #include <thread>
 
 #include "../Header/ServerBase.h"
@@ -29,7 +24,7 @@ int ServerBase::StartListener(int port)
     listen_fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
     if (listen_fd == -1)
     {
-        std::cerr << "Failed to create socket\n";
+        std::cerr << "Failed to create socket" << std::endl;
         return -1;
     }
 
@@ -47,7 +42,7 @@ int ServerBase::StartListener(int port)
     addr.sin_addr.s_addr = htonl(INADDR_ANY);
     if (bind(listen_fd, reinterpret_cast<struct sockaddr *>(&addr), sizeof(addr)) == -1)
     {
-        std::cerr << "Failed to bind address\n";
+        std::cerr << "Failed to bind address" << std::endl;
         close(listen_fd);
         return -1;
     }
@@ -55,7 +50,7 @@ int ServerBase::StartListener(int port)
     // 开始监听连接
     if (listen(listen_fd, SOMAXCONN) == -1)
     {
-        std::cerr << "Failed to listen on socket\n";
+        std::cerr << "Failed to listen on socket" << std::endl;
         close(listen_fd);
         return -1;
     }
@@ -75,7 +70,7 @@ void ServerBase::HandleListenerEvent(std::map<int, RingBuffer *> &conns, int fd)
 
         if (conn_fd == -1)
         {
-            std::cerr << "Failed to accept connection\n";
+            std::cerr << "Failed to accept connection" << std::endl;
             return;
         }
 
@@ -145,6 +140,21 @@ void ServerBase::HandleConnEvent(std::map<int, RingBuffer *> &conn, int conn_fd)
     }
 }
 
+void ServerBase::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t length, int fd)
+{
+    msg->body = CreateMessageBody(msg->head->m_packageType);
+    
+    // 不出意外，应该不会反序列化寄，因为已经判断过了。。。
+    if (msg->body->ParseFromArray(body, length))
+    {
+
+    }
+    else 
+    {
+
+    }
+}
+
 void ServerBase::HandleReceivedMsg(RingBuffer *buffer, int fd)
 {
     auto buffer_size = buffer->GetCapacity();
@@ -153,28 +163,28 @@ void ServerBase::HandleReceivedMsg(RingBuffer *buffer, int fd)
 
     while (buffer_size >= HEAD_SIZE)
     {
-        Header h = ProtoUtil::ParseHeaderFromArray(recv);
+        // Todo : 使用对象池对消息进行优化，这里new/delete太频繁了，等服务器跑起来就优化
+        Message *message = new Message(); 
+        message->head = new MessageHead(recv, HEAD_SIZE);
 
         // 判断反序列化是否正常
-        if (ProtoUtil::CheckHeaderIsValid(h))
+        if (CheckHeaderIsValid(message->head))
         {
-            uint32_t body_length = h.package_size - HEAD_SIZE;
-  
-            uint8_t *body = ProtoUtil::GetBodyFromArray(recv, HEAD_SIZE, body_length);
+            uint32_t body_length = message->head->m_packageSize - HEAD_SIZE;
 
-            OnMsgBodyAnalysised(h, body, body_length, fd);
+            OnMsgBodyAnalysised(message, recv + HEAD_SIZE, body_length, fd);
 
-            delete body;
-            
-            buffer_size -= h.package_size;
+            buffer_size -= message->head->m_packageSize;
+
             //指针向后偏移
-            recv += h.package_size;
+            recv += message->head->m_packageSize;
         }
         else
         {
             buffer_size = 0;
-            std::cerr << "Parse Header error" << std::endl;
+            std::cerr << "Parse Header Error" << std::endl;
         }
+        delete message;
     }
 
     // 清空缓冲区
@@ -182,27 +192,21 @@ void ServerBase::HandleReceivedMsg(RingBuffer *buffer, int fd)
     delete begin;
 }
 
-bool ServerBase::SendMsg(BODYTYPE type, size_t totalSize, const uint8_t *data_array, int fd)
+bool ServerBase::SendMsg(Message *msg, int fd)
 {
     if (connections.count(fd))
     {
-        totalSize += HEAD_SIZE;
-        Header head;
-        head.package_size = totalSize;
-        head.type = type;
-
-        uint8_t resp[totalSize];
-
-        ProtoUtil::SerializeHeaderToArray(resp, head);
-
-        for (int i = HEAD_SIZE; i < totalSize; i++)
+        uint8_t resp[msg->head->m_packageSize];
+        if (msg->SerializeToArray(resp, msg->head->m_packageSize)) 
         {
-            resp[i] = data_array[i - HEAD_SIZE];
+            std::cerr << "Parse Msg Error (Send to client)" << std::endl;
+            CloseClientSocket(fd);
+            return false;
         }
 
-        if (send(fd, resp, totalSize, 0) < 0)
+        if (send(fd, resp, msg->head->m_packageSize, 0) < 0)
         {
-            std::cerr << "Could not send msg to client\n";
+            std::cerr << "Could not send msg to client" << std::endl;
             CloseClientSocket(fd);
             return false;
         }
@@ -211,7 +215,7 @@ bool ServerBase::SendMsg(BODYTYPE type, size_t totalSize, const uint8_t *data_ar
     }
     else
     {
-        std::cerr << "client is not exist\n";
+        std::cerr << "client is not exist" << std::endl;
         return false;
     }
 }
@@ -229,7 +233,7 @@ void ServerBase::MulticastMsg(size_t totalSize, uint8_t *data_array, int self_fd
 
         if (send(conn_fd, data_array, totalSize, 0) < 0)
         {
-            std::cerr << "Could not send msg to client\n";
+            std::cerr << "Could not send msg to client" << std::endl;
             CloseClientSocket(conn_fd);
         }
     }
@@ -294,7 +298,7 @@ void ServerBase::BootServer(int port)
             close(listen_fd);
             return;
         }
-
+        std::cout << "123SBSB" << std::endl;
         // 主线程处理监听epoll
         listen_epoll->WaitEpollEvent(&ServerBase::HandleListenerEvent, this, ref(connections));
     }

@@ -16,10 +16,7 @@ private:
     void DisconnectAllClients();
     
 protected:
-    virtual void OnMsgBodyAnalysised(Header head,
-                                     const uint8_t *body,
-                                     uint32_t length,
-                                     int fd);
+    virtual void OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t length, int fd);
 
     /*
      * @brief 成功连接到center server后触发
