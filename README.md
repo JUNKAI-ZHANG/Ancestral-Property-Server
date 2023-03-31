@@ -19,7 +19,9 @@
 * SendMsg不需要重载，一律使用SendMsg(Message*, int)
 * 所有的SerializeServerInfoToArray全都删掉，最终的代码不应有ProtoUtils.cpp，应替换为MessageUtils.cpp
 * Source下需要改的东西很多，还是稳一点好，轻易别gdb
-
 顶不住了，先睡了
----
+
+
 2023.3.31 15:48 终于解决完编译问题了，现在准备连接一下客户端和服务端，检查是否有牛马问题。。。
+
+2023.3.31 16:53 完了，多线程的段错误，寄
