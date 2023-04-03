@@ -98,6 +98,7 @@ public:
 
                 std::bind(std::forward<_Callable>(__f),
                           std::forward<_Args>(__args)..., conn_fd)();
+
             }
         }
 

@@ -6,7 +6,7 @@ ServerBase::ServerBase()
 {
     listen_epoll = new EpollMgr();
     conn_epoll = new EpollMgr();
-
+    
     CreateConnEpoll();
 }
 
@@ -89,7 +89,7 @@ void ServerBase::HandleListenerEvent(std::map<int, RingBuffer *> &conns, int fd)
         else
         {
             // create a buffer for every client
-            printf("create buffer\n");
+            std::cout << "Create buffer" << std::endl;
             connections_mutex.lock();
             conns[conn_fd] = new RingBuffer();
             connections_mutex.unlock();
@@ -111,13 +111,11 @@ void ServerBase::HandleConnEvent(std::map<int, RingBuffer *> &conn, int conn_fd)
     }
 
     // Receive data from client
-
     while ((tmp_received = recv(conn_fd, tmp, TMP_BUFFER_SIZE, MSG_DONTWAIT)) > 0)
     {
         if (!conn[conn_fd]->AddBuffer(tmp, tmp_received))
         {
             std::cerr << "Client Read Buffer is Full" << std::endl;
-
         }
     }
 
@@ -147,15 +145,13 @@ void ServerBase::HandleConnEvent(std::map<int, RingBuffer *> &conn, int conn_fd)
 void ServerBase::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t length, int fd)
 {
     msg->body = CreateMessageBody(msg->head->m_packageType);
-    
+
     // 不出意外，应该不会反序列化寄，因为已经判断过了。。。
     if (msg->body->ParseFromArray(body, length))
     {
-
     }
-    else 
+    else
     {
-
     }
 }
 
@@ -168,19 +164,17 @@ void ServerBase::HandleReceivedMsg(RingBuffer *buffer, int fd)
     while (buffer_size >= HEAD_SIZE)
     {
         // Todo : 使用对象池对消息进行优化，这里new/delete太频繁了，等服务器跑起来就优化
-        Message *message = new Message(); 
+        Message *message = new Message();
         message->head = new MessageHead(recv, HEAD_SIZE);
 
         // 判断反序列化是否正常
         if (CheckHeaderIsValid(message->head))
         {
-            uint32_t body_length = message->head->m_packageSize - HEAD_SIZE;
-
-            OnMsgBodyAnalysised(message, recv + HEAD_SIZE, body_length, fd);
+            OnMsgBodyAnalysised(message, recv + HEAD_SIZE, message->head->m_packageSize - HEAD_SIZE, fd);
 
             buffer_size -= message->head->m_packageSize;
 
-            //指针向后偏移
+            // 指针向后偏移
             recv += message->head->m_packageSize;
         }
         else
@@ -201,16 +195,16 @@ bool ServerBase::SendMsg(Message *msg, int fd)
     if (connections.count(fd))
     {
         uint8_t resp[msg->head->m_packageSize];
-        if (msg->SerializeToArray(resp, msg->head->m_packageSize)) 
+        if (!msg->SerializeToArray(resp, msg->head->m_packageSize))
         {
-            std::cerr << "Parse Msg Error (Send to client)" << std::endl;
+            std::cerr << "Parse Msg Error (SendMsg)" << std::endl;
             CloseClientSocket(fd);
             return false;
         }
 
         if (send(fd, resp, msg->head->m_packageSize, 0) < 0)
         {
-            std::cerr << "Could not send msg to client" << std::endl;
+            std::cerr << "Could not send msg to client (SendMsg)" << std::endl;
             CloseClientSocket(fd);
             return false;
         }
@@ -219,7 +213,7 @@ bool ServerBase::SendMsg(Message *msg, int fd)
     }
     else
     {
-        std::cerr << "client is not exist" << std::endl;
+        std::cerr << "Client is not exist (SendMsg)" << std::endl;
         return false;
     }
 }
@@ -237,7 +231,7 @@ void ServerBase::MulticastMsg(size_t totalSize, uint8_t *data_array, int self_fd
 
         if (send(conn_fd, data_array, totalSize, 0) < 0)
         {
-            std::cerr << "Could not send msg to client" << std::endl;
+            std::cerr << "Could not send msg to client (Broadcast)" << std::endl;
             CloseClientSocket(conn_fd);
         }
     }
@@ -272,7 +266,7 @@ void ServerBase::CloseServer()
 
 void ServerBase::BootServer(int port)
 {
-    // 如果conn epoll启动失败直接return
+    // 如果conn epoll启动失败直接return 
     if (!isConnEpollStart)
     {
         return;
@@ -280,7 +274,7 @@ void ServerBase::BootServer(int port)
 
     if (StartListener(port) == 1)
     {
-        printf("Server start at port:%d\n", port);
+        std::cout << "Server start at port : " << port << std::endl;
 
         if (listen_epoll->CreateEpoll() == -1)
         {
@@ -294,7 +288,7 @@ void ServerBase::BootServer(int port)
             return;
         }
 
-        printf("epoll create success, wait for event...\n");
+        std::cout << "Epoll create success, wait for event..." << std::endl;
 
         if (!OnListenerStart())
         {

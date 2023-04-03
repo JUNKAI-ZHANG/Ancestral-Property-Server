@@ -33,8 +33,6 @@ void FuncServer::CloseServer()
 
 void FuncServer::ApplyServerByType(SERVER_TYPE InType)
 {
-    int msg_length = 0;
-
     Message *msg = NewServerInfoMessage("", 0, InType, ServerProto::ServerInfo_Operation_RequstAssgin, SERVER_FREE_LEVEL::FREE);
 
     SendMsg(msg, center_server_client);
@@ -48,12 +46,14 @@ void FuncServer::OnConnectToCenterServer()
 
 void FuncServer::SendSelfInfoToCenter()
 {
-    int msg_length = 0;
+    Message *msg = NewServerInfoMessage("127.0.0.1", this->listen_port, server_type, ServerProto::ServerInfo_Operation_Register, SERVER_FREE_LEVEL::FREE);
 
-    Message *msg = NewServerInfoMessage("127.0.0.1", this->listen_port, server_type, ServerProto::ServerInfo_Operation_Register, SERVER_FREE_LEVEL::FREE );
+    // std::cout << "size = "            << msg->length() << std::endl;
 
     if (msg == nullptr)
+    {
         return;
+    }
 
     // 如果发送失败 意味和center server断开连接 尝试重连
     if (!SendMsg(msg, center_server_client))
@@ -61,7 +61,7 @@ void FuncServer::SendSelfInfoToCenter()
         // 连接中心服务器
         if (!ConnectToOtherServer(center_ip, center_port, center_server_client))
         {
-            std::cerr << "Failed to connect center server, boot it first\n";
+            std::cerr << "Failed to connect center server, boot it first" << std::endl;
             return;
         }
 
@@ -72,7 +72,7 @@ void FuncServer::SendSelfInfoToCenter()
         }
 
         this->connections[center_server_client] = new RingBuffer();
-        printf("connect to center server success \n");
+        std::cout << "Connect to center server success!" << std::endl;
 
         // 连接成功后立即发送一次自身状态
         this->SendSelfInfoToCenter();
@@ -121,7 +121,7 @@ void FuncServer::HandleServerInfo(Message *msg, int fd)
 
             if (!ConnectToOtherServer(body->ip(), body->port(), logic_server_client))
             {
-                std::cerr << "Failed to connect Logic server, boot it first\n";
+                std::cerr << "Failed to connect Logic server, boot it first" << std::endl;
                 return;
             }
 
@@ -132,7 +132,7 @@ void FuncServer::HandleServerInfo(Message *msg, int fd)
             }
 
             this->connections[logic_server_client] = new RingBuffer();
-            printf("connect to logic server success \n");
+            std::cout << "connect to logic server success!" << std::endl;;
         }
 
         else if (static_cast<SERVER_TYPE>(body->server_type()) == SERVER_TYPE::DATABASE)
@@ -145,7 +145,7 @@ void FuncServer::HandleServerInfo(Message *msg, int fd)
 
             if (!ConnectToOtherServer(body->ip(), body->port(), db_server_client))
             {
-                std::cerr << "Failed to connect database server, boot it first\n";
+                std::cerr << "Failed to connect database server, boot it first" << std::endl;
                 return;
             }
 
@@ -156,7 +156,7 @@ void FuncServer::HandleServerInfo(Message *msg, int fd)
             }
 
             this->connections[db_server_client] = new RingBuffer();
-            printf("connect to database server success \n");
+            std::cout << "connect to database server success \n" << std::endl;;
         }
 
         Timer timer;

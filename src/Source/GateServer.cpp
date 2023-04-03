@@ -84,6 +84,10 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
     case BODYTYPE::LoginRequest:
     {
         LoginProto::LoginRequest *body1 = reinterpret_cast<LoginProto::LoginRequest *>(msg->body->message);
+
+        std::cout << "username = " << body1->username() << std::endl;
+        std::cout << "password = " << body1->passwd() << std::endl;
+
         user_fd_record[body1->username()] = fd;
         // 转发给db server处理
         SendMsg(msg, db_server_client);
@@ -122,10 +126,11 @@ int main(int argc, char **argv)
     if (argc != 2)
     {
         printf("Usage: %s port\n", argv[0]);
-        return 1;
+        // return 1;
     }
 
-    int port = std::atoi(argv[1]);
+   // int port = std::atoi(argv[1]);
+    int port = 10808;
 
     GateServer gateServer;
 

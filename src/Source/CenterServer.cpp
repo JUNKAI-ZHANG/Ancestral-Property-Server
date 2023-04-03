@@ -143,12 +143,10 @@ void CenterServer::HandleServerInfo(Message *msg, int fd)
     // 千万不要delete body;
     ServerProto::ServerInfo *body = reinterpret_cast<ServerProto::ServerInfo *>(msg->body->message);
 
-    if (msg->head->m_packageType == ServerProto::ServerInfo_Operation_Register)
+    switch (body->opt())
     {
-        Server_Info machine;
-        machine.ip = body->ip();
-        machine.level = static_cast<SERVER_FREE_LEVEL>(body->server_free_level());
-
+    case ServerProto::ServerInfo_Operation_Register:
+    {
         // 如果记录不存在 注册一条记录
         if (!MachineRecord.count(fd))
         {
@@ -163,9 +161,10 @@ void CenterServer::HandleServerInfo(Message *msg, int fd)
 
         // 更新服务器状态
         MachineRecord[fd]->level = static_cast<SERVER_FREE_LEVEL>(body->server_free_level());
+        break;
     }
 
-    else if (msg->head->m_packageType == ServerProto::ServerInfo_Operation_RequstAssgin)
+    case ServerProto::ServerInfo_Operation_RequstAssgin:
     {
         Server_Info machine = AssignServer(static_cast<SERVER_TYPE>(body->server_type()));
 
@@ -177,16 +176,20 @@ void CenterServer::HandleServerInfo(Message *msg, int fd)
         {
             std::cout << "Assgin server success" << std::endl;
         }
-
-        uint8_t *msg = nullptr;
-        int msg_length = 0;
-
         Message *message = NewServerInfoMessage(machine.ip, machine.port, machine.type, ServerProto::ServerInfo_Operation_Connect, machine.level);
-        if (msg != nullptr)
+        if (message != nullptr)
         {
             SendMsg(message, fd);
-            delete msg;
+            delete message;
         }
+        break;
+    }
+    default :
+    {
+        std::cout << "Type = " << msg->head->m_packageType << std::endl;
+        std::cout << "Error ServerInfo Type" << std::endl;
+        break;
+    }
     }
 }
 

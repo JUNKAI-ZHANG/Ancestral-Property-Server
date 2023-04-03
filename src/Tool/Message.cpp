@@ -1,4 +1,5 @@
 #include "../Header/Message.h"
+#include "../Header/MessageUtils.h"
 
 MessageHead::MessageHead(const uint8_t *buffer, int len)
 {
@@ -9,11 +10,14 @@ MessageHead::MessageHead(const uint8_t *buffer, int len)
     }
 
     // 0~3位存大小
-    m_packageSize = ntohl(*((uint32_t *)buffer));
+    // m_packageSize = ntohl(*((uint32_t *)buffer));
+    m_packageSize = ByteToInt(buffer);
     // 4~7位存类型
-    m_packageType = static_cast<BODYTYPE>(ntohl(*((uint32_t *)(buffer + 4))));
+    // m_packageType = static_cast<BODYTYPE>(ntohl(*((uint32_t *)(buffer + 4))));
+    m_packageType = ByteToInt(buffer + 4);
     // 8~11位存token
-    m_token = ntohl(*((uint32_t *)(buffer + 8)));
+    // m_token = ntohl(*((uint32_t *)(buffer + 8)));
+    m_token = ByteToUint(buffer + 8);
     return;
 }
 
@@ -24,29 +28,50 @@ bool MessageHead::SerailizeToArray(uint8_t *buffer, int len) const
         return false;
     }
 
-    // 转大端序
-    uint32_t size = htonl(m_packageSize);
-    uint32_t type = htonl(static_cast<uint32_t>(m_packageType));
-    uint32_t token = htonl(static_cast<uint32_t>(m_token));
+    /*
+        // 转大端序
+        uint32_t size = htonl(m_packageSize);
+        uint32_t type = htonl(static_cast<uint32_t>(m_packageType));
+        uint32_t token = htonl(static_cast<uint32_t>(m_token));
 
-    uint8_t *tmp = (uint8_t *)(&size);
+        uint8_t *tmp = (uint8_t *)(&size);
+        for (int i = 0; i < 4; i++)
+        {
+            buffer[i] = tmp[i];
+        }
+
+        tmp = (uint8_t *)(&type);
+        for (int i = 0; i < 4; i++)
+        {
+            buffer[i + 4] = tmp[i];
+        }
+
+        // 最后4Byte不处理，前端不需要解析token.(算了吧，都写了这么多了，也不差这一点了，hh)
+        tmp = (uint8_t *)(&token);
+        for (int i = 0; i < 4; i++)
+        {
+            buffer[i + 8] = tmp[i];
+        }
+    */
+    uint8_t *tmp = IntToByte(m_packageSize);
     for (int i = 0; i < 4; i++)
     {
         buffer[i] = tmp[i];
     }
 
-    tmp = (uint8_t *)(&type);
+    tmp = IntToByte(m_packageType);
     for (int i = 0; i < 4; i++)
     {
         buffer[i + 4] = tmp[i];
     }
 
     // 最后4Byte不处理，前端不需要解析token.(算了吧，都写了这么多了，也不差这一点了，hh)
-    tmp = (uint8_t *)(&token);
+    tmp = UintToByte(m_token);
     for (int i = 0; i < 4; i++)
     {
         buffer[i + 8] = tmp[i];
     }
+    delete tmp;
     return true;
 }
 
@@ -85,6 +110,12 @@ MessageBody::~MessageBody()
 }
 
 // ******************** Message **********************
+
+Message::Message()
+{
+    // head = new MessageHead;
+    // body = new MessageBody;
+}
 
 int Message::length() const
 {

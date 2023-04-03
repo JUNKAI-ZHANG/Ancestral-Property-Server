@@ -49,6 +49,8 @@ public:
     MessageHead *head = nullptr;
     MessageBody *body = nullptr;
 
+    Message();
+
     int length() const;
 
     bool SerializeToArray(uint8_t *buffer, int len) const;
