@@ -109,7 +109,7 @@ void FuncServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
 void FuncServer::HandleServerInfo(Message *msg, int fd)
 {
     ServerProto::ServerInfo *body = reinterpret_cast<ServerProto::ServerInfo *>(msg->body->message);
-    if (msg->head->m_packageType == ServerProto::ServerInfo_Operation_Connect)
+    if (body->opt() == ServerProto::ServerInfo_Operation_Connect)
     {
         if (static_cast<SERVER_TYPE>(body->server_type()) == SERVER_TYPE::LOGIC)
         {
@@ -132,7 +132,7 @@ void FuncServer::HandleServerInfo(Message *msg, int fd)
             }
 
             this->connections[logic_server_client] = new RingBuffer();
-            std::cout << "connect to logic server success!" << std::endl;;
+            std::cout << "Connect to logic server success!" << std::endl;;
         }
 
         else if (static_cast<SERVER_TYPE>(body->server_type()) == SERVER_TYPE::DATABASE)
@@ -156,7 +156,7 @@ void FuncServer::HandleServerInfo(Message *msg, int fd)
             }
 
             this->connections[db_server_client] = new RingBuffer();
-            std::cout << "connect to database server success \n" << std::endl;;
+            std::cout << "Connect to database server success!" << std::endl;
         }
 
         Timer timer;

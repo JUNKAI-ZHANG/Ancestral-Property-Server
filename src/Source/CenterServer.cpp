@@ -122,6 +122,7 @@ void CenterServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32
 {
     ServerBase::OnMsgBodyAnalysised(msg, body, length, fd);
 
+    // Center Server 只会收到服务器的消息
     switch (msg->head->m_packageType)
     {
     case BODYTYPE::ServerInfo:
@@ -151,12 +152,12 @@ void CenterServer::HandleServerInfo(Message *msg, int fd)
         if (!MachineRecord.count(fd))
         {
             MachineRecord[fd] = new Server_Info();
-            MachineRecord[fd]->ip = body->ip();
+            MachineRecord[fd]->ip   = body->ip();
             MachineRecord[fd]->port = body->port();
             MachineRecord[fd]->type = static_cast<SERVER_TYPE>(body->server_type());
 
             RegisterServer(MachineRecord[fd]);
-            std::cout << "Register server success" << std::endl;
+            std::cout << "Register server success!" << std::endl;
         }
 
         // 更新服务器状态
@@ -170,11 +171,11 @@ void CenterServer::HandleServerInfo(Message *msg, int fd)
 
         if (machine.level == SERVER_FREE_LEVEL::DOWN)
         {
-            std::cout << "Assgin server failed, machine is not enough" << std::endl;
+            std::cout << "Assgin server failed, machine is not enough..." << std::endl;
         }
         else
         {
-            std::cout << "Assgin server success" << std::endl;
+            std::cout << "Assgin server success!" << std::endl;
         }
         Message *message = NewServerInfoMessage(machine.ip, machine.port, machine.type, ServerProto::ServerInfo_Operation_Connect, machine.level);
         if (message != nullptr)
@@ -186,8 +187,7 @@ void CenterServer::HandleServerInfo(Message *msg, int fd)
     }
     default :
     {
-        std::cout << "Type = " << msg->head->m_packageType << std::endl;
-        std::cout << "Error ServerInfo Type" << std::endl;
+        std::cerr << "Error ServerInfo Type = " << msg->head->m_packageType << std::endl;
         break;
     }
     }

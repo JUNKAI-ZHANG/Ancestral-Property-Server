@@ -11,11 +11,11 @@ class DBServer : public FuncServer
 {
 private:
     // mysql config
-    const char *mysql_ip = "110.42.203.195";
+    const char *mysql_ip = "124.223.73.248";
     int mysql_port = 3306;
     const char *mysql_user = "root";
-    const char *mysql_password = "Aa20010621++";
-    const char *db_name = "gameDemo";
+    const char *mysql_password = "Zjk20011019#";
+    const char *db_name = "AncestralProperty";
 
     // redis config
     const char *redis_ip = "110.42.203.195";

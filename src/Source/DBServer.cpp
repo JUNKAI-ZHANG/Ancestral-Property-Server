@@ -53,25 +53,38 @@ void DBServer::HandleUserLogin(Message *msg, int fd)
     LoginProto::LoginRequest *body = reinterpret_cast<LoginProto::LoginRequest *>(msg->body->message);
     int ret = -1;
 
-    if (msg->head->m_packageType == LoginProto::LoginRequest_Operation_Login)
+    switch (body->opt())
     {
-        ret = QueryUser(body->username(), body->passwd());
-    }
-    else if (msg->head->m_packageType == LoginProto::LoginRequest_Operation_Register)
+    case LoginProto::LoginRequest_Operation_Login:
     {
         ret = InsertUser(body->username(), body->passwd());
+        ret = QueryUser(body->username(), body->passwd());
+        break;
+    }
+    case LoginProto::LoginRequest_Operation_Register:
+    {
+        ret = InsertUser(body->username(), body->passwd());
+        break;
+    }
+    default:
+    {
+        break;
+    }
     }
 
     // 异常错误
     if (ret == -1)
     {
+        std::cerr << "Login/Register Error in handle" << std::endl;
         return;
     }
 
     std::string resp_msg;
     LoginProto::LoginResponse_Operation resp_opt;
 
-    if (msg->head->m_packageType == LoginProto::LoginRequest_Operation_Login)
+    switch(body->opt())
+    {
+    case LoginProto::LoginRequest_Operation_Login:
     {
         if (ret == 1)
         {
@@ -82,8 +95,9 @@ void DBServer::HandleUserLogin(Message *msg, int fd)
             resp_msg = "passwd error";
         }
         resp_opt = LoginProto::LoginResponse_Operation_Login;
+        break;
     }
-    else if (msg->head->m_packageType == LoginProto::LoginRequest_Operation_Register)
+    case LoginProto::LoginRequest_Operation_Register:
     {
         if (ret == 1)
         {
@@ -94,12 +108,19 @@ void DBServer::HandleUserLogin(Message *msg, int fd)
             resp_msg = "register failed";
         }
         resp_opt = LoginProto::LoginResponse_Operation_Register;
+        break;
+    }
+    default:
+    {
+        break;
+    }
     }
 
     uint32_t token = 0;
     if (ret == 1)
     {
         token = Encryption::GenerateToken(body->username(), body->passwd());
+        std::cout << "Token = " << token << std::endl;
         redisReply *reply = (redisReply *)redisCommand(redis, "set %s %u", body->username().c_str(), token);
         if (reply != nullptr)
         {
@@ -142,7 +163,7 @@ bool DBServer::ConnectToMysqlAndRedis()
         return false;
     }
 
-    printf("Connect to mysql success\n");
+    std::cout << "Connect to mysql success!" << std::endl;
 
     // 连接Redis服务器
     redis = redisConnect(redis_ip, redis_port);
@@ -161,7 +182,7 @@ bool DBServer::ConnectToMysqlAndRedis()
         return false;
     }
 
-    printf("Connect to redis success\n");
+    std::cout << "Connect to redis success!" << std::endl;
 
     return true;
 }
@@ -273,15 +294,6 @@ bool DBServer::InsertUser(std::string username, std::string password)
         return false;
     }
 
-    // 执行 SQL 语句初始化玩家金币
-    sql = "insert into user_money (username, money) VALUES (\'" + username + "\', \'" + "0" + "\')";
-
-    if (mysql_query(mysql, sql.c_str()) != 0)
-    {
-        std::cerr << "Error: " << mysql_error(mysql) << std::endl;
-        return false;
-    }
-
     return true;
 }
 
@@ -370,20 +382,6 @@ int main(int argc, char **argv)
     {
         printf("Start DB Server ing...\n");
         dbServer.BootServer(port);
-        // {
-        //     auto start_time = std::chrono::high_resolution_clock::now();
-        //     int ret = dbServer.QueryUser("123", "123456");
-        //     auto end_time = std::chrono::high_resolution_clock::now();
-        //     auto diff = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count(); // 微秒
-        //     std::cout << "ret:" << ret << " time(微秒):" << diff << std::endl;
-        // }
-        // {
-        //     auto start_time = std::chrono::high_resolution_clock::now();
-        //     int ret = dbServer.QueryUser("123", "123456");
-        //     auto end_time = std::chrono::high_resolution_clock::now();
-        //     auto diff = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count(); // 微秒
-        //     std::cout << "ret:" << ret << " time(微秒):" << diff << std::endl;
-        // }
     }
 
     return 0;

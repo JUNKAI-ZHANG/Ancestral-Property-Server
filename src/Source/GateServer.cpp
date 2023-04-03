@@ -89,6 +89,7 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
         std::cout << "password = " << body1->passwd() << std::endl;
 
         user_fd_record[body1->username()] = fd;
+        
         // 转发给db server处理
         SendMsg(msg, db_server_client);
         break;
@@ -96,6 +97,13 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
     case BODYTYPE::LoginResponse:
     {
         LoginProto::LoginResponse *body2 = reinterpret_cast<LoginProto::LoginResponse *>(msg->body->message);
+        std::cout << "Size = " << msg->head->m_packageSize << std::endl;
+        std::cout << "Type = " << msg->head->m_packageType << std::endl;
+        std::cout << "Token = " << body2->token() << std::endl;
+        if (body2->opt() == LoginProto::LoginResponse_Operation_Login)
+        {
+            std::cout << "Good  Zjk" << std::endl;
+        }
         if (!user_fd_record.count(body2->userid()))
         {
             return;
