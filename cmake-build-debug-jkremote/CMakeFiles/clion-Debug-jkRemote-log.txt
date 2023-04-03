@@ -1,0 +1,4 @@
+/usr/local/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/jk/CodeHome/Ancestral-Property-Client-jiubei
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote

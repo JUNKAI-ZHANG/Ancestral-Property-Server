@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+   <FileVersion major="1" minor="6" />
+   <Project>
+      <Option title="Holy" />
+      <Option makefile_is_custom="1" />
+      <Option compiler="gcc" />
+      <Option virtualFolders="CMake Files\;" />
+      <Build>
+      <Target title="all">
+         <Option working_dir="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 all" />
+            <CompileFile command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="edit_cache">
+         <Option working_dir="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 edit_cache" />
+            <CompileFile command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="GateServer">
+         <Option output="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/GateServer" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add directory="/usr/include" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/backward" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/x86_64-redhat-linux" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include" />
+            <Add directory="/usr/local/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 GateServer" />
+            <CompileFile command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="GateServer/fast">
+         <Option output="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/GateServer" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add directory="/usr/include" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/backward" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/x86_64-redhat-linux" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include" />
+            <Add directory="/usr/local/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 GateServer/fast" />
+            <CompileFile command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="DBServer">
+         <Option output="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/DBServer" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add directory="/usr/include" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/backward" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/x86_64-redhat-linux" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include" />
+            <Add directory="/usr/local/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 DBServer" />
+            <CompileFile command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="DBServer/fast">
+         <Option output="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/DBServer" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add directory="/usr/include" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/backward" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/x86_64-redhat-linux" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include" />
+            <Add directory="/usr/local/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 DBServer/fast" />
+            <CompileFile command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="CenterServer">
+         <Option output="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/CenterServer" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add directory="/usr/include" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/backward" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/x86_64-redhat-linux" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include" />
+            <Add directory="/usr/local/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 CenterServer" />
+            <CompileFile command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="CenterServer/fast">
+         <Option output="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/CenterServer" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add directory="/usr/include" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/backward" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/x86_64-redhat-linux" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include" />
+            <Add directory="/usr/local/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 CenterServer/fast" />
+            <CompileFile command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="BaseObj">
+         <Option output="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/CMakeFiles/BaseObj.dir/BaseObj.objlib" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote" />
+         <Option object_output="./" />
+         <Option type="2" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add directory="/usr/include" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/backward" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/x86_64-redhat-linux" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include" />
+            <Add directory="/usr/local/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 BaseObj" />
+            <CompileFile command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="BaseObj/fast">
+         <Option output="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/CMakeFiles/BaseObj.dir/BaseObj.objlib" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote" />
+         <Option object_output="./" />
+         <Option type="2" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add directory="/usr/include" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/backward" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/x86_64-redhat-linux" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include" />
+            <Add directory="/usr/local/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 BaseObj/fast" />
+            <CompileFile command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="rebuild_cache">
+         <Option working_dir="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 rebuild_cache" />
+            <CompileFile command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="CommonUtilLib">
+         <Option output="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/lib/libCommonUtilLib.a" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote" />
+         <Option object_output="./" />
+         <Option type="2" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add directory="/usr/include" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/backward" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/x86_64-redhat-linux" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include" />
+            <Add directory="/usr/local/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 CommonUtilLib" />
+            <CompileFile command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="CommonUtilLib/fast">
+         <Option output="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/lib/libCommonUtilLib.a" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote" />
+         <Option object_output="./" />
+         <Option type="2" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add directory="/usr/include" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/backward" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/x86_64-redhat-linux" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include" />
+            <Add directory="/usr/local/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 CommonUtilLib/fast" />
+            <CompileFile command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="LogicServer">
+         <Option output="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/LogicServer" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add directory="/usr/include" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/backward" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/x86_64-redhat-linux" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include" />
+            <Add directory="/usr/local/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 LogicServer" />
+            <CompileFile command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="LogicServer/fast">
+         <Option output="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/LogicServer" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add directory="/usr/include" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/backward" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/x86_64-redhat-linux" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include" />
+            <Add directory="/usr/local/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 LogicServer/fast" />
+            <CompileFile command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="ProtoUtilLib">
+         <Option output="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/lib/libProtoUtilLib.a" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote" />
+         <Option object_output="./" />
+         <Option type="2" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add directory="/usr/include" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/backward" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/x86_64-redhat-linux" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include" />
+            <Add directory="/usr/local/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 ProtoUtilLib" />
+            <CompileFile command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="ProtoUtilLib/fast">
+         <Option output="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/lib/libProtoUtilLib.a" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote" />
+         <Option object_output="./" />
+         <Option type="2" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add directory="/usr/include" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/backward" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/../../../../include/c++/4.8.5/x86_64-redhat-linux" />
+            <Add directory="/usr/lib/gcc/x86_64-redhat-linux/4.8.5/include" />
+            <Add directory="/usr/local/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 ProtoUtilLib/fast" />
+            <CompileFile command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/gmake -f &quot;/home/jk/CodeHome/Ancestral-Property-Client-jiubei/cmake-build-debug-jkremote/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      </Build>
+      <Unit filename="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/src/Protobuf/Frame.pb.cc">
+         <Option target="ProtoUtilLib"/>
+      </Unit>
+      <Unit filename="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/src/Protobuf/Login.pb.cc">
+         <Option target="ProtoUtilLib"/>
+      </Unit>
+      <Unit filename="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/src/Protobuf/Server.pb.cc">
+         <Option target="ProtoUtilLib"/>
+      </Unit>
+      <Unit filename="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/src/Source/CenterServer.cpp">
+         <Option target="CenterServer"/>
+      </Unit>
+      <Unit filename="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/src/Source/DBServer.cpp">
+         <Option target="DBServer"/>
+      </Unit>
+      <Unit filename="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/src/Source/FuncServer.cpp">
+         <Option target="BaseObj"/>
+      </Unit>
+      <Unit filename="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/src/Source/GateServer.cpp">
+         <Option target="GateServer"/>
+      </Unit>
+      <Unit filename="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/src/Source/LogicServer.cpp">
+         <Option target="LogicServer"/>
+      </Unit>
+      <Unit filename="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/src/Source/ServerBase.cpp">
+         <Option target="BaseObj"/>
+      </Unit>
+      <Unit filename="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/src/Tool/EpollMgr.cpp">
+         <Option target="CommonUtilLib"/>
+      </Unit>
+      <Unit filename="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/src/Tool/Event.cpp">
+         <Option target="CommonUtilLib"/>
+      </Unit>
+      <Unit filename="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/src/Tool/Message.cpp">
+         <Option target="ProtoUtilLib"/>
+      </Unit>
+      <Unit filename="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/src/Tool/RingBuffer.cpp">
+         <Option target="CommonUtilLib"/>
+      </Unit>
+      <Unit filename="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/src/Tool/Timer.cpp">
+         <Option target="CommonUtilLib"/>
+      </Unit>
+      <Unit filename="/home/jk/CodeHome/Ancestral-Property-Client-jiubei/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\" />
+      </Unit>
+   </Project>
+</CodeBlocks_project_file>
