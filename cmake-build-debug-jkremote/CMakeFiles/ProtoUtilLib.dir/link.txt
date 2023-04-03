@@ -1,2 +1,0 @@
-/usr/bin/ar cq lib/libProtoUtilLib.a  CMakeFiles/ProtoUtilLib.dir/src/Protobuf/Login.pb.cc.o CMakeFiles/ProtoUtilLib.dir/src/Protobuf/Server.pb.cc.o CMakeFiles/ProtoUtilLib.dir/src/Protobuf/Frame.pb.cc.o CMakeFiles/ProtoUtilLib.dir/src/Tool/Message.cpp.o
-/usr/bin/ranlib lib/libProtoUtilLib.a

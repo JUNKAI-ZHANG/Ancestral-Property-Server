@@ -1,2 +1,0 @@
-/usr/bin/ar cq lib/libCommonUtilLib.a  CMakeFiles/CommonUtilLib.dir/src/Tool/EpollMgr.cpp.o CMakeFiles/CommonUtilLib.dir/src/Tool/Event.cpp.o CMakeFiles/CommonUtilLib.dir/src/Tool/RingBuffer.cpp.o CMakeFiles/CommonUtilLib.dir/src/Tool/Timer.cpp.o
-/usr/bin/ranlib lib/libCommonUtilLib.a

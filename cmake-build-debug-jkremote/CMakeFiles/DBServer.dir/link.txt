@@ -1,1 +1,0 @@
-/usr/bin/c++   -g   CMakeFiles/DBServer.dir/src/Source/DBServer.cpp.o CMakeFiles/BaseObj.dir/src/Source/ServerBase.cpp.o CMakeFiles/BaseObj.dir/src/Source/FuncServer.cpp.o  -o DBServer  -L/usr/lib64/mysql -rdynamic -lprotobuf -lpthread -lmysqlclient -lhiredis lib/libCommonUtilLib.a lib/libProtoUtilLib.a -Wl,-rpath,/usr/lib64/mysql 
