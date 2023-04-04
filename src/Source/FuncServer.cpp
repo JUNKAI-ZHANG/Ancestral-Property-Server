@@ -48,8 +48,6 @@ void FuncServer::SendSelfInfoToCenter()
 {
     Message *msg = NewServerInfoMessage("127.0.0.1", this->listen_port, server_type, ServerProto::ServerInfo_Operation_Register, SERVER_FREE_LEVEL::FREE);
 
-    // std::cout << "size = "            << msg->length() << std::endl;
-
     if (msg == nullptr)
     {
         return;
@@ -103,13 +101,24 @@ void FuncServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
 
         break;
     }
+    case BODYTYPE::UserInfo:
+    {
+        HandleUserInfo(msg, fd);
+
+        break;
+    }
+    default:
+    {
+        // std::cout << "FuncServer : Not found package(" << msg->head->m_packageType << ")type..., will goto FuncServer!" << std::endl;
+        break;
+    }
     }
 }
 
 void FuncServer::HandleServerInfo(Message *msg, int fd)
 {
     ServerProto::ServerInfo *body = reinterpret_cast<ServerProto::ServerInfo *>(msg->body->message);
-    if (msg->head->m_packageType == ServerProto::ServerInfo_Operation_Connect)
+    if (body->opt() == ServerProto::ServerInfo_Operation_Connect)
     {
         if (static_cast<SERVER_TYPE>(body->server_type()) == SERVER_TYPE::LOGIC)
         {
@@ -132,7 +141,7 @@ void FuncServer::HandleServerInfo(Message *msg, int fd)
             }
 
             this->connections[logic_server_client] = new RingBuffer();
-            std::cout << "connect to logic server success!" << std::endl;;
+            std::cout << "Connect to logic server success!" << std::endl;;
         }
 
         else if (static_cast<SERVER_TYPE>(body->server_type()) == SERVER_TYPE::DATABASE)
@@ -156,11 +165,36 @@ void FuncServer::HandleServerInfo(Message *msg, int fd)
             }
 
             this->connections[db_server_client] = new RingBuffer();
-            std::cout << "connect to database server success \n" << std::endl;;
+            std::cout << "Connect to database server success!" << std::endl;
         }
 
         Timer timer;
         // 1s 后再次尝试重连
         timer.startOnce(1000, &FuncServer::TryToConnectAvailabeServer, this);
+    }
+}
+
+void FuncServer::HandleUserInfo(Message *msg, int fd)
+{
+    ServerProto::UserInfo *body = reinterpret_cast<ServerProto::UserInfo *>(msg->body->message);
+    switch (body->opt()) 
+    {
+    case ServerProto::UserInfo_Operation_Register :
+    {
+        user_fd_record[body->userid()] = body->fd();
+        break;
+    }
+    case ServerProto::UserInfo_Operation_Logout :
+    {
+        if (user_fd_record.count(body->userid()))
+        {
+            user_fd_record.erase(body->userid());
+        }
+        break;
+    }
+    default:
+    {
+        break;
+    }
     }
 }

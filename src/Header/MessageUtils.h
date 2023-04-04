@@ -24,6 +24,26 @@ static MessageBody *CreateMessageBody(int type)
         message = new ServerProto::ServerInfo;
         break;
     }
+    case BODYTYPE::JoinRoom:
+    {
+        message = new RoomProto::JoinRoom;
+        break;
+    }
+    case BODYTYPE::LeaveRoom:
+    {
+        message = new RoomProto::LeaveRoom;
+        break;
+    }
+    case BODYTYPE::CreateRoom:
+    {
+        message = new RoomProto::CreateRoom;
+        break;
+    }
+    case BODYTYPE::GetRoomList:
+    {
+        message = new RoomProto::GetRoomList;
+        break;
+    }
     default:
     {
         message = nullptr;
@@ -120,6 +140,87 @@ static Message *NewServerInfoMessage(std::string ip, int port, SERVER_TYPE type,
     return message;
 }
 
+static Message *NewJoinRoomResponse(const std::string& userid, const std::string result, bool ret)
+{
+    Message *message = new Message;
+
+    RoomProto::JoinRoom *body = new RoomProto::JoinRoom;
+    message->body = new MessageBody;
+    body->set_ret(ret);
+    body->set_result(result);
+    body->set_userid(userid);
+    body->set_type(RoomProto::JoinRoom::Type::JoinRoom_Type_RESPONSE);
+    message->body->message = body;
+
+    message->head = new MessageHead;
+    message->head->m_packageSize = message->length();
+    message->head->m_packageType = BODYTYPE::JoinRoom;
+
+    return message;
+}
+
+static Message *NewLeaveRoomResponse(const std::string& userid, const std::string result, bool ret)
+{
+    Message *message = new Message;
+
+    RoomProto::LeaveRoom *body = new RoomProto::LeaveRoom;
+    message->body = new MessageBody;
+    body->set_ret(ret);
+    body->set_result(result);
+    body->set_userid(userid);
+    body->set_type(RoomProto::LeaveRoom::Type::LeaveRoom_Type_RESPONSE);
+    message->body->message = body;
+
+    message->head = new MessageHead;
+    message->head->m_packageSize = message->length();
+    message->head->m_packageType = BODYTYPE::LeaveRoom;
+
+    return message;
+}
+
+static Message *NewCreateRoomResponse(const std::string& userid, const std::string result, bool ret)
+{
+    Message *message = new Message;
+
+    RoomProto::CreateRoom *body = new RoomProto::CreateRoom;
+    message->body = new MessageBody;
+    body->set_ret(ret);
+    body->set_result(result);
+    body->set_userid(userid);
+    body->set_type(RoomProto::CreateRoom::Type::CreateRoom_Type_RESPONSE);
+    message->body->message = body;
+
+    message->head = new MessageHead;
+    message->head->m_packageSize = message->length();
+    message->head->m_packageType = BODYTYPE::CreateRoom;
+
+    return message;
+}
+
+static Message *NewGetRoomListResponse(const std::string& userid, const std::string result, int *roomlist, int *people, int roomsize, bool ret)
+{
+    Message *message = new Message;
+
+    RoomProto::GetRoomList *body = new RoomProto::GetRoomList;
+    message->body = new MessageBody;
+    body->set_ret(ret);
+    body->set_size(roomsize);
+    body->set_userid(userid);
+    body->set_type(RoomProto::GetRoomList::Type::GetRoomList_Type_RESPONSE);
+    for (int i = 0; i < roomsize; i++) 
+    {
+        body->add_roomlist(roomlist[i]);
+        body->add_peoplecount(people[i]);
+    }
+    message->body->message = body;
+
+    message->head = new MessageHead;
+    message->head->m_packageSize = message->length();
+    message->head->m_packageType = BODYTYPE::GetRoomList;
+
+    return message;
+}
+
 static uint8_t *IntToByte(const int x)
 {
     uint8_t *ret = new uint8_t[4];
@@ -130,7 +231,7 @@ static uint8_t *IntToByte(const int x)
     return ret;
 }
 
-static uint8_t* UintToByte(const uint32_t x)
+static uint8_t *UintToByte(const uint32_t x)
 {
     uint8_t *ret = new uint8_t[4];
     ret[3] = ((x >> 0) & 255);
@@ -139,7 +240,7 @@ static uint8_t* UintToByte(const uint32_t x)
     ret[0] = ((x >> 24) & 255);
     return ret;
 }
-static int ByteToInt(const uint8_t* x)
+static int ByteToInt(const uint8_t *x)
 {
     int ret = 0;
     ret = (ret << 8) + (int)x[0];
@@ -148,7 +249,7 @@ static int ByteToInt(const uint8_t* x)
     ret = (ret << 8) + (int)x[3];
     return ret;
 }
-static uint ByteToUint(const uint8_t* x)
+static uint ByteToUint(const uint8_t *x)
 {
     uint ret = 0;
     ret = (ret << 8) + (uint)x[0];
