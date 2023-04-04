@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package RoomProto;
+
+message JoinRoom
+{
+    int32 roomid = 1;
+    string userid = 2;
+    string result = 3;
+
+    enum Type
+    {
+        REQUEST = 0;
+        RESPONSE = 1;
+    }
+
+    Type type = 4;
+    bool ret = 5;
+}
+
+message LeaveRoom
+{
+    int32 roomid = 1;
+    string userid = 2;
+    string result = 3;
+
+    enum Type
+    {
+        REQUEST = 0;
+        RESPONSE = 1;
+    }
+
+    Type type = 4;
+    bool ret = 5;
+}
+
+message CreateRoom
+{
+    int32 roomid = 1;
+    string userid = 2;
+    bool ret = 3; // 创建结果
+    string result = 4;
+    string roomname = 5;
+
+    enum Type
+    {
+        REQUEST = 0;
+        RESPONSE = 1;
+    }
+
+    Type type = 6;
+}
+
+message GetRoomList
+{
+    repeated int32 roomlist = 1;
+    repeated int32 peoplecount = 2;
+    int32 size = 3;
+    bool ret = 4;
+
+    enum Type
+    {
+        REQUEST = 0;
+        RESPONSE = 1;
+    }
+
+    Type type = 5;
+    string userid = 6;
+}
+
