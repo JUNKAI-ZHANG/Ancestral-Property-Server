@@ -23,6 +23,13 @@ public:
     virtual ~LogicServer();
     
     virtual void CloseClientSocket(int fd);
+
+private:
+    /* roomid - players */
+    std::map<int, std::set<std::string>> room; 
+
+
+    int now_room_count = 0;
 };
 
 #endif

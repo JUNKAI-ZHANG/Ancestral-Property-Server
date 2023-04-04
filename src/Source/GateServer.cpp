@@ -85,10 +85,11 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
     {
         LoginProto::LoginRequest *body1 = reinterpret_cast<LoginProto::LoginRequest *>(msg->body->message);
 
-        std::cout << "username = " << body1->username() << std::endl;
-        std::cout << "password = " << body1->passwd() << std::endl;
+        // std::cout << "username = " << body1->username() << std::endl;
+        // std::cout << "password = " << body1->passwd() << std::endl;
 
         user_fd_record[body1->username()] = fd;
+        
         // 转发给db server处理
         SendMsg(msg, db_server_client);
         break;
@@ -96,6 +97,11 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
     case BODYTYPE::LoginResponse:
     {
         LoginProto::LoginResponse *body2 = reinterpret_cast<LoginProto::LoginResponse *>(msg->body->message);
+
+        // std::cout << "Size = " << msg->head->m_packageSize << std::endl;
+        // std::cout << "Type = " << msg->head->m_packageType << std::endl;
+        // std::cout << "Token = " << body2->token() << std::endl;
+
         if (!user_fd_record.count(body2->userid()))
         {
             return;
@@ -116,6 +122,86 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
         }
         break;
     }
+    case BODYTYPE::JoinRoom:
+    {
+        RoomProto::JoinRoom *body = reinterpret_cast<RoomProto::JoinRoom *>(msg->body->message);
+        if (body->type() == RoomProto::JoinRoom::Type::JoinRoom_Type_REQUEST)
+        {
+            /* 转发给logic server处理 */
+            SendMsg(msg, logic_server_client);
+        }
+        else if (body->type() == RoomProto::JoinRoom::Type::JoinRoom_Type_RESPONSE)
+        {
+            /* 转发给 client 处理 */
+            SendMsg(msg, user_fd_record[body->userid()]);
+        }
+        else 
+        {
+            std::cerr << "GateServer : Error JoinRoom Type" << std::endl;
+        }
+        break;
+    }
+    case BODYTYPE::LeaveRoom:
+    {
+        RoomProto::LeaveRoom *body = reinterpret_cast<RoomProto::LeaveRoom *>(msg->body->message);
+        if (body->type() == RoomProto::LeaveRoom::Type::LeaveRoom_Type_REQUEST)
+        {
+            /* 转发给logic server处理 */
+            SendMsg(msg, logic_server_client);
+        }
+        else if (body->type() == RoomProto::LeaveRoom::Type::LeaveRoom_Type_RESPONSE)
+        {
+            /* 转发给 client 处理 */
+            SendMsg(msg, user_fd_record[body->userid()]);
+        }
+        else 
+        {
+            std::cerr << "GateServer : Error LeaveRoom Type" << std::endl;
+        }
+        break;
+    }
+    case BODYTYPE::CreateRoom:
+    {
+        RoomProto::CreateRoom *body = reinterpret_cast<RoomProto::CreateRoom *>(msg->body->message);
+        if (body->type() == RoomProto::CreateRoom::Type::CreateRoom_Type_REQUEST)
+        {
+            /* 转发给logic server处理 */
+            SendMsg(msg, logic_server_client);
+        }
+        else if (body->type() == RoomProto::CreateRoom::Type::CreateRoom_Type_RESPONSE)
+        {
+            /* 转发给 client 处理 */
+            SendMsg(msg, user_fd_record[body->userid()]);
+        }
+        else 
+        {
+            std::cerr << "GateServer : Error CreateRoom Type" << std::endl;
+        }
+        break;
+    }
+    case BODYTYPE::GetRoomList:
+    {
+        RoomProto::GetRoomList *body = reinterpret_cast<RoomProto::GetRoomList *>(msg->body->message);
+        if (body->type() == RoomProto::GetRoomList::Type::GetRoomList_Type_REQUEST)
+        {
+            /* 转发给logic server处理 */
+            SendMsg(msg, logic_server_client);
+        }
+        else if (body->type() == RoomProto::GetRoomList::Type::GetRoomList_Type_RESPONSE)
+        {
+            /* 转发给 client 处理 */
+            SendMsg(msg, user_fd_record[body->userid()]);
+        }
+        else 
+        {
+            std::cerr << "GateServer : Error JoinRoom Type" << std::endl;
+        }
+        break;
+    }
+    default:
+    {
+        break;
+    }
     }
 
     FuncServer::OnMsgBodyAnalysised(msg, body, length, fd);
@@ -129,7 +215,7 @@ int main(int argc, char **argv)
         // return 1;
     }
 
-   // int port = std::atoi(argv[1]);
+    // int port = std::atoi(argv[1]);
     int port = 10808;
 
     GateServer gateServer;

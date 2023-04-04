@@ -47,7 +47,7 @@ struct TableStruct_Server_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[1]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[2]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -58,9 +58,13 @@ namespace ServerProto {
 class ServerInfo;
 struct ServerInfoDefaultTypeInternal;
 extern ServerInfoDefaultTypeInternal _ServerInfo_default_instance_;
+class UserInfo;
+struct UserInfoDefaultTypeInternal;
+extern UserInfoDefaultTypeInternal _UserInfo_default_instance_;
 }  // namespace ServerProto
 PROTOBUF_NAMESPACE_OPEN
 template<> ::ServerProto::ServerInfo* Arena::CreateMaybeMessage<::ServerProto::ServerInfo>(Arena*);
+template<> ::ServerProto::UserInfo* Arena::CreateMaybeMessage<::ServerProto::UserInfo>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace ServerProto {
 
@@ -89,6 +93,31 @@ inline bool ServerInfo_Operation_Parse(
     ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, ServerInfo_Operation* value) {
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<ServerInfo_Operation>(
     ServerInfo_Operation_descriptor(), name, value);
+}
+enum UserInfo_Operation : int {
+  UserInfo_Operation_Register = 0,
+  UserInfo_Operation_Logout = 1,
+  UserInfo_Operation_UserInfo_Operation_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  UserInfo_Operation_UserInfo_Operation_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+};
+bool UserInfo_Operation_IsValid(int value);
+constexpr UserInfo_Operation UserInfo_Operation_Operation_MIN = UserInfo_Operation_Register;
+constexpr UserInfo_Operation UserInfo_Operation_Operation_MAX = UserInfo_Operation_Logout;
+constexpr int UserInfo_Operation_Operation_ARRAYSIZE = UserInfo_Operation_Operation_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* UserInfo_Operation_descriptor();
+template<typename T>
+inline const std::string& UserInfo_Operation_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, UserInfo_Operation>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function UserInfo_Operation_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    UserInfo_Operation_descriptor(), enum_t_value);
+}
+inline bool UserInfo_Operation_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, UserInfo_Operation* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<UserInfo_Operation>(
+    UserInfo_Operation_descriptor(), name, value);
 }
 // ===================================================================
 
@@ -317,6 +346,209 @@ class ServerInfo final :
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_Server_2eproto;
 };
+// -------------------------------------------------------------------
+
+class UserInfo final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ServerProto.UserInfo) */ {
+ public:
+  inline UserInfo() : UserInfo(nullptr) {}
+  ~UserInfo() override;
+  explicit constexpr UserInfo(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  UserInfo(const UserInfo& from);
+  UserInfo(UserInfo&& from) noexcept
+    : UserInfo() {
+    *this = ::std::move(from);
+  }
+
+  inline UserInfo& operator=(const UserInfo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline UserInfo& operator=(UserInfo&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const UserInfo& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const UserInfo* internal_default_instance() {
+    return reinterpret_cast<const UserInfo*>(
+               &_UserInfo_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    1;
+
+  friend void swap(UserInfo& a, UserInfo& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(UserInfo* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(UserInfo* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  UserInfo* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<UserInfo>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const UserInfo& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const UserInfo& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(UserInfo* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "ServerProto.UserInfo";
+  }
+  protected:
+  explicit UserInfo(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  typedef UserInfo_Operation Operation;
+  static constexpr Operation Register =
+    UserInfo_Operation_Register;
+  static constexpr Operation Logout =
+    UserInfo_Operation_Logout;
+  static inline bool Operation_IsValid(int value) {
+    return UserInfo_Operation_IsValid(value);
+  }
+  static constexpr Operation Operation_MIN =
+    UserInfo_Operation_Operation_MIN;
+  static constexpr Operation Operation_MAX =
+    UserInfo_Operation_Operation_MAX;
+  static constexpr int Operation_ARRAYSIZE =
+    UserInfo_Operation_Operation_ARRAYSIZE;
+  static inline const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor*
+  Operation_descriptor() {
+    return UserInfo_Operation_descriptor();
+  }
+  template<typename T>
+  static inline const std::string& Operation_Name(T enum_t_value) {
+    static_assert(::std::is_same<T, Operation>::value ||
+      ::std::is_integral<T>::value,
+      "Incorrect type passed to function Operation_Name.");
+    return UserInfo_Operation_Name(enum_t_value);
+  }
+  static inline bool Operation_Parse(::PROTOBUF_NAMESPACE_ID::ConstStringParam name,
+      Operation* value) {
+    return UserInfo_Operation_Parse(name, value);
+  }
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kUseridFieldNumber = 1,
+    kFdFieldNumber = 2,
+    kOptFieldNumber = 3,
+  };
+  // string userid = 1;
+  void clear_userid();
+  const std::string& userid() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_userid(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_userid();
+  PROTOBUF_NODISCARD std::string* release_userid();
+  void set_allocated_userid(std::string* userid);
+  private:
+  const std::string& _internal_userid() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_userid(const std::string& value);
+  std::string* _internal_mutable_userid();
+  public:
+
+  // int32 fd = 2;
+  void clear_fd();
+  int32_t fd() const;
+  void set_fd(int32_t value);
+  private:
+  int32_t _internal_fd() const;
+  void _internal_set_fd(int32_t value);
+  public:
+
+  // .ServerProto.UserInfo.Operation opt = 3;
+  void clear_opt();
+  ::ServerProto::UserInfo_Operation opt() const;
+  void set_opt(::ServerProto::UserInfo_Operation value);
+  private:
+  ::ServerProto::UserInfo_Operation _internal_opt() const;
+  void _internal_set_opt(::ServerProto::UserInfo_Operation value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:ServerProto.UserInfo)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr userid_;
+  int32_t fd_;
+  int opt_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_Server_2eproto;
+};
 // ===================================================================
 
 
@@ -459,9 +691,106 @@ inline void ServerInfo::set_opt(::ServerProto::ServerInfo_Operation value) {
   // @@protoc_insertion_point(field_set:ServerProto.ServerInfo.opt)
 }
 
+// -------------------------------------------------------------------
+
+// UserInfo
+
+// string userid = 1;
+inline void UserInfo::clear_userid() {
+  userid_.ClearToEmpty();
+}
+inline const std::string& UserInfo::userid() const {
+  // @@protoc_insertion_point(field_get:ServerProto.UserInfo.userid)
+  return _internal_userid();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void UserInfo::set_userid(ArgT0&& arg0, ArgT... args) {
+ 
+ userid_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:ServerProto.UserInfo.userid)
+}
+inline std::string* UserInfo::mutable_userid() {
+  std::string* _s = _internal_mutable_userid();
+  // @@protoc_insertion_point(field_mutable:ServerProto.UserInfo.userid)
+  return _s;
+}
+inline const std::string& UserInfo::_internal_userid() const {
+  return userid_.Get();
+}
+inline void UserInfo::_internal_set_userid(const std::string& value) {
+  
+  userid_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* UserInfo::_internal_mutable_userid() {
+  
+  return userid_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* UserInfo::release_userid() {
+  // @@protoc_insertion_point(field_release:ServerProto.UserInfo.userid)
+  return userid_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void UserInfo::set_allocated_userid(std::string* userid) {
+  if (userid != nullptr) {
+    
+  } else {
+    
+  }
+  userid_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), userid,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (userid_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    userid_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:ServerProto.UserInfo.userid)
+}
+
+// int32 fd = 2;
+inline void UserInfo::clear_fd() {
+  fd_ = 0;
+}
+inline int32_t UserInfo::_internal_fd() const {
+  return fd_;
+}
+inline int32_t UserInfo::fd() const {
+  // @@protoc_insertion_point(field_get:ServerProto.UserInfo.fd)
+  return _internal_fd();
+}
+inline void UserInfo::_internal_set_fd(int32_t value) {
+  
+  fd_ = value;
+}
+inline void UserInfo::set_fd(int32_t value) {
+  _internal_set_fd(value);
+  // @@protoc_insertion_point(field_set:ServerProto.UserInfo.fd)
+}
+
+// .ServerProto.UserInfo.Operation opt = 3;
+inline void UserInfo::clear_opt() {
+  opt_ = 0;
+}
+inline ::ServerProto::UserInfo_Operation UserInfo::_internal_opt() const {
+  return static_cast< ::ServerProto::UserInfo_Operation >(opt_);
+}
+inline ::ServerProto::UserInfo_Operation UserInfo::opt() const {
+  // @@protoc_insertion_point(field_get:ServerProto.UserInfo.opt)
+  return _internal_opt();
+}
+inline void UserInfo::_internal_set_opt(::ServerProto::UserInfo_Operation value) {
+  
+  opt_ = value;
+}
+inline void UserInfo::set_opt(::ServerProto::UserInfo_Operation value) {
+  _internal_set_opt(value);
+  // @@protoc_insertion_point(field_set:ServerProto.UserInfo.opt)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -473,6 +802,11 @@ template <> struct is_proto_enum< ::ServerProto::ServerInfo_Operation> : ::std::
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::ServerProto::ServerInfo_Operation>() {
   return ::ServerProto::ServerInfo_Operation_descriptor();
+}
+template <> struct is_proto_enum< ::ServerProto::UserInfo_Operation> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::ServerProto::UserInfo_Operation>() {
+  return ::ServerProto::UserInfo_Operation_descriptor();
 }
 
 PROTOBUF_NAMESPACE_CLOSE

@@ -8,28 +8,29 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 # 设置动态库的输出目录
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/dll)
 
-project(Holy)
+project(Ancestral-Property-Server)
 
 # ADD DLL-PATH
 link_directories(/usr/lib64/mysql)
 
 add_library(ProtoUtilLib STATIC
-    ./Protobuf/Login.pb.cc
-    ./Protobuf/Server.pb.cc
-    ./Protobuf/Frame.pb.cc
-    ./Tool/Message.cpp
+    src/Protobuf/Login.pb.cc
+    src/Protobuf/Server.pb.cc
+    src/Protobuf/Frame.pb.cc
+    src/Protobuf/Room.pb.cc
+    src/Tool/Message.cpp
 )
 
 add_library(CommonUtilLib STATIC
-    ./Tool/EpollMgr.cpp 
-    ./Tool/Event.cpp 
-    ./Tool/RingBuffer.cpp 
-    ./Tool/Timer.cpp 
+    src/Tool/EpollMgr.cpp
+    src/Tool/Event.cpp
+    src/Tool/RingBuffer.cpp
+    src/Tool/Timer.cpp
 )
 
 add_library(BaseObj OBJECT
-    ./Source/ServerBase.cpp
-    ./Source/FuncServer.cpp
+    src/Source/ServerBase.cpp
+    src/Source/FuncServer.cpp
 )
 
 set(libraries_to_link
@@ -45,24 +46,30 @@ set(libraries_to_link
 
 add_executable(CenterServer
     $<TARGET_OBJECTS:BaseObj>
-    ./Source/CenterServer.cpp
+    src/Source/CenterServer.cpp
 )
 target_link_libraries(CenterServer  ${libraries_to_link})
 
 add_executable(DBServer
     $<TARGET_OBJECTS:BaseObj>
-    ./Source/DBServer.cpp
+    src/Source/DBServer.cpp
 )
 target_link_libraries(DBServer  ${libraries_to_link})
 
 add_executable(GateServer
     $<TARGET_OBJECTS:BaseObj>
-    ./Source/GateServer.cpp 
+    src/Source/GateServer.cpp
 )
 target_link_libraries(GateServer  ${libraries_to_link})
 
 add_executable(LogicServer
     $<TARGET_OBJECTS:BaseObj>
-    ./Source/LogicServer.cpp
+    src/Source/LogicServer.cpp
 )
 target_link_libraries(LogicServer  ${libraries_to_link})
+
+# add_executable(MatchServer
+#     $<TARGET_OBJECTS:BaseObj>
+#     src/Source/MatchServer.cpp
+# )
+# target_link_libraries(MatchServer  ${libraries_to_link})

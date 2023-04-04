@@ -23,8 +23,13 @@ protected:
     /* 用于和数据库服务器连接 只用来做登录处理 */
     int db_server_client = -1;
 
+    /* 记录userid和fd的映射 */
+    std::map<std::string, int> user_fd_record;
+
 private:
     void HandleServerInfo(Message *msg, int fd);
+
+    void HandleUserInfo(Message *msg, int fd);
 
 protected:
     /* 尝试连接其他类型功能服务器 */

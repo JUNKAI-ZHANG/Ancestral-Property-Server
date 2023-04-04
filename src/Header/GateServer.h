@@ -6,8 +6,6 @@
 class GateServer : public FuncServer
 {
 private:
-    /* 记录userid和fd的映射 */
-    std::map<std::string, int> user_fd_record;
 
 private:
     /* 尝试连接其他类型功能服务器 */
