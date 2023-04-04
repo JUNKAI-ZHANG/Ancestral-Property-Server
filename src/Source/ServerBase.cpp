@@ -89,7 +89,6 @@ void ServerBase::HandleListenerEvent(std::map<int, RingBuffer *> &conns, int fd)
         else
         {
             // create a buffer for every client
-            std::cout << "Create buffer" << std::endl;
             connections_mutex.lock();
             conns[conn_fd] = new RingBuffer();
             connections_mutex.unlock();
@@ -115,7 +114,7 @@ void ServerBase::HandleConnEvent(std::map<int, RingBuffer *> &conn, int conn_fd)
     {
         if (!conn[conn_fd]->AddBuffer(tmp, tmp_received))
         {
-            std::cerr << "Client Read Buffer is Full" << std::endl;
+            std::cerr << "ServerBase : Client Read Buffer is Full" << std::endl;
         }
     }
 
@@ -129,7 +128,7 @@ void ServerBase::HandleConnEvent(std::map<int, RingBuffer *> &conn, int conn_fd)
         }
         else
         {
-            std::cerr << "Failed to read from connection" << std::endl;
+            std::cerr << "ServerBase : Failed to read from connection" << std::endl;
             CloseClientSocket(conn_fd);
             return;
         }
@@ -152,6 +151,7 @@ void ServerBase::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
     }
     else
     {
+        std::cerr << "ServerBase : OnMsgBodyAnalysised ERROR" << std::endl;
     }
 }
 
@@ -180,7 +180,7 @@ void ServerBase::HandleReceivedMsg(RingBuffer *buffer, int fd)
         else
         {
             buffer_size = 0;
-            std::cerr << "Parse Header Error" << std::endl;
+            std::cerr << "ServerBase : Parse Header Error" << std::endl;
         }
         delete message;
     }
@@ -197,14 +197,14 @@ bool ServerBase::SendMsg(Message *msg, int fd)
         uint8_t resp[msg->head->m_packageSize];
         if (!msg->SerializeToArray(resp, msg->head->m_packageSize))
         {
-            std::cerr << "Parse Msg Error (SendMsg)" << std::endl;
-            CloseClientSocket(fd);
+            std::cerr << "ServerBase : Parse Msg Error (SendMsg)" << std::endl;
+            // CloseClientSocket(fd); // 此处不应close
             return false;
         }
 
         if (send(fd, resp, msg->head->m_packageSize, 0) < 0)
         {
-            std::cerr << "Could not send msg to client (SendMsg)" << std::endl;
+            std::cerr << "ServerBase : Could not send msg to client (SendMsg)" << std::endl;
             CloseClientSocket(fd);
             return false;
         }
@@ -213,7 +213,7 @@ bool ServerBase::SendMsg(Message *msg, int fd)
     }
     else
     {
-        std::cerr << "Client is not exist (SendMsg)" << std::endl;
+        std::cerr << "ServerBase : Client is not exist (SendMsg)" << std::endl;
         return false;
     }
 }
@@ -231,7 +231,7 @@ void ServerBase::MulticastMsg(size_t totalSize, uint8_t *data_array, int self_fd
 
         if (send(conn_fd, data_array, totalSize, 0) < 0)
         {
-            std::cerr << "Could not send msg to client (Broadcast)" << std::endl;
+            std::cerr << "ServerBase : Could not send msg to client (Broadcast)" << std::endl;
             CloseClientSocket(conn_fd);
         }
     }

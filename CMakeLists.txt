@@ -8,7 +8,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 # 设置动态库的输出目录
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/dll)
 
-project(Holy)
+project(Ancestral-Property-Server)
 
 # ADD DLL-PATH
 link_directories(/usr/lib64/mysql)
@@ -17,6 +17,7 @@ add_library(ProtoUtilLib STATIC
     src/Protobuf/Login.pb.cc
     src/Protobuf/Server.pb.cc
     src/Protobuf/Frame.pb.cc
+    src/Protobuf/Room.pb.cc
     src/Tool/Message.cpp
 )
 
@@ -66,3 +67,9 @@ add_executable(LogicServer
     src/Source/LogicServer.cpp
 )
 target_link_libraries(LogicServer  ${libraries_to_link})
+
+# add_executable(MatchServer
+#     $<TARGET_OBJECTS:BaseObj>
+#     src/Source/MatchServer.cpp
+# )
+# target_link_libraries(MatchServer  ${libraries_to_link})

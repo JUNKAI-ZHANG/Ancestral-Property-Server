@@ -19,3 +19,17 @@ message ServerInfo
     Operation opt = 5;
 }
 
+message UserInfo
+{
+    string userid = 1;
+    int32 fd = 2;
+
+    enum Operation
+    {
+        Register = 0;
+        Logout = 1;
+    }
+
+    Operation opt = 3;
+}
+

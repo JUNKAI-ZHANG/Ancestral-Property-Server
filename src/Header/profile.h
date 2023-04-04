@@ -15,7 +15,8 @@ enum SERVER_TYPE
     CENTER = 1,
     GATE = 2,
     LOGIC = 3,
-    DATABASE = 4
+    DATABASE = 4,
+    MATCH = 5,
 };
 
 /*
@@ -35,15 +36,29 @@ enum SERVER_FREE_LEVEL
 enum BODYTYPE
 {
     ErrorPackage = -1,
+
     LoginRequest = 0,
     LoginResponse,
+    RegistRequest,
+    RegistResponse,
+
     LoginOut,
+
+    JoinRoom,
+    LeaveRoom,
+    CreateRoom,
+    GetRoomList,
+
     Frame,
     GameState,
     HashString,
 
-    /* server之间通信协议 */
-    ServerInfo = 100
+    /* server之间通信协议,绝对不会发往客户端 */
+    ServerInfo = 100,
+    UserInfo,
+
+    /* 客户端token出问题 */
+    ErrorToken = 400,
 };
 
 #endif
