@@ -42,6 +42,8 @@ void LogicServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_
                 room[body->roomid()].insert(body->userid());
                 message = NewJoinRoomResponse(body->userid(), "Join success!", true);
                 SendMsg(message, fd);
+                // 处理战斗
+                broadcast_list.insert(body->roomid());
             }
             else
             {
@@ -89,7 +91,7 @@ void LogicServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_
         int room_id = ++now_room_count;
         room[room_id].insert(body->userid());
 
-        message = NewCreateRoomResponse(body->userid(), "Create room success!", true);
+        message = NewCreateRoomResponse(body->userid(), "Create room success!", room_id, true);
         SendMsg(message, fd);
 
         std::cout << "Userid = " << body->userid() << std::endl;
