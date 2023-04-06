@@ -143,12 +143,14 @@ static Message *NewServerInfoMessage(std::string ip, int port, SERVER_TYPE type,
 static Message *NewJoinRoomResponse(const std::string& userid, const std::string result, bool ret)
 {
     Message *message = new Message;
+    std::mt19937 rng(std::chrono::system_clock::now().time_since_epoch().count());
 
     RoomProto::JoinRoom *body = new RoomProto::JoinRoom;
     message->body = new MessageBody;
     body->set_ret(ret);
     body->set_result(result);
     body->set_userid(userid);
+    body->set_seed(rng() % UINT32_MAX);
     body->set_type(RoomProto::JoinRoom::Type::JoinRoom_Type_RESPONSE);
     message->body->message = body;
 
@@ -178,15 +180,18 @@ static Message *NewLeaveRoomResponse(const std::string& userid, const std::strin
     return message;
 }
 
-static Message *NewCreateRoomResponse(const std::string& userid, const std::string result, bool ret)
+static Message *NewCreateRoomResponse(const std::string& userid, const std::string result, int roomid, bool ret)
 {
     Message *message = new Message;
+    std::mt19937 rng(std::chrono::system_clock::now().time_since_epoch().count());
 
     RoomProto::CreateRoom *body = new RoomProto::CreateRoom;
     message->body = new MessageBody;
     body->set_ret(ret);
     body->set_result(result);
     body->set_userid(userid);
+    body->set_roomid(roomid);
+    body->set_seed(rng() % UINT32_MAX);
     body->set_type(RoomProto::CreateRoom::Type::CreateRoom_Type_RESPONSE);
     message->body->message = body;
 
