@@ -28,6 +28,7 @@ private:
     /* roomid - players */
     std::map<int, std::set<std::string>> room; 
 
+    std::set<int> broadcast_list;
 
     int now_room_count = 0;
 };
