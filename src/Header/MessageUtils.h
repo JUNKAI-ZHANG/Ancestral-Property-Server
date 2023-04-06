@@ -264,4 +264,16 @@ static uint ByteToUint(const uint8_t *x)
     return ret;
 }
 
+static std::string to_string(int x) 
+{
+    std::string ret = "";
+    while (x) 
+    {
+        ret.push_back(x % 10 + '0');
+        x /= 10;
+    }
+    reverse(ret.begin(), ret.end());
+    return ret;
+}
+
 #endif

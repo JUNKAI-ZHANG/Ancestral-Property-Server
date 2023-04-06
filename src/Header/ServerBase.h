@@ -69,9 +69,6 @@ protected:
 
     bool SendMsg(Message *msg, int fd);
 
-    // if hasSelf = false, multicast will not send to self
-    void MulticastMsg(size_t totalSize, uint8_t *data_array, int self_fd, bool hasSelf = true);
-
     /*
      * @brief 服务端成功开启监听后进行的初始化操作
      */

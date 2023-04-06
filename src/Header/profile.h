@@ -1,4 +1,5 @@
 #ifndef _PROFILE_H
+
 #define _PROFILE_H
 
 #define HEAD_SIZE       12
@@ -48,6 +49,9 @@ enum BODYTYPE
     LeaveRoom,
     CreateRoom,
     GetRoomList,
+
+    StartGame,
+    CloseGame,
 
     Frame,
     GameState,

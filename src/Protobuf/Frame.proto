@@ -4,7 +4,14 @@ package FrameProto;
 
 message StartGame
 {
-    int32 framecount = 1;
+    int32 roomid = 1;
+    string userid = 2;
+}
+
+message CloseGame
+{
+    int32 roomid = 1;
+    string userid = 2;
 }
 
 message PlayerOperate 
@@ -15,7 +22,13 @@ message PlayerOperate
     float mousey = 4;
 }
 
-message GameReplay {
+message ChaseFrame
+{
+    string userid = 1;
+}
+
+message GameReplay 
+{
     repeated Frame frames = 1;
 }
 

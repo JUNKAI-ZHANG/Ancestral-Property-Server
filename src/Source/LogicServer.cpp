@@ -35,15 +35,22 @@ void LogicServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_
     case BODYTYPE::JoinRoom:
     {
         RoomProto::JoinRoom *body = reinterpret_cast<RoomProto::JoinRoom *>(msg->body->message);
-        if (room.count(body->roomid()))
+        if (user_room.count(body->userid()))
+        {
+            message = NewJoinRoomResponse(body->userid(), "Already in room " + to_string(user_room[body->userid()]), false);
+            SendMsg(message, fd);
+        }
+        else if (room.count(body->roomid()))
         {
             if (room[body->roomid()].size() == 1)
             {
                 room[body->roomid()].insert(body->userid());
+                user_room[body->userid()] = body->roomid();
                 message = NewJoinRoomResponse(body->userid(), "Join success!", true);
                 SendMsg(message, fd);
-                // 处理战斗
+                // StartGame 
                 broadcast_list.insert(body->roomid());
+                NotifyRoom(BODYTYPE::StartGame, body->roomid());
             }
             else
             {
@@ -68,12 +75,14 @@ void LogicServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_
             {
                 _room.erase(body->userid());
                 message = NewLeaveRoomResponse(body->userid(), "Exit success!", true);
+                user_room.erase(body->userid());
                 SendMsg(message, fd);
             }
             else if (_room.size() == 1)
             {
+                user_room.erase(body->userid());
                 room.erase(body->roomid());
-                message = NewLeaveRoomResponse(body->userid(), "Room destroy", true);
+                message = NewLeaveRoomResponse(body->userid(), "Exit success, Room destroy", true);
                 SendMsg(message, fd);
             }
         }
@@ -90,12 +99,10 @@ void LogicServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_
 
         int room_id = ++now_room_count;
         room[room_id].insert(body->userid());
+        user_room[body->userid()] = room_id;
 
         message = NewCreateRoomResponse(body->userid(), "Create room success!", room_id, true);
         SendMsg(message, fd);
-
-        std::cout << "Userid = " << body->userid() << std::endl;
-        std::cout << "Roomid = " << now_room_count << std::endl;
 
         break;
     }
@@ -118,10 +125,25 @@ void LogicServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_
         break;
     }
     default:
+    {
         break;
+    }
     }
 
     FuncServer::OnMsgBodyAnalysised(msg, body, length, fd);
+}
+
+void LogicServer::NotifyRoom(BODYTYPE bodytype, int roomid)
+{
+    // 通知房间开始游戏
+}
+
+void LogicServer::BroadCastMsg()
+{
+    for (int _room : broadcast_list)
+    {
+
+    }
 }
 
 void LogicServer::TryToConnectAvailabeServer()
@@ -145,7 +167,7 @@ int main(int argc, char **argv)
 
     LogicServer logicServer;
 
-    printf("Start Logic Center Server ing...\n");
+    std::cout << "Start Logic Center Server ing..." << std::endl;
     logicServer.BootServer(port);
 
     return 0;

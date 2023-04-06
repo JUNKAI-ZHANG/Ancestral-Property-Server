@@ -46,7 +46,7 @@ struct TableStruct_Frame_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[5]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[7]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -54,6 +54,12 @@ struct TableStruct_Frame_2eproto {
 };
 extern const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Frame_2eproto;
 namespace FrameProto {
+class ChaseFrame;
+struct ChaseFrameDefaultTypeInternal;
+extern ChaseFrameDefaultTypeInternal _ChaseFrame_default_instance_;
+class CloseGame;
+struct CloseGameDefaultTypeInternal;
+extern CloseGameDefaultTypeInternal _CloseGame_default_instance_;
 class Frame;
 struct FrameDefaultTypeInternal;
 extern FrameDefaultTypeInternal _Frame_default_instance_;
@@ -71,6 +77,8 @@ struct StartGameDefaultTypeInternal;
 extern StartGameDefaultTypeInternal _StartGame_default_instance_;
 }  // namespace FrameProto
 PROTOBUF_NAMESPACE_OPEN
+template<> ::FrameProto::ChaseFrame* Arena::CreateMaybeMessage<::FrameProto::ChaseFrame>(Arena*);
+template<> ::FrameProto::CloseGame* Arena::CreateMaybeMessage<::FrameProto::CloseGame>(Arena*);
 template<> ::FrameProto::Frame* Arena::CreateMaybeMessage<::FrameProto::Frame>(Arena*);
 template<> ::FrameProto::GameReplay* Arena::CreateMaybeMessage<::FrameProto::GameReplay>(Arena*);
 template<> ::FrameProto::HashString* Arena::CreateMaybeMessage<::FrameProto::HashString>(Arena*);
@@ -203,15 +211,30 @@ class StartGame final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kFramecountFieldNumber = 1,
+    kUseridFieldNumber = 2,
+    kRoomidFieldNumber = 1,
   };
-  // int32 framecount = 1;
-  void clear_framecount();
-  int32_t framecount() const;
-  void set_framecount(int32_t value);
+  // string userid = 2;
+  void clear_userid();
+  const std::string& userid() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_userid(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_userid();
+  PROTOBUF_NODISCARD std::string* release_userid();
+  void set_allocated_userid(std::string* userid);
   private:
-  int32_t _internal_framecount() const;
-  void _internal_set_framecount(int32_t value);
+  const std::string& _internal_userid() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_userid(const std::string& value);
+  std::string* _internal_mutable_userid();
+  public:
+
+  // int32 roomid = 1;
+  void clear_roomid();
+  int32_t roomid() const;
+  void set_roomid(int32_t value);
+  private:
+  int32_t _internal_roomid() const;
+  void _internal_set_roomid(int32_t value);
   public:
 
   // @@protoc_insertion_point(class_scope:FrameProto.StartGame)
@@ -221,7 +244,170 @@ class StartGame final :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  int32_t framecount_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr userid_;
+  int32_t roomid_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_Frame_2eproto;
+};
+// -------------------------------------------------------------------
+
+class CloseGame final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:FrameProto.CloseGame) */ {
+ public:
+  inline CloseGame() : CloseGame(nullptr) {}
+  ~CloseGame() override;
+  explicit constexpr CloseGame(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  CloseGame(const CloseGame& from);
+  CloseGame(CloseGame&& from) noexcept
+    : CloseGame() {
+    *this = ::std::move(from);
+  }
+
+  inline CloseGame& operator=(const CloseGame& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline CloseGame& operator=(CloseGame&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const CloseGame& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const CloseGame* internal_default_instance() {
+    return reinterpret_cast<const CloseGame*>(
+               &_CloseGame_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    1;
+
+  friend void swap(CloseGame& a, CloseGame& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(CloseGame* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(CloseGame* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  CloseGame* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<CloseGame>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const CloseGame& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const CloseGame& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(CloseGame* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "FrameProto.CloseGame";
+  }
+  protected:
+  explicit CloseGame(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kUseridFieldNumber = 2,
+    kRoomidFieldNumber = 1,
+  };
+  // string userid = 2;
+  void clear_userid();
+  const std::string& userid() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_userid(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_userid();
+  PROTOBUF_NODISCARD std::string* release_userid();
+  void set_allocated_userid(std::string* userid);
+  private:
+  const std::string& _internal_userid() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_userid(const std::string& value);
+  std::string* _internal_mutable_userid();
+  public:
+
+  // int32 roomid = 1;
+  void clear_roomid();
+  int32_t roomid() const;
+  void set_roomid(int32_t value);
+  private:
+  int32_t _internal_roomid() const;
+  void _internal_set_roomid(int32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:FrameProto.CloseGame)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr userid_;
+  int32_t roomid_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_Frame_2eproto;
 };
@@ -275,7 +461,7 @@ class PlayerOperate final :
                &_PlayerOperate_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    1;
+    2;
 
   friend void swap(PlayerOperate& a, PlayerOperate& b) {
     a.Swap(&b);
@@ -425,6 +611,157 @@ class PlayerOperate final :
 };
 // -------------------------------------------------------------------
 
+class ChaseFrame final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:FrameProto.ChaseFrame) */ {
+ public:
+  inline ChaseFrame() : ChaseFrame(nullptr) {}
+  ~ChaseFrame() override;
+  explicit constexpr ChaseFrame(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  ChaseFrame(const ChaseFrame& from);
+  ChaseFrame(ChaseFrame&& from) noexcept
+    : ChaseFrame() {
+    *this = ::std::move(from);
+  }
+
+  inline ChaseFrame& operator=(const ChaseFrame& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ChaseFrame& operator=(ChaseFrame&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const ChaseFrame& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const ChaseFrame* internal_default_instance() {
+    return reinterpret_cast<const ChaseFrame*>(
+               &_ChaseFrame_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    3;
+
+  friend void swap(ChaseFrame& a, ChaseFrame& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(ChaseFrame* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ChaseFrame* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  ChaseFrame* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<ChaseFrame>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const ChaseFrame& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const ChaseFrame& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(ChaseFrame* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "FrameProto.ChaseFrame";
+  }
+  protected:
+  explicit ChaseFrame(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kUseridFieldNumber = 1,
+  };
+  // string userid = 1;
+  void clear_userid();
+  const std::string& userid() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_userid(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_userid();
+  PROTOBUF_NODISCARD std::string* release_userid();
+  void set_allocated_userid(std::string* userid);
+  private:
+  const std::string& _internal_userid() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_userid(const std::string& value);
+  std::string* _internal_mutable_userid();
+  public:
+
+  // @@protoc_insertion_point(class_scope:FrameProto.ChaseFrame)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr userid_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_Frame_2eproto;
+};
+// -------------------------------------------------------------------
+
 class GameReplay final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:FrameProto.GameReplay) */ {
  public:
@@ -473,7 +810,7 @@ class GameReplay final :
                &_GameReplay_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    2;
+    4;
 
   friend void swap(GameReplay& a, GameReplay& b) {
     a.Swap(&b);
@@ -628,7 +965,7 @@ class Frame final :
                &_Frame_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    3;
+    5;
 
   friend void swap(Frame& a, Frame& b) {
     a.Swap(&b);
@@ -774,7 +1111,7 @@ class HashString final :
                &_HashString_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    4;
+    6;
 
   friend void swap(HashString& a, HashString& b) {
     a.Swap(&b);
@@ -897,24 +1234,150 @@ class HashString final :
 #endif  // __GNUC__
 // StartGame
 
-// int32 framecount = 1;
-inline void StartGame::clear_framecount() {
-  framecount_ = 0;
+// int32 roomid = 1;
+inline void StartGame::clear_roomid() {
+  roomid_ = 0;
 }
-inline int32_t StartGame::_internal_framecount() const {
-  return framecount_;
+inline int32_t StartGame::_internal_roomid() const {
+  return roomid_;
 }
-inline int32_t StartGame::framecount() const {
-  // @@protoc_insertion_point(field_get:FrameProto.StartGame.framecount)
-  return _internal_framecount();
+inline int32_t StartGame::roomid() const {
+  // @@protoc_insertion_point(field_get:FrameProto.StartGame.roomid)
+  return _internal_roomid();
 }
-inline void StartGame::_internal_set_framecount(int32_t value) {
+inline void StartGame::_internal_set_roomid(int32_t value) {
   
-  framecount_ = value;
+  roomid_ = value;
 }
-inline void StartGame::set_framecount(int32_t value) {
-  _internal_set_framecount(value);
-  // @@protoc_insertion_point(field_set:FrameProto.StartGame.framecount)
+inline void StartGame::set_roomid(int32_t value) {
+  _internal_set_roomid(value);
+  // @@protoc_insertion_point(field_set:FrameProto.StartGame.roomid)
+}
+
+// string userid = 2;
+inline void StartGame::clear_userid() {
+  userid_.ClearToEmpty();
+}
+inline const std::string& StartGame::userid() const {
+  // @@protoc_insertion_point(field_get:FrameProto.StartGame.userid)
+  return _internal_userid();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void StartGame::set_userid(ArgT0&& arg0, ArgT... args) {
+ 
+ userid_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:FrameProto.StartGame.userid)
+}
+inline std::string* StartGame::mutable_userid() {
+  std::string* _s = _internal_mutable_userid();
+  // @@protoc_insertion_point(field_mutable:FrameProto.StartGame.userid)
+  return _s;
+}
+inline const std::string& StartGame::_internal_userid() const {
+  return userid_.Get();
+}
+inline void StartGame::_internal_set_userid(const std::string& value) {
+  
+  userid_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* StartGame::_internal_mutable_userid() {
+  
+  return userid_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* StartGame::release_userid() {
+  // @@protoc_insertion_point(field_release:FrameProto.StartGame.userid)
+  return userid_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void StartGame::set_allocated_userid(std::string* userid) {
+  if (userid != nullptr) {
+    
+  } else {
+    
+  }
+  userid_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), userid,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (userid_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    userid_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:FrameProto.StartGame.userid)
+}
+
+// -------------------------------------------------------------------
+
+// CloseGame
+
+// int32 roomid = 1;
+inline void CloseGame::clear_roomid() {
+  roomid_ = 0;
+}
+inline int32_t CloseGame::_internal_roomid() const {
+  return roomid_;
+}
+inline int32_t CloseGame::roomid() const {
+  // @@protoc_insertion_point(field_get:FrameProto.CloseGame.roomid)
+  return _internal_roomid();
+}
+inline void CloseGame::_internal_set_roomid(int32_t value) {
+  
+  roomid_ = value;
+}
+inline void CloseGame::set_roomid(int32_t value) {
+  _internal_set_roomid(value);
+  // @@protoc_insertion_point(field_set:FrameProto.CloseGame.roomid)
+}
+
+// string userid = 2;
+inline void CloseGame::clear_userid() {
+  userid_.ClearToEmpty();
+}
+inline const std::string& CloseGame::userid() const {
+  // @@protoc_insertion_point(field_get:FrameProto.CloseGame.userid)
+  return _internal_userid();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void CloseGame::set_userid(ArgT0&& arg0, ArgT... args) {
+ 
+ userid_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:FrameProto.CloseGame.userid)
+}
+inline std::string* CloseGame::mutable_userid() {
+  std::string* _s = _internal_mutable_userid();
+  // @@protoc_insertion_point(field_mutable:FrameProto.CloseGame.userid)
+  return _s;
+}
+inline const std::string& CloseGame::_internal_userid() const {
+  return userid_.Get();
+}
+inline void CloseGame::_internal_set_userid(const std::string& value) {
+  
+  userid_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* CloseGame::_internal_mutable_userid() {
+  
+  return userid_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* CloseGame::release_userid() {
+  // @@protoc_insertion_point(field_release:FrameProto.CloseGame.userid)
+  return userid_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void CloseGame::set_allocated_userid(std::string* userid) {
+  if (userid != nullptr) {
+    
+  } else {
+    
+  }
+  userid_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), userid,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (userid_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    userid_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:FrameProto.CloseGame.userid)
 }
 
 // -------------------------------------------------------------------
@@ -1057,6 +1520,61 @@ inline void PlayerOperate::_internal_set_mousey(float value) {
 inline void PlayerOperate::set_mousey(float value) {
   _internal_set_mousey(value);
   // @@protoc_insertion_point(field_set:FrameProto.PlayerOperate.mousey)
+}
+
+// -------------------------------------------------------------------
+
+// ChaseFrame
+
+// string userid = 1;
+inline void ChaseFrame::clear_userid() {
+  userid_.ClearToEmpty();
+}
+inline const std::string& ChaseFrame::userid() const {
+  // @@protoc_insertion_point(field_get:FrameProto.ChaseFrame.userid)
+  return _internal_userid();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void ChaseFrame::set_userid(ArgT0&& arg0, ArgT... args) {
+ 
+ userid_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:FrameProto.ChaseFrame.userid)
+}
+inline std::string* ChaseFrame::mutable_userid() {
+  std::string* _s = _internal_mutable_userid();
+  // @@protoc_insertion_point(field_mutable:FrameProto.ChaseFrame.userid)
+  return _s;
+}
+inline const std::string& ChaseFrame::_internal_userid() const {
+  return userid_.Get();
+}
+inline void ChaseFrame::_internal_set_userid(const std::string& value) {
+  
+  userid_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* ChaseFrame::_internal_mutable_userid() {
+  
+  return userid_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* ChaseFrame::release_userid() {
+  // @@protoc_insertion_point(field_release:FrameProto.ChaseFrame.userid)
+  return userid_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void ChaseFrame::set_allocated_userid(std::string* userid) {
+  if (userid != nullptr) {
+    
+  } else {
+    
+  }
+  userid_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), userid,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (userid_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    userid_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:FrameProto.ChaseFrame.userid)
 }
 
 // -------------------------------------------------------------------
@@ -1205,6 +1723,10 @@ inline void HashString::set_allocated_hash(std::string* hash) {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

@@ -218,25 +218,6 @@ bool ServerBase::SendMsg(Message *msg, int fd)
     }
 }
 
-void ServerBase::MulticastMsg(size_t totalSize, uint8_t *data_array, int self_fd, bool hasSelf)
-{
-    for (const auto &client : connections)
-    {
-        int conn_fd = client.first;
-
-        if (!hasSelf && conn_fd == self_fd)
-        {
-            continue;
-        }
-
-        if (send(conn_fd, data_array, totalSize, 0) < 0)
-        {
-            std::cerr << "ServerBase : Could not send msg to client (Broadcast)" << std::endl;
-            CloseClientSocket(conn_fd);
-        }
-    }
-}
-
 bool ServerBase::OnListenerStart()
 {
     // 默认为true
