@@ -1,5 +1,3 @@
-#include <chrono>
-
 #include "../Header/DBServer.h"
 #include "../Header/Encryption.hpp"
 
@@ -200,7 +198,8 @@ bool DBServer::IsExistUser(const std::string username)
         return -1;
     }
 
-    std::string sql = "SELECT * FROM user where username = " + username;
+    std::string sql = "SELECT * FROM user where username = '" + username + "'";
+    std::cout << sql << std::endl;
 
     if (mysql_query(mysql, sql.c_str()))
     {
@@ -252,7 +251,7 @@ int DBServer::QueryUser(const std::string username, const std::string password)
     }
 
     // 执行 SQL 查询
-    std::string sql = "SELECT * FROM user where username = " + username + " and passwd = " + password;
+    std::string sql = "SELECT * FROM user where username = '" + username + "' and passwd = '" + password + "'";
 
     if (mysql_query(mysql, sql.c_str()))
     {
@@ -313,7 +312,8 @@ bool DBServer::InsertUser(const std::string username, const std::string password
         std::cerr << "Connection with mysql was closed" << std::endl;
         return false;
     }
-
+/*
+* 手机号注册 Exception
     try
     {
         int num = std::stoi(username);
@@ -323,6 +323,7 @@ bool DBServer::InsertUser(const std::string username, const std::string password
         std::cerr << "username format error" << std::endl;
         return false;
     }
+*/
 
     // 执行 SQL 插入用户信息
     std::string sql = "insert into user (username, passwd) VALUES (\'" + username + "\', \'" + password + "\')";
@@ -355,7 +356,7 @@ bool DBServer::ChangeUserMoney(const std::string username, int money, int &allMo
     }
 
     // 执行 SQL 查询
-    std::string sql = "SELECT * FROM user_money where username = " + username;
+    std::string sql = "SELECT * FROM user_money where username = '" + username + "'";
 
     if (mysql_query(mysql, sql.c_str()))
     {
@@ -391,7 +392,7 @@ bool DBServer::ChangeUserMoney(const std::string username, int money, int &allMo
     }
 
     // 执行 SQL 语句修改金币
-    sql = "update user_money set money = " + std::to_string(currentMoney + money) + " where username = " + username;
+    sql = "update user_money set money = " + std::to_string(currentMoney + money) + " where username = '" + username + "'";
 
     if (mysql_query(mysql, sql.c_str()) != 0)
     {

@@ -335,6 +335,7 @@ class JoinRoom final :
     kRoomidFieldNumber = 1,
     kTypeFieldNumber = 4,
     kRetFieldNumber = 5,
+    kSeedFieldNumber = 6,
   };
   // string userid = 2;
   void clear_userid();
@@ -391,6 +392,15 @@ class JoinRoom final :
   void _internal_set_ret(bool value);
   public:
 
+  // uint32 seed = 6;
+  void clear_seed();
+  uint32_t seed() const;
+  void set_seed(uint32_t value);
+  private:
+  uint32_t _internal_seed() const;
+  void _internal_set_seed(uint32_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:RoomProto.JoinRoom)
  private:
   class _Internal;
@@ -403,6 +413,7 @@ class JoinRoom final :
   int32_t roomid_;
   int type_;
   bool ret_;
+  uint32_t seed_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_Room_2eproto;
 };
@@ -796,6 +807,7 @@ class CreateRoom final :
     kRoomidFieldNumber = 1,
     kRetFieldNumber = 3,
     kTypeFieldNumber = 6,
+    kSeedFieldNumber = 7,
   };
   // string userid = 2;
   void clear_userid();
@@ -866,6 +878,15 @@ class CreateRoom final :
   void _internal_set_type(::RoomProto::CreateRoom_Type value);
   public:
 
+  // uint32 seed = 7;
+  void clear_seed();
+  uint32_t seed() const;
+  void set_seed(uint32_t value);
+  private:
+  uint32_t _internal_seed() const;
+  void _internal_set_seed(uint32_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:RoomProto.CreateRoom)
  private:
   class _Internal;
@@ -879,6 +900,7 @@ class CreateRoom final :
   int32_t roomid_;
   bool ret_;
   int type_;
+  uint32_t seed_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_Room_2eproto;
 };
@@ -1319,6 +1341,26 @@ inline void JoinRoom::set_ret(bool value) {
   // @@protoc_insertion_point(field_set:RoomProto.JoinRoom.ret)
 }
 
+// uint32 seed = 6;
+inline void JoinRoom::clear_seed() {
+  seed_ = 0u;
+}
+inline uint32_t JoinRoom::_internal_seed() const {
+  return seed_;
+}
+inline uint32_t JoinRoom::seed() const {
+  // @@protoc_insertion_point(field_get:RoomProto.JoinRoom.seed)
+  return _internal_seed();
+}
+inline void JoinRoom::_internal_set_seed(uint32_t value) {
+  
+  seed_ = value;
+}
+inline void JoinRoom::set_seed(uint32_t value) {
+  _internal_set_seed(value);
+  // @@protoc_insertion_point(field_set:RoomProto.JoinRoom.seed)
+}
+
 // -------------------------------------------------------------------
 
 // LeaveRoom
@@ -1700,6 +1742,26 @@ inline void CreateRoom::_internal_set_type(::RoomProto::CreateRoom_Type value) {
 inline void CreateRoom::set_type(::RoomProto::CreateRoom_Type value) {
   _internal_set_type(value);
   // @@protoc_insertion_point(field_set:RoomProto.CreateRoom.type)
+}
+
+// uint32 seed = 7;
+inline void CreateRoom::clear_seed() {
+  seed_ = 0u;
+}
+inline uint32_t CreateRoom::_internal_seed() const {
+  return seed_;
+}
+inline uint32_t CreateRoom::seed() const {
+  // @@protoc_insertion_point(field_get:RoomProto.CreateRoom.seed)
+  return _internal_seed();
+}
+inline void CreateRoom::_internal_set_seed(uint32_t value) {
+  
+  seed_ = value;
+}
+inline void CreateRoom::set_seed(uint32_t value) {
+  _internal_set_seed(value);
+  // @@protoc_insertion_point(field_set:RoomProto.CreateRoom.seed)
 }
 
 // -------------------------------------------------------------------

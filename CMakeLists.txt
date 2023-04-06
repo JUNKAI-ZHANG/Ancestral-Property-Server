@@ -68,8 +68,4 @@ add_executable(LogicServer
 )
 target_link_libraries(LogicServer  ${libraries_to_link})
 
-# add_executable(MatchServer
-#     $<TARGET_OBJECTS:BaseObj>
-#     src/Source/MatchServer.cpp
-# )
-# target_link_libraries(MatchServer  ${libraries_to_link})
+

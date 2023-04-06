@@ -211,7 +211,7 @@ int main(int argc, char **argv)
 {
     if (argc != 2)
     {
-        printf("Usage: %s port\n", argv[0]);
+        // printf("Usage: %s port\n", argv[0]);
         // return 1;
     }
 
@@ -220,7 +220,7 @@ int main(int argc, char **argv)
 
     GateServer gateServer;
 
-    printf("Start Gate Center Server ing...\n");
+    std::cout << "Start Gate Center Server ing..." << std::endl;
     gateServer.BootServer(port);
 
     return 0;
