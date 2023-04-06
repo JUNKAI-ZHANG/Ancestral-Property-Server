@@ -16,6 +16,7 @@ message JoinRoom
 
     Type type = 4;
     bool ret = 5;
+    uint32 seed = 6;
 }
 
 message LeaveRoom
@@ -49,6 +50,7 @@ message CreateRoom
     }
 
     Type type = 6;
+    uint32 seed = 7;
 }
 
 message GetRoomList
