@@ -33,8 +33,16 @@ void DBServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t l
     {
     case BODYTYPE::LoginRequest:
     {
-        LoginProto::LoginRequest *body = reinterpret_cast<LoginProto::LoginRequest *>(msg->body->message);
         HandleUserLogin(msg, fd);
+        break;
+    }
+    case BODYTYPE::RegistRequest:
+    {
+        HandleUserRegister(msg, fd);
+        break;
+    }
+    default:
+    {
         break;
     }
     }
@@ -50,80 +58,30 @@ void DBServer::HandleUserLogin(Message *msg, int fd)
     LoginProto::LoginRequest *body = reinterpret_cast<LoginProto::LoginRequest *>(msg->body->message);
     int ret = -1;
 
-    switch (body->opt())
-    {
-    case LoginProto::LoginRequest_Operation_Login:
-    {
-        printf("%s %s try to login \n", body->username().c_str(), body->passwd().c_str());
-        ret = QueryUser(body->username(), body->passwd());
-        break;
-    }
-    case LoginProto::LoginRequest_Operation_Register:
-    {
-        if (IsExistUser(body->username()))
-        {
-            ret = 0;
-            break;
-        }
-        printf("%s %s try to register \n", body->username().c_str(), body->passwd().c_str());
-        ret = InsertUser(body->username(), body->passwd());
-        break;
-    }
-    default:
-    {
-        break;
-    }
-    }
-
-    // 异常错误
-    if (ret == -1)
-    {
-        std::cerr << "Login/Register Error in handle" << std::endl;
-        return;
-    }
+    std::cout << body->username() << ' ' << body->passwd() << " try to login" << std::endl;
+    ret = QueryUser(body->username(), body->passwd());
 
     std::string resp_msg;
-    LoginProto::LoginResponse_Operation resp_opt;
 
-    switch(body->opt())
+    if (ret == 1)
     {
-    case LoginProto::LoginRequest_Operation_Login:
-    {
-        if (ret == 1)
-        {
-            resp_msg = "Login Success!";
-        }
-        else if (ret == 0)
-        {
-            resp_msg = "Passwd Error";
-        }
-        resp_opt = LoginProto::LoginResponse_Operation_Login;
-        break;
+        resp_msg = "Login Success!";
     }
-    case LoginProto::LoginRequest_Operation_Register:
+    else if (ret == 0)
     {
-        if (ret == 1)
-        {
-            resp_msg = "Register Success!";
-        }
-        else if (ret == 0)
-        {
-            resp_msg = "Register Failed, username is exist";
-        }
-        resp_opt = LoginProto::LoginResponse_Operation_Register;
-        break;
+        resp_msg = "Passwd Error";
     }
-    default:
+    else if (ret == -1)
     {
-        break;
-    }
+        // 异常错误
+        std::cerr << "Login Error in handle(MySQL Layer)" << std::endl;
+        return;
     }
 
     uint32_t token = 0;
     if (ret == 1)
     {
         token = Encryption::GenerateToken(body->username(), body->passwd());
-        std::cout << "Token = " << token << std::endl;
 
         redisReply *reply = (redisReply *)redisCommand(redis, "set %s %u", body->username().c_str(), token);
         if (reply != nullptr)
@@ -141,7 +99,57 @@ void DBServer::HandleUserLogin(Message *msg, int fd)
         }
     }
 
-    Message *message = NewLoginResponseMessage(ret, resp_msg, body->username(), token, resp_opt);
+    int userid = -1;
+    if (ret == 1) 
+    {
+        userid = GetUserid(body->username());
+    }
+
+    Message *message = NewLoginResponseMessage(ret, resp_msg, token, userid, msg->head->m_userid);
+
+    if (message != nullptr)
+    {
+        SendMsg(message, fd);
+        delete message;
+    }
+}
+
+void DBServer::HandleUserRegister(Message *msg, int fd)
+{
+    LoginProto::RegistRequest *body = reinterpret_cast<LoginProto::RegistRequest *>(msg->body->message);
+    int ret = -1;
+
+    if (IsExistUser(body->username()))
+    {
+        ret = 0;
+    }
+    if (ret == -1)
+    {
+        std::cout << body->username() << ' ' << body->passwd() << " try to register" << std::endl;
+
+        int userid = GetRowCount("user");
+
+        ret = InsertUser(body->username(), body->passwd(), to_string(userid + 1));
+    }
+
+    std::string resp_msg = "";
+
+    if (ret == 1)
+    {
+        resp_msg = "Register Success!";
+    }
+    else if (ret == 0)
+    {
+        resp_msg = "Register Failed, username is exist";
+    }
+    else if (ret == -1)
+    {
+        // 异常错误
+        std::cerr << "Register Error in handle" << std::endl;
+        return;
+    }
+
+    Message *message = NewRegisterResponseMessage(ret, resp_msg, msg->head->m_userid);
 
     if (message != nullptr)
     {
@@ -195,7 +203,7 @@ bool DBServer::IsExistUser(const std::string username)
     if (mysql == nullptr)
     {
         std::cerr << "Connection with mysql was closed" << std::endl;
-        return -1;
+        return false;
     }
 
     std::string sql = "SELECT * FROM user where username = '" + username + "'";
@@ -204,7 +212,7 @@ bool DBServer::IsExistUser(const std::string username)
     if (mysql_query(mysql, sql.c_str()))
     {
         std::cerr << "Error: " << mysql_error(mysql) << std::endl;
-        return -1;
+        return false;
     }
 
     // 获取查询结果
@@ -212,7 +220,7 @@ bool DBServer::IsExistUser(const std::string username)
     if (result == nullptr)
     {
         std::cerr << "Error: " << mysql_error(mysql) << std::endl;
-        return -1;
+        return false;
     }
 
     bool ret = false;
@@ -305,7 +313,7 @@ int DBServer::QueryUser(const std::string username, const std::string password)
     return ret;
 }
 
-bool DBServer::InsertUser(const std::string username, const std::string password)
+bool DBServer::InsertUser(const std::string username, const std::string password, const std::string userid)
 {
     if (mysql == nullptr)
     {
@@ -326,7 +334,7 @@ bool DBServer::InsertUser(const std::string username, const std::string password
 */
 
     // 执行 SQL 插入用户信息
-    std::string sql = "insert into user (username, passwd) VALUES (\'" + username + "\', \'" + password + "\')";
+    std::string sql = "insert into user (username, passwd, userid) VALUES (\'" + username + "\', \'" + password + "\', \'" + userid + "\')";
 
     if (mysql_query(mysql, sql.c_str()) != 0)
     {
@@ -335,6 +343,54 @@ bool DBServer::InsertUser(const std::string username, const std::string password
     }
 
     return true;
+}
+
+int DBServer::GetUserid(std::string username)
+{
+    std::string sql = "select userid from user where username = '" + username + "'";
+    if (mysql_query(mysql, sql.c_str()))
+    {
+        std::cerr << "Error: " << mysql_error(mysql) << std::endl;
+        return -1;
+    }
+
+    // 获取查询结果
+    MYSQL_RES *result = mysql_store_result(mysql);
+    if (result == nullptr)
+    {
+        std::cerr << "Error: " << mysql_error(mysql) << std::endl;
+        return -1;
+    }
+
+    bool ret = false;
+
+    MYSQL_ROW row;
+    row = mysql_fetch_row(result);
+    return atoi(row[0]);
+}
+
+int DBServer::GetRowCount(std::string tablename)
+{
+    std::string sql = "SELECT COUNT(*) FROM " + tablename;
+    if (mysql_query(mysql, sql.c_str()))
+    {
+        std::cerr << "Error: " << mysql_error(mysql) << std::endl;
+        return -1;
+    }
+
+    // 获取查询结果
+    MYSQL_RES *result = mysql_store_result(mysql);
+    if (result == nullptr)
+    {
+        std::cerr << "Error: " << mysql_error(mysql) << std::endl;
+        return -1;
+    }
+
+    bool ret = false;
+
+    MYSQL_ROW row;
+    row = mysql_fetch_row(result);
+    return atoi(row[0]);
 }
 
 bool DBServer::ChangeUserMoney(const std::string username, int money, int &allMoney)
@@ -421,7 +477,7 @@ int main(int argc, char **argv)
 
     if (dbServer.ConnectToMysqlAndRedis())
     {
-        printf("Start DB Server ing...\n");
+        std::cout << "Start DB Server ing..." << std::endl;
         dbServer.BootServer(port);
     }
 

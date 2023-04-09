@@ -115,7 +115,7 @@ void CenterServer::RemoveServer(const Server_Info *info)
         RemoveServerFromGroup(dbServerGroup, info);
     }
 
-    printf("%s:%d is offline\n", info->ip.c_str(), info->port);
+    std::cout << info->ip << ":" << info->port << " is offline" << std::endl;
 }
 
 void CenterServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t length, int fd)

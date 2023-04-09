@@ -75,51 +75,75 @@ void GateServer::DisconnectAllClients()
     }
 }
 
+bool GateServer::CheckMessageValid(Message *msg, int fd)
+{
+    if (fd == center_server_client || fd == logic_server_client || fd == db_server_client)
+    {
+        return true;
+    }
+    if (msg->head->m_userid == 0)
+    {
+        int type = msg->head->m_packageType;
+        if (type == BODYTYPE::LoginRequest || type == BODYTYPE::RegistRequest)
+        {
+            return true;
+        }
+    }
+    else 
+    {
+        if (fd == user_fd_record[msg->head->m_userid])
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t length, int fd)
 {
     ServerBase::OnMsgBodyAnalysised(msg, body, length, fd);
+
+    if (!CheckMessageValid(msg, fd))
+    {
+        return;
+    }
 
     switch (msg->head->m_packageType)
     {
     case BODYTYPE::LoginRequest:
     {
-        LoginProto::LoginRequest *body1 = reinterpret_cast<LoginProto::LoginRequest *>(msg->body->message);
+        // 登录的m_userid字段暂时存储user_fd
+        msg->head->m_userid = fd;
 
-        // std::cout << "username = " << body1->username() << std::endl;
-        // std::cout << "password = " << body1->passwd() << std::endl;
-
-        user_fd_record[body1->username()] = fd;
-        
         // 转发给db server处理
         SendMsg(msg, db_server_client);
         break;
     }
     case BODYTYPE::LoginResponse:
     {
-        LoginProto::LoginResponse *body2 = reinterpret_cast<LoginProto::LoginResponse *>(msg->body->message);
+        LoginProto::LoginResponse *body = reinterpret_cast<LoginProto::LoginResponse *>(msg->body->message);
 
-        // std::cout << "Size = " << msg->head->m_packageSize << std::endl;
-        // std::cout << "Type = " << msg->head->m_packageType << std::endl;
-        // std::cout << "Token = " << body2->token() << std::endl;
-
-        if (!user_fd_record.count(body2->userid()))
+        if (body->result())
         {
-            return;
+            user_fd_record[body->userid()] = msg->head->m_userid;
         }
 
-        int client_fd = user_fd_record[body2->userid()];
-        SendMsg(msg, client_fd);
+        SendMsg(msg, msg->head->m_userid);
+        break;
+    }
+    case BODYTYPE::RegistRequest:
+    {
+        // 注册的m_userid字段暂时存储user_fd
+        msg->head->m_userid = fd;
 
-        if (body2->opt() == LoginProto::LoginResponse_Operation_Register)
-        {
-            // 注册操作 移除临时record
-            user_fd_record.erase(body2->userid());
-        }
-        else if (!(body2->result()))
-        {
-            // 登录失败 移除record
-            user_fd_record.erase(body2->userid());
-        }
+        // 转发给db server处理
+        SendMsg(msg, db_server_client);
+        break;
+    }
+    case BODYTYPE::RegistResponse:
+    {
+        // 无论成功与否，都转发给client，无需额外的操作
+        SendMsg(msg, msg->head->m_userid);
         break;
     }
     case BODYTYPE::JoinRoom:
@@ -133,7 +157,7 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
         else if (body->type() == RoomProto::JoinRoom::Type::JoinRoom_Type_RESPONSE)
         {
             /* 转发给 client 处理 */
-            SendMsg(msg, user_fd_record[body->userid()]);
+            SendMsg(msg, user_fd_record[msg->head->m_userid]);
         }
         else 
         {
@@ -152,7 +176,7 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
         else if (body->type() == RoomProto::LeaveRoom::Type::LeaveRoom_Type_RESPONSE)
         {
             /* 转发给 client 处理 */
-            SendMsg(msg, user_fd_record[body->userid()]);
+            SendMsg(msg, user_fd_record[msg->head->m_userid]);
         }
         else 
         {
@@ -171,7 +195,7 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
         else if (body->type() == RoomProto::CreateRoom::Type::CreateRoom_Type_RESPONSE)
         {
             /* 转发给 client 处理 */
-            SendMsg(msg, user_fd_record[body->userid()]);
+            SendMsg(msg, user_fd_record[msg->head->m_userid]);
         }
         else 
         {
@@ -190,7 +214,7 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
         else if (body->type() == RoomProto::GetRoomList::Type::GetRoomList_Type_RESPONSE)
         {
             /* 转发给 client 处理 */
-            SendMsg(msg, user_fd_record[body->userid()]);
+            SendMsg(msg, user_fd_record[msg->head->m_userid]);
         }
         else 
         {
