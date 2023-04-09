@@ -30,7 +30,6 @@
 #include <google/protobuf/message.h>
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
-#include <google/protobuf/generated_enum_reflection.h>
 #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
@@ -47,7 +46,7 @@ struct TableStruct_Login_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[3]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[5]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -64,64 +63,22 @@ extern LoginRequestDefaultTypeInternal _LoginRequest_default_instance_;
 class LoginResponse;
 struct LoginResponseDefaultTypeInternal;
 extern LoginResponseDefaultTypeInternal _LoginResponse_default_instance_;
+class RegistRequest;
+struct RegistRequestDefaultTypeInternal;
+extern RegistRequestDefaultTypeInternal _RegistRequest_default_instance_;
+class RegistResponse;
+struct RegistResponseDefaultTypeInternal;
+extern RegistResponseDefaultTypeInternal _RegistResponse_default_instance_;
 }  // namespace LoginProto
 PROTOBUF_NAMESPACE_OPEN
 template<> ::LoginProto::LoginOut* Arena::CreateMaybeMessage<::LoginProto::LoginOut>(Arena*);
 template<> ::LoginProto::LoginRequest* Arena::CreateMaybeMessage<::LoginProto::LoginRequest>(Arena*);
 template<> ::LoginProto::LoginResponse* Arena::CreateMaybeMessage<::LoginProto::LoginResponse>(Arena*);
+template<> ::LoginProto::RegistRequest* Arena::CreateMaybeMessage<::LoginProto::RegistRequest>(Arena*);
+template<> ::LoginProto::RegistResponse* Arena::CreateMaybeMessage<::LoginProto::RegistResponse>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace LoginProto {
 
-enum LoginRequest_Operation : int {
-  LoginRequest_Operation_Login = 0,
-  LoginRequest_Operation_Register = 1,
-  LoginRequest_Operation_LoginRequest_Operation_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
-  LoginRequest_Operation_LoginRequest_Operation_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
-};
-bool LoginRequest_Operation_IsValid(int value);
-constexpr LoginRequest_Operation LoginRequest_Operation_Operation_MIN = LoginRequest_Operation_Login;
-constexpr LoginRequest_Operation LoginRequest_Operation_Operation_MAX = LoginRequest_Operation_Register;
-constexpr int LoginRequest_Operation_Operation_ARRAYSIZE = LoginRequest_Operation_Operation_MAX + 1;
-
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* LoginRequest_Operation_descriptor();
-template<typename T>
-inline const std::string& LoginRequest_Operation_Name(T enum_t_value) {
-  static_assert(::std::is_same<T, LoginRequest_Operation>::value ||
-    ::std::is_integral<T>::value,
-    "Incorrect type passed to function LoginRequest_Operation_Name.");
-  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
-    LoginRequest_Operation_descriptor(), enum_t_value);
-}
-inline bool LoginRequest_Operation_Parse(
-    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, LoginRequest_Operation* value) {
-  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<LoginRequest_Operation>(
-    LoginRequest_Operation_descriptor(), name, value);
-}
-enum LoginResponse_Operation : int {
-  LoginResponse_Operation_Login = 0,
-  LoginResponse_Operation_Register = 1,
-  LoginResponse_Operation_LoginResponse_Operation_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
-  LoginResponse_Operation_LoginResponse_Operation_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
-};
-bool LoginResponse_Operation_IsValid(int value);
-constexpr LoginResponse_Operation LoginResponse_Operation_Operation_MIN = LoginResponse_Operation_Login;
-constexpr LoginResponse_Operation LoginResponse_Operation_Operation_MAX = LoginResponse_Operation_Register;
-constexpr int LoginResponse_Operation_Operation_ARRAYSIZE = LoginResponse_Operation_Operation_MAX + 1;
-
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* LoginResponse_Operation_descriptor();
-template<typename T>
-inline const std::string& LoginResponse_Operation_Name(T enum_t_value) {
-  static_assert(::std::is_same<T, LoginResponse_Operation>::value ||
-    ::std::is_integral<T>::value,
-    "Incorrect type passed to function LoginResponse_Operation_Name.");
-  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
-    LoginResponse_Operation_descriptor(), enum_t_value);
-}
-inline bool LoginResponse_Operation_Parse(
-    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, LoginResponse_Operation* value) {
-  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<LoginResponse_Operation>(
-    LoginResponse_Operation_descriptor(), name, value);
-}
 // ===================================================================
 
 class LoginRequest final :
@@ -243,42 +200,11 @@ class LoginRequest final :
 
   // nested types ----------------------------------------------------
 
-  typedef LoginRequest_Operation Operation;
-  static constexpr Operation Login =
-    LoginRequest_Operation_Login;
-  static constexpr Operation Register =
-    LoginRequest_Operation_Register;
-  static inline bool Operation_IsValid(int value) {
-    return LoginRequest_Operation_IsValid(value);
-  }
-  static constexpr Operation Operation_MIN =
-    LoginRequest_Operation_Operation_MIN;
-  static constexpr Operation Operation_MAX =
-    LoginRequest_Operation_Operation_MAX;
-  static constexpr int Operation_ARRAYSIZE =
-    LoginRequest_Operation_Operation_ARRAYSIZE;
-  static inline const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor*
-  Operation_descriptor() {
-    return LoginRequest_Operation_descriptor();
-  }
-  template<typename T>
-  static inline const std::string& Operation_Name(T enum_t_value) {
-    static_assert(::std::is_same<T, Operation>::value ||
-      ::std::is_integral<T>::value,
-      "Incorrect type passed to function Operation_Name.");
-    return LoginRequest_Operation_Name(enum_t_value);
-  }
-  static inline bool Operation_Parse(::PROTOBUF_NAMESPACE_ID::ConstStringParam name,
-      Operation* value) {
-    return LoginRequest_Operation_Parse(name, value);
-  }
-
   // accessors -------------------------------------------------------
 
   enum : int {
     kUsernameFieldNumber = 1,
     kPasswdFieldNumber = 2,
-    kOptFieldNumber = 3,
   };
   // string username = 1;
   void clear_username();
@@ -308,15 +234,6 @@ class LoginRequest final :
   std::string* _internal_mutable_passwd();
   public:
 
-  // .LoginProto.LoginRequest.Operation opt = 3;
-  void clear_opt();
-  ::LoginProto::LoginRequest_Operation opt() const;
-  void set_opt(::LoginProto::LoginRequest_Operation value);
-  private:
-  ::LoginProto::LoginRequest_Operation _internal_opt() const;
-  void _internal_set_opt(::LoginProto::LoginRequest_Operation value);
-  public:
-
   // @@protoc_insertion_point(class_scope:LoginProto.LoginRequest)
  private:
   class _Internal;
@@ -326,7 +243,6 @@ class LoginRequest final :
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr username_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr passwd_;
-  int opt_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_Login_2eproto;
 };
@@ -451,44 +367,13 @@ class LoginResponse final :
 
   // nested types ----------------------------------------------------
 
-  typedef LoginResponse_Operation Operation;
-  static constexpr Operation Login =
-    LoginResponse_Operation_Login;
-  static constexpr Operation Register =
-    LoginResponse_Operation_Register;
-  static inline bool Operation_IsValid(int value) {
-    return LoginResponse_Operation_IsValid(value);
-  }
-  static constexpr Operation Operation_MIN =
-    LoginResponse_Operation_Operation_MIN;
-  static constexpr Operation Operation_MAX =
-    LoginResponse_Operation_Operation_MAX;
-  static constexpr int Operation_ARRAYSIZE =
-    LoginResponse_Operation_Operation_ARRAYSIZE;
-  static inline const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor*
-  Operation_descriptor() {
-    return LoginResponse_Operation_descriptor();
-  }
-  template<typename T>
-  static inline const std::string& Operation_Name(T enum_t_value) {
-    static_assert(::std::is_same<T, Operation>::value ||
-      ::std::is_integral<T>::value,
-      "Incorrect type passed to function Operation_Name.");
-    return LoginResponse_Operation_Name(enum_t_value);
-  }
-  static inline bool Operation_Parse(::PROTOBUF_NAMESPACE_ID::ConstStringParam name,
-      Operation* value) {
-    return LoginResponse_Operation_Parse(name, value);
-  }
-
   // accessors -------------------------------------------------------
 
   enum : int {
     kMsgFieldNumber = 2,
-    kUseridFieldNumber = 3,
     kResultFieldNumber = 1,
+    kUseridFieldNumber = 3,
     kTokenFieldNumber = 4,
-    kOptFieldNumber = 5,
   };
   // string msg = 2;
   void clear_msg();
@@ -504,20 +389,6 @@ class LoginResponse final :
   std::string* _internal_mutable_msg();
   public:
 
-  // string userid = 3;
-  void clear_userid();
-  const std::string& userid() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_userid(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_userid();
-  PROTOBUF_NODISCARD std::string* release_userid();
-  void set_allocated_userid(std::string* userid);
-  private:
-  const std::string& _internal_userid() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_userid(const std::string& value);
-  std::string* _internal_mutable_userid();
-  public:
-
   // bool result = 1;
   void clear_result();
   bool result() const;
@@ -525,6 +396,15 @@ class LoginResponse final :
   private:
   bool _internal_result() const;
   void _internal_set_result(bool value);
+  public:
+
+  // int32 userid = 3;
+  void clear_userid();
+  int32_t userid() const;
+  void set_userid(int32_t value);
+  private:
+  int32_t _internal_userid() const;
+  void _internal_set_userid(int32_t value);
   public:
 
   // uint32 token = 4;
@@ -536,15 +416,6 @@ class LoginResponse final :
   void _internal_set_token(uint32_t value);
   public:
 
-  // .LoginProto.LoginResponse.Operation opt = 5;
-  void clear_opt();
-  ::LoginProto::LoginResponse_Operation opt() const;
-  void set_opt(::LoginProto::LoginResponse_Operation value);
-  private:
-  ::LoginProto::LoginResponse_Operation _internal_opt() const;
-  void _internal_set_opt(::LoginProto::LoginResponse_Operation value);
-  public:
-
   // @@protoc_insertion_point(class_scope:LoginProto.LoginResponse)
  private:
   class _Internal;
@@ -553,10 +424,338 @@ class LoginResponse final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr msg_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr userid_;
   bool result_;
+  int32_t userid_;
   uint32_t token_;
-  int opt_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_Login_2eproto;
+};
+// -------------------------------------------------------------------
+
+class RegistRequest final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:LoginProto.RegistRequest) */ {
+ public:
+  inline RegistRequest() : RegistRequest(nullptr) {}
+  ~RegistRequest() override;
+  explicit constexpr RegistRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  RegistRequest(const RegistRequest& from);
+  RegistRequest(RegistRequest&& from) noexcept
+    : RegistRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline RegistRequest& operator=(const RegistRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline RegistRequest& operator=(RegistRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const RegistRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const RegistRequest* internal_default_instance() {
+    return reinterpret_cast<const RegistRequest*>(
+               &_RegistRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    2;
+
+  friend void swap(RegistRequest& a, RegistRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(RegistRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(RegistRequest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  RegistRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<RegistRequest>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const RegistRequest& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const RegistRequest& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(RegistRequest* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "LoginProto.RegistRequest";
+  }
+  protected:
+  explicit RegistRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kUsernameFieldNumber = 1,
+    kPasswdFieldNumber = 2,
+  };
+  // string username = 1;
+  void clear_username();
+  const std::string& username() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_username(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_username();
+  PROTOBUF_NODISCARD std::string* release_username();
+  void set_allocated_username(std::string* username);
+  private:
+  const std::string& _internal_username() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_username(const std::string& value);
+  std::string* _internal_mutable_username();
+  public:
+
+  // string passwd = 2;
+  void clear_passwd();
+  const std::string& passwd() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_passwd(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_passwd();
+  PROTOBUF_NODISCARD std::string* release_passwd();
+  void set_allocated_passwd(std::string* passwd);
+  private:
+  const std::string& _internal_passwd() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_passwd(const std::string& value);
+  std::string* _internal_mutable_passwd();
+  public:
+
+  // @@protoc_insertion_point(class_scope:LoginProto.RegistRequest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr username_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr passwd_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_Login_2eproto;
+};
+// -------------------------------------------------------------------
+
+class RegistResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:LoginProto.RegistResponse) */ {
+ public:
+  inline RegistResponse() : RegistResponse(nullptr) {}
+  ~RegistResponse() override;
+  explicit constexpr RegistResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  RegistResponse(const RegistResponse& from);
+  RegistResponse(RegistResponse&& from) noexcept
+    : RegistResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline RegistResponse& operator=(const RegistResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline RegistResponse& operator=(RegistResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const RegistResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const RegistResponse* internal_default_instance() {
+    return reinterpret_cast<const RegistResponse*>(
+               &_RegistResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    3;
+
+  friend void swap(RegistResponse& a, RegistResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(RegistResponse* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(RegistResponse* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  RegistResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<RegistResponse>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const RegistResponse& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const RegistResponse& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(RegistResponse* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "LoginProto.RegistResponse";
+  }
+  protected:
+  explicit RegistResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kMsgFieldNumber = 2,
+    kResultFieldNumber = 1,
+  };
+  // string msg = 2;
+  void clear_msg();
+  const std::string& msg() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_msg(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_msg();
+  PROTOBUF_NODISCARD std::string* release_msg();
+  void set_allocated_msg(std::string* msg);
+  private:
+  const std::string& _internal_msg() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_msg(const std::string& value);
+  std::string* _internal_mutable_msg();
+  public:
+
+  // bool result = 1;
+  void clear_result();
+  bool result() const;
+  void set_result(bool value);
+  private:
+  bool _internal_result() const;
+  void _internal_set_result(bool value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:LoginProto.RegistResponse)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr msg_;
+  bool result_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_Login_2eproto;
 };
@@ -610,7 +809,7 @@ class LoginOut final :
                &_LoginOut_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    2;
+    4;
 
   friend void swap(LoginOut& a, LoginOut& b) {
     a.Swap(&b);
@@ -684,23 +883,9 @@ class LoginOut final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kUseridFieldNumber = 1,
     kReasonFieldNumber = 2,
+    kUseridFieldNumber = 1,
   };
-  // string userid = 1;
-  void clear_userid();
-  const std::string& userid() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_userid(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_userid();
-  PROTOBUF_NODISCARD std::string* release_userid();
-  void set_allocated_userid(std::string* userid);
-  private:
-  const std::string& _internal_userid() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_userid(const std::string& value);
-  std::string* _internal_mutable_userid();
-  public:
-
   // string reason = 2;
   void clear_reason();
   const std::string& reason() const;
@@ -715,6 +900,15 @@ class LoginOut final :
   std::string* _internal_mutable_reason();
   public:
 
+  // int32 userid = 1;
+  void clear_userid();
+  int32_t userid() const;
+  void set_userid(int32_t value);
+  private:
+  int32_t _internal_userid() const;
+  void _internal_set_userid(int32_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:LoginProto.LoginOut)
  private:
   class _Internal;
@@ -722,8 +916,8 @@ class LoginOut final :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr userid_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr reason_;
+  int32_t userid_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_Login_2eproto;
 };
@@ -840,26 +1034,6 @@ inline void LoginRequest::set_allocated_passwd(std::string* passwd) {
   // @@protoc_insertion_point(field_set_allocated:LoginProto.LoginRequest.passwd)
 }
 
-// .LoginProto.LoginRequest.Operation opt = 3;
-inline void LoginRequest::clear_opt() {
-  opt_ = 0;
-}
-inline ::LoginProto::LoginRequest_Operation LoginRequest::_internal_opt() const {
-  return static_cast< ::LoginProto::LoginRequest_Operation >(opt_);
-}
-inline ::LoginProto::LoginRequest_Operation LoginRequest::opt() const {
-  // @@protoc_insertion_point(field_get:LoginProto.LoginRequest.opt)
-  return _internal_opt();
-}
-inline void LoginRequest::_internal_set_opt(::LoginProto::LoginRequest_Operation value) {
-  
-  opt_ = value;
-}
-inline void LoginRequest::set_opt(::LoginProto::LoginRequest_Operation value) {
-  _internal_set_opt(value);
-  // @@protoc_insertion_point(field_set:LoginProto.LoginRequest.opt)
-}
-
 // -------------------------------------------------------------------
 
 // LoginResponse
@@ -935,55 +1109,24 @@ inline void LoginResponse::set_allocated_msg(std::string* msg) {
   // @@protoc_insertion_point(field_set_allocated:LoginProto.LoginResponse.msg)
 }
 
-// string userid = 3;
+// int32 userid = 3;
 inline void LoginResponse::clear_userid() {
-  userid_.ClearToEmpty();
+  userid_ = 0;
 }
-inline const std::string& LoginResponse::userid() const {
+inline int32_t LoginResponse::_internal_userid() const {
+  return userid_;
+}
+inline int32_t LoginResponse::userid() const {
   // @@protoc_insertion_point(field_get:LoginProto.LoginResponse.userid)
   return _internal_userid();
 }
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void LoginResponse::set_userid(ArgT0&& arg0, ArgT... args) {
- 
- userid_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+inline void LoginResponse::_internal_set_userid(int32_t value) {
+  
+  userid_ = value;
+}
+inline void LoginResponse::set_userid(int32_t value) {
+  _internal_set_userid(value);
   // @@protoc_insertion_point(field_set:LoginProto.LoginResponse.userid)
-}
-inline std::string* LoginResponse::mutable_userid() {
-  std::string* _s = _internal_mutable_userid();
-  // @@protoc_insertion_point(field_mutable:LoginProto.LoginResponse.userid)
-  return _s;
-}
-inline const std::string& LoginResponse::_internal_userid() const {
-  return userid_.Get();
-}
-inline void LoginResponse::_internal_set_userid(const std::string& value) {
-  
-  userid_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
-}
-inline std::string* LoginResponse::_internal_mutable_userid() {
-  
-  return userid_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
-}
-inline std::string* LoginResponse::release_userid() {
-  // @@protoc_insertion_point(field_release:LoginProto.LoginResponse.userid)
-  return userid_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
-}
-inline void LoginResponse::set_allocated_userid(std::string* userid) {
-  if (userid != nullptr) {
-    
-  } else {
-    
-  }
-  userid_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), userid,
-      GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (userid_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
-    userid_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:LoginProto.LoginResponse.userid)
 }
 
 // uint32 token = 4;
@@ -1006,79 +1149,209 @@ inline void LoginResponse::set_token(uint32_t value) {
   // @@protoc_insertion_point(field_set:LoginProto.LoginResponse.token)
 }
 
-// .LoginProto.LoginResponse.Operation opt = 5;
-inline void LoginResponse::clear_opt() {
-  opt_ = 0;
+// -------------------------------------------------------------------
+
+// RegistRequest
+
+// string username = 1;
+inline void RegistRequest::clear_username() {
+  username_.ClearToEmpty();
 }
-inline ::LoginProto::LoginResponse_Operation LoginResponse::_internal_opt() const {
-  return static_cast< ::LoginProto::LoginResponse_Operation >(opt_);
+inline const std::string& RegistRequest::username() const {
+  // @@protoc_insertion_point(field_get:LoginProto.RegistRequest.username)
+  return _internal_username();
 }
-inline ::LoginProto::LoginResponse_Operation LoginResponse::opt() const {
-  // @@protoc_insertion_point(field_get:LoginProto.LoginResponse.opt)
-  return _internal_opt();
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void RegistRequest::set_username(ArgT0&& arg0, ArgT... args) {
+ 
+ username_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:LoginProto.RegistRequest.username)
 }
-inline void LoginResponse::_internal_set_opt(::LoginProto::LoginResponse_Operation value) {
+inline std::string* RegistRequest::mutable_username() {
+  std::string* _s = _internal_mutable_username();
+  // @@protoc_insertion_point(field_mutable:LoginProto.RegistRequest.username)
+  return _s;
+}
+inline const std::string& RegistRequest::_internal_username() const {
+  return username_.Get();
+}
+inline void RegistRequest::_internal_set_username(const std::string& value) {
   
-  opt_ = value;
+  username_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
 }
-inline void LoginResponse::set_opt(::LoginProto::LoginResponse_Operation value) {
-  _internal_set_opt(value);
-  // @@protoc_insertion_point(field_set:LoginProto.LoginResponse.opt)
+inline std::string* RegistRequest::_internal_mutable_username() {
+  
+  return username_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* RegistRequest::release_username() {
+  // @@protoc_insertion_point(field_release:LoginProto.RegistRequest.username)
+  return username_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void RegistRequest::set_allocated_username(std::string* username) {
+  if (username != nullptr) {
+    
+  } else {
+    
+  }
+  username_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), username,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (username_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    username_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:LoginProto.RegistRequest.username)
+}
+
+// string passwd = 2;
+inline void RegistRequest::clear_passwd() {
+  passwd_.ClearToEmpty();
+}
+inline const std::string& RegistRequest::passwd() const {
+  // @@protoc_insertion_point(field_get:LoginProto.RegistRequest.passwd)
+  return _internal_passwd();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void RegistRequest::set_passwd(ArgT0&& arg0, ArgT... args) {
+ 
+ passwd_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:LoginProto.RegistRequest.passwd)
+}
+inline std::string* RegistRequest::mutable_passwd() {
+  std::string* _s = _internal_mutable_passwd();
+  // @@protoc_insertion_point(field_mutable:LoginProto.RegistRequest.passwd)
+  return _s;
+}
+inline const std::string& RegistRequest::_internal_passwd() const {
+  return passwd_.Get();
+}
+inline void RegistRequest::_internal_set_passwd(const std::string& value) {
+  
+  passwd_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* RegistRequest::_internal_mutable_passwd() {
+  
+  return passwd_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* RegistRequest::release_passwd() {
+  // @@protoc_insertion_point(field_release:LoginProto.RegistRequest.passwd)
+  return passwd_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void RegistRequest::set_allocated_passwd(std::string* passwd) {
+  if (passwd != nullptr) {
+    
+  } else {
+    
+  }
+  passwd_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), passwd,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (passwd_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    passwd_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:LoginProto.RegistRequest.passwd)
+}
+
+// -------------------------------------------------------------------
+
+// RegistResponse
+
+// bool result = 1;
+inline void RegistResponse::clear_result() {
+  result_ = false;
+}
+inline bool RegistResponse::_internal_result() const {
+  return result_;
+}
+inline bool RegistResponse::result() const {
+  // @@protoc_insertion_point(field_get:LoginProto.RegistResponse.result)
+  return _internal_result();
+}
+inline void RegistResponse::_internal_set_result(bool value) {
+  
+  result_ = value;
+}
+inline void RegistResponse::set_result(bool value) {
+  _internal_set_result(value);
+  // @@protoc_insertion_point(field_set:LoginProto.RegistResponse.result)
+}
+
+// string msg = 2;
+inline void RegistResponse::clear_msg() {
+  msg_.ClearToEmpty();
+}
+inline const std::string& RegistResponse::msg() const {
+  // @@protoc_insertion_point(field_get:LoginProto.RegistResponse.msg)
+  return _internal_msg();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void RegistResponse::set_msg(ArgT0&& arg0, ArgT... args) {
+ 
+ msg_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:LoginProto.RegistResponse.msg)
+}
+inline std::string* RegistResponse::mutable_msg() {
+  std::string* _s = _internal_mutable_msg();
+  // @@protoc_insertion_point(field_mutable:LoginProto.RegistResponse.msg)
+  return _s;
+}
+inline const std::string& RegistResponse::_internal_msg() const {
+  return msg_.Get();
+}
+inline void RegistResponse::_internal_set_msg(const std::string& value) {
+  
+  msg_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* RegistResponse::_internal_mutable_msg() {
+  
+  return msg_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* RegistResponse::release_msg() {
+  // @@protoc_insertion_point(field_release:LoginProto.RegistResponse.msg)
+  return msg_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void RegistResponse::set_allocated_msg(std::string* msg) {
+  if (msg != nullptr) {
+    
+  } else {
+    
+  }
+  msg_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), msg,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (msg_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    msg_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:LoginProto.RegistResponse.msg)
 }
 
 // -------------------------------------------------------------------
 
 // LoginOut
 
-// string userid = 1;
+// int32 userid = 1;
 inline void LoginOut::clear_userid() {
-  userid_.ClearToEmpty();
+  userid_ = 0;
 }
-inline const std::string& LoginOut::userid() const {
+inline int32_t LoginOut::_internal_userid() const {
+  return userid_;
+}
+inline int32_t LoginOut::userid() const {
   // @@protoc_insertion_point(field_get:LoginProto.LoginOut.userid)
   return _internal_userid();
 }
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void LoginOut::set_userid(ArgT0&& arg0, ArgT... args) {
- 
- userid_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+inline void LoginOut::_internal_set_userid(int32_t value) {
+  
+  userid_ = value;
+}
+inline void LoginOut::set_userid(int32_t value) {
+  _internal_set_userid(value);
   // @@protoc_insertion_point(field_set:LoginProto.LoginOut.userid)
-}
-inline std::string* LoginOut::mutable_userid() {
-  std::string* _s = _internal_mutable_userid();
-  // @@protoc_insertion_point(field_mutable:LoginProto.LoginOut.userid)
-  return _s;
-}
-inline const std::string& LoginOut::_internal_userid() const {
-  return userid_.Get();
-}
-inline void LoginOut::_internal_set_userid(const std::string& value) {
-  
-  userid_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
-}
-inline std::string* LoginOut::_internal_mutable_userid() {
-  
-  return userid_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
-}
-inline std::string* LoginOut::release_userid() {
-  // @@protoc_insertion_point(field_release:LoginProto.LoginOut.userid)
-  return userid_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
-}
-inline void LoginOut::set_allocated_userid(std::string* userid) {
-  if (userid != nullptr) {
-    
-  } else {
-    
-  }
-  userid_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), userid,
-      GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (userid_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
-    userid_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:LoginProto.LoginOut.userid)
 }
 
 // string reason = 2;
@@ -1139,25 +1412,14 @@ inline void LoginOut::set_allocated_reason(std::string* reason) {
 
 // -------------------------------------------------------------------
 
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 
 // @@protoc_insertion_point(namespace_scope)
 
 }  // namespace LoginProto
-
-PROTOBUF_NAMESPACE_OPEN
-
-template <> struct is_proto_enum< ::LoginProto::LoginRequest_Operation> : ::std::true_type {};
-template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::LoginProto::LoginRequest_Operation>() {
-  return ::LoginProto::LoginRequest_Operation_descriptor();
-}
-template <> struct is_proto_enum< ::LoginProto::LoginResponse_Operation> : ::std::true_type {};
-template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::LoginProto::LoginResponse_Operation>() {
-  return ::LoginProto::LoginResponse_Operation_descriptor();
-}
-
-PROTOBUF_NAMESPACE_CLOSE
 
 // @@protoc_insertion_point(global_scope)
 

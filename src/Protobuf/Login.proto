@@ -6,33 +6,30 @@ message LoginRequest
 {
     string username = 1;
     string passwd = 2;
-    enum Operation
-    {
-        Login = 0;
-        Register = 1;
-    }
-
-    Operation opt = 3;
 }
 
 message LoginResponse
 {
     bool result = 1;
     string msg = 2;
-    string userid = 3;
+    int32 userid = 3;
     uint32 token = 4;
+}
 
-    enum Operation
-    {
-        Login = 0;
-        Register = 1;
-    }
+message RegistRequest
+{
+    string username = 1;
+    string passwd = 2;
+}
 
-    Operation opt = 5;
+message RegistResponse 
+{
+    bool result = 1;
+    string msg = 2;
 }
 
 message LoginOut
 {
-    string userid = 1;
+    int32 userid = 1;
     string reason = 2;
 }

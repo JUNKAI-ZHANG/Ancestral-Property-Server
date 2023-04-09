@@ -4,18 +4,33 @@ package FrameProto;
 
 message StartGame
 {
-    int32 framecount = 1;
+    int32 roomid = 1;
 }
 
+message CloseGame
+{
+    int32 roomid = 1;
+}
+
+message UserOperate
+{
+    bool is_down = 1;
+    int32 key_name = 2;
+}
 message PlayerOperate 
 {
-    string userid = 1;
-    repeated int32 data = 2;   // 某帧下，玩家的按键列表
-    float mousex = 3;
-    float mousey = 4;
+    repeated UserOperate key_data = 1;   // 某帧下，玩家的按键列表
+    int32 frame_count = 2;
+    float mouse_x = 3;
+    float mouse_y = 4;
 }
 
-message GameReplay {
+message ChaseFrame
+{
+}
+
+message GameReplay 
+{
     repeated Frame frames = 1;
 }
 
