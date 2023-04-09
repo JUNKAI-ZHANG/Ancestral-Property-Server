@@ -6,17 +6,18 @@
 #include <mysql/mysql.h>
 #include <hiredis/async.h>
 #include <hiredis/hiredis.h>
+#include <bits/stdc++.h>
 
 // 操作mysql的实例类
 class MysqlInst
 {
 private:
     // mysql config
-    const char *mysql_ip = "110.42.203.195";
+    const char *mysql_ip = "124.223.73.248";
     int mysql_port = 3306;
     const char *mysql_user = "root";
-    const char *mysql_password = "Aa20010621++";
-    const char *db_name = "gameDemo";
+    const char *mysql_password = "Zjk20011019#";
+    const char *db_name = "AncestralProperty";
 
 private:
     MYSQL *mysql = nullptr;
@@ -92,6 +93,52 @@ public:
 
         return true;
     }
+    std::string test(std::string username)
+    {
+        std::string sql = "select passwd from user where username = '" + username + "'";
+        if (mysql_query(mysql, sql.c_str()))
+        {
+            std::cerr << "Error: " << mysql_error(mysql) << std::endl;
+            return "Error";
+        }
+
+        // 获取查询结果
+        MYSQL_RES *result = mysql_store_result(mysql);
+        if (result == nullptr)
+        {
+            std::cerr << "Error: " << mysql_error(mysql) << std::endl;
+            return "Error";
+        }
+
+        bool ret = false;
+
+        MYSQL_ROW row;
+        row = mysql_fetch_row(result);
+        return row[0];
+    }
+    int getRow(std::string tablename)
+    {
+        std::string sql = "SELECT COUNT(*) FROM " + tablename;
+        if (mysql_query(mysql, sql.c_str()))
+        {
+            std::cerr << "Error: " << mysql_error(mysql) << std::endl;
+            return -1;
+        }
+
+        // 获取查询结果
+        MYSQL_RES *result = mysql_store_result(mysql);
+        if (result == nullptr)
+        {
+            std::cerr << "Error: " << mysql_error(mysql) << std::endl;
+            return -1;
+        }
+
+        bool ret = false;
+
+        MYSQL_ROW row;
+        row = mysql_fetch_row(result);
+        return atoi(row[0]);
+    }
 };
 
 // 操作redis的实例类
@@ -160,11 +207,16 @@ public:
 
 int main()
 {
-    MysqlInst m;
-    std::map<std::string, std::string> params;
-    params.insert({"username", "999"});
-    params.insert({"passwd", "999"});
-    m.Insert("user", params);
+    // MysqlInst m;
+    // std::map<std::string, std::string> params;
+    // params.insert({"username", "999"});
+    // params.insert({"passwd", "999"});
+    // m.Insert("user", params);
+
+    MysqlInst mysql;
+    std::cout << mysql.getRow("user") << std::endl;
+    std::cout << mysql.test("123") << std::endl;
+
     return 0;
 }
 #endif

@@ -6,7 +6,6 @@ ObjectPool::ObjectPool()
     for (int i = 0; i < INIT_SIZE; i++) 
     {
         Message *message = new Message();
-        message->head = new MessageHead();
         
         pool.push(message);
     }
@@ -39,7 +38,6 @@ Message *ObjectPool::Get()
     else 
     {
         tmp = new Message();
-        tmp->head = new MessageHead();
     }
     return tmp;
 }
@@ -48,6 +46,8 @@ void ObjectPool::Return(Message *msg)
 {
     if (size < SAFETY_SIZE)
     {
+        delete msg->head;
+        delete msg->body;
         size += 1;
         pool.push(msg);
     }

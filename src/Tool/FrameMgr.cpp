@@ -28,12 +28,15 @@ bool FrameMgr::DelFrame(const int& frame_count)
 {
     if (frame.count(frame_count))
     {
+        for (Message *it : frame[frame_count]) 
+        {
+            pool->Return(it);
+        }
         frame.erase(frame_count);
     }
     return true;
 }
 
-/* 使用完应该release，释放掉vector的内存 */
 std::vector<Message *> FrameMgr::GetFrame(const int& frame_count)
 {
     if (frame.count(frame_count))
