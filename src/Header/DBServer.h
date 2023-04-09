@@ -10,25 +10,14 @@
 class DBServer : public FuncServer
 {
 private:
-    // mysql config
-    const char *mysql_ip = "124.223.73.248";
-    int mysql_port = 3306;
-    const char *mysql_user = "root";
-    const char *mysql_password = "Zjk20011019#";
-    const char *db_name = "AncestralProperty";
-
-    // redis config
-    const char *redis_ip = "110.42.203.195";
-    int redis_port = 6379;
-    const char *redis_password = "Aa20010621++";
-
-private:
     MYSQL *mysql = nullptr;
 
     redisContext *redis = nullptr;
 
 private:
     void HandleUserLogin(Message *msg, int fd);
+
+    void HandleUserRegister(Message *msg, int fd);
 
     /* 尝试连接其他类型功能服务器 */
     virtual void TryToConnectAvailabeServer();
@@ -48,7 +37,11 @@ protected:
 
     bool IsExistUser(const std::string username);
 
-    bool InsertUser(const std::string username, const std::string password);
+    bool InsertUser(const std::string username, const std::string password, const std::string userid);
+
+    int GetUserid(std::string username);
+
+    int GetRowCount(std::string tablename);
 
     bool ChangeUserMoney(const std::string username, int money, int&);
 
@@ -61,6 +54,20 @@ public:
     virtual ~DBServer();
 
     bool ConnectToMysqlAndRedis();
+    
+private:
+    // mysql config
+    const char *mysql_ip = "124.223.73.248";
+    int mysql_port = 3306;
+    const char *mysql_user = "root";
+    const char *mysql_password = "Zjk20011019#";
+    const char *db_name = "AncestralProperty";
+
+    // redis config
+    const char *redis_ip = "110.42.203.195";
+    int redis_port = 6379;
+    const char *redis_password = "Aa20010621++";
+
 };
 
 #endif

@@ -1,4 +1,5 @@
 #ifndef _PROFILE_H
+
 #define _PROFILE_H
 
 #define HEAD_SIZE       12
@@ -44,10 +45,23 @@ enum BODYTYPE
 
     LoginOut,
 
+    // JoinRoomRequest,
+    // LeaveRoomRequest,
+    // CreateRoomRequest,
+    // GetRoomListRequest,
+
+    // JoinRoomResponse,
+    // LeaveRoomResponse,
+    // CreateRoomResponse,
+    // GetRoomListResponse,
+
     JoinRoom,
     LeaveRoom,
     CreateRoom,
     GetRoomList,
+
+    StartGame,
+    CloseGame,
 
     Frame,
     GameState,

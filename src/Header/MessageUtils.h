@@ -19,6 +19,16 @@ static MessageBody *CreateMessageBody(int type)
         message = new LoginProto::LoginResponse;
         break;
     }
+    case BODYTYPE::RegistRequest:
+    {
+        message = new LoginProto::RegistRequest;
+        break;
+    }
+    case BODYTYPE::RegistResponse:
+    {
+        message = new LoginProto::RegistResponse;
+        break;
+    }
     case BODYTYPE::ServerInfo:
     {
         message = new ServerProto::ServerInfo;
@@ -42,6 +52,16 @@ static MessageBody *CreateMessageBody(int type)
     case BODYTYPE::GetRoomList:
     {
         message = new RoomProto::GetRoomList;
+        break;
+    }
+    case BODYTYPE::StartGame:
+    {
+        message = new FrameProto::StartGame;
+        break;
+    }
+    case BODYTYPE::CloseGame:
+    {
+        message = new FrameProto::CloseGame;
         break;
     }
     default:
@@ -71,9 +91,6 @@ static Message *DecodeMessage(uint8_t *data, int len)
 
 static bool CheckHeaderIsValid(MessageHead *header)
 {
-    // std::cout << "m_packSize = "  << header->m_packageSize << std::endl;
-    // std::cout << "m_packType = "  << header->m_packageType << std::endl;
-    // std::cout << "m_packToken = " << header->m_token << std::endl;
     if (header->m_packageSize < HEAD_SIZE)
     {
         return false;
@@ -99,7 +116,7 @@ static bool CheckHeaderIsValid(MessageHead *header)
 }
 
 // 请手动释放返回值 // 可能存在内存泄漏问题。
-static Message *NewLoginResponseMessage(bool ret, std::string msg, std::string userid, uint32_t token, LoginProto::LoginResponse_Operation opt)
+static Message *NewLoginResponseMessage(bool ret, std::string msg, uint32_t token, int userid, int fd)
 {
     Message *message = new Message;
 
@@ -107,14 +124,32 @@ static Message *NewLoginResponseMessage(bool ret, std::string msg, std::string u
     message->body = new MessageBody;
     body->set_result(ret);
     body->set_msg(msg);
-    body->set_userid(userid);
     body->set_token(token);
-    body->set_opt(opt);
+    body->set_userid(userid);
     message->body->message = body;
 
     message->head = new MessageHead;
     message->head->m_packageSize = message->length();
     message->head->m_packageType = BODYTYPE::LoginResponse;
+    message->head->m_userid = fd;
+
+    return message;
+}
+
+static Message *NewRegisterResponseMessage(bool ret, std::string msg, int fd)
+{
+    Message *message = new Message;
+
+    LoginProto::RegistResponse *body = new LoginProto::RegistResponse;
+    message->body = new MessageBody;
+    body->set_result(ret);
+    body->set_msg(msg);
+    message->body->message = body;
+
+    message->head = new MessageHead;
+    message->head->m_packageSize = message->length();
+    message->head->m_packageType = BODYTYPE::RegistResponse;
+    message->head->m_userid = fd;
 
     return message;
 }
@@ -140,7 +175,7 @@ static Message *NewServerInfoMessage(std::string ip, int port, SERVER_TYPE type,
     return message;
 }
 
-static Message *NewJoinRoomResponse(const std::string& userid, const std::string result, bool ret)
+static Message *NewJoinRoomResponse(const std::string result, bool ret, int userid)
 {
     Message *message = new Message;
     std::mt19937 rng(std::chrono::system_clock::now().time_since_epoch().count());
@@ -149,19 +184,19 @@ static Message *NewJoinRoomResponse(const std::string& userid, const std::string
     message->body = new MessageBody;
     body->set_ret(ret);
     body->set_result(result);
-    body->set_userid(userid);
     body->set_seed(rng() % UINT32_MAX);
     body->set_type(RoomProto::JoinRoom::Type::JoinRoom_Type_RESPONSE);
     message->body->message = body;
 
-    message->head = new MessageHead;
-    message->head->m_packageSize = message->length();
-    message->head->m_packageType = BODYTYPE::JoinRoom;
+    message->head = new MessageHead(message->length(), BODYTYPE::JoinRoom, userid);
+    //message->head->m_packageSize = message->length();
+    //message->head->m_packageType = BODYTYPE::JoinRoom;
+    //message->head->m_userid = userid;
 
     return message;
 }
 
-static Message *NewLeaveRoomResponse(const std::string& userid, const std::string result, bool ret)
+static Message *NewLeaveRoomResponse(const std::string result, bool ret, int userid)
 {
     Message *message = new Message;
 
@@ -169,18 +204,18 @@ static Message *NewLeaveRoomResponse(const std::string& userid, const std::strin
     message->body = new MessageBody;
     body->set_ret(ret);
     body->set_result(result);
-    body->set_userid(userid);
     body->set_type(RoomProto::LeaveRoom::Type::LeaveRoom_Type_RESPONSE);
     message->body->message = body;
 
-    message->head = new MessageHead;
-    message->head->m_packageSize = message->length();
-    message->head->m_packageType = BODYTYPE::LeaveRoom;
+    message->head = new MessageHead(message->length(), BODYTYPE::LeaveRoom, userid);
+    //message->head->m_packageSize = message->length();
+    //message->head->m_packageType = BODYTYPE::LeaveRoom;
+    //message->head->m_userid = userid;
 
     return message;
 }
 
-static Message *NewCreateRoomResponse(const std::string& userid, const std::string result, int roomid, bool ret)
+static Message *NewCreateRoomResponse(const std::string result, int roomid, std::string roomname, bool ret, int userid)
 {
     Message *message = new Message;
     std::mt19937 rng(std::chrono::system_clock::now().time_since_epoch().count());
@@ -189,20 +224,21 @@ static Message *NewCreateRoomResponse(const std::string& userid, const std::stri
     message->body = new MessageBody;
     body->set_ret(ret);
     body->set_result(result);
-    body->set_userid(userid);
     body->set_roomid(roomid);
+    body->set_roomname(roomname);
     body->set_seed(rng() % UINT32_MAX);
     body->set_type(RoomProto::CreateRoom::Type::CreateRoom_Type_RESPONSE);
     message->body->message = body;
 
-    message->head = new MessageHead;
-    message->head->m_packageSize = message->length();
-    message->head->m_packageType = BODYTYPE::CreateRoom;
+    message->head = new MessageHead(message->length(), BODYTYPE::CreateRoom, userid);
+    //message->head->m_packageSize = message->length();
+    //message->head->m_packageType = BODYTYPE::CreateRoom;
+    //message->head->m_userid = userid;
 
     return message;
 }
 
-static Message *NewGetRoomListResponse(const std::string& userid, const std::string result, int *roomlist, int *people, int roomsize, bool ret)
+static Message *NewGetRoomListResponse(const std::string result, int *roomlist, int *people, std::string *roomname, int roomsize, bool ret, int userid)
 {
     Message *message = new Message;
 
@@ -210,18 +246,44 @@ static Message *NewGetRoomListResponse(const std::string& userid, const std::str
     message->body = new MessageBody;
     body->set_ret(ret);
     body->set_size(roomsize);
-    body->set_userid(userid);
     body->set_type(RoomProto::GetRoomList::Type::GetRoomList_Type_RESPONSE);
     for (int i = 0; i < roomsize; i++) 
     {
-        body->add_roomlist(roomlist[i]);
-        body->add_peoplecount(people[i]);
+        RoomProto::RoomInfo *roomInfo = body->add_room_list();
+        roomInfo->set_roomid(roomlist[i]);
+        roomInfo->set_roomname(roomname[i]);
+        roomInfo->set_people_count(people[i]);
     }
     message->body->message = body;
 
-    message->head = new MessageHead;
-    message->head->m_packageSize = message->length();
-    message->head->m_packageType = BODYTYPE::GetRoomList;
+    message->head = new MessageHead(message->length(), BODYTYPE::GetRoomList, userid);
+    //message->head->m_packageSize = message->length();
+    //message->head->m_packageType = BODYTYPE::GetRoomList;
+    //message->head->m_userid = userid;
+
+    return message;
+}
+
+static Message *NewStartOrCloseGameMessage(BODYTYPE bodytype, int userid, int roomid)
+{
+    Message *message = new Message;
+
+    if (bodytype == BODYTYPE::StartGame)
+    {
+        FrameProto::StartGame *body = new FrameProto::StartGame;
+        message->body = new MessageBody;
+        body->set_roomid(roomid);
+        message->body->message = body;
+    }
+    if (bodytype == BODYTYPE::CloseGame)
+    {
+        FrameProto::CloseGame *body = new FrameProto::CloseGame;
+        message->body = new MessageBody;
+        body->set_roomid(roomid);
+        message->body->message = body;
+    }
+
+    message->head = new MessageHead(message->length(), bodytype, userid);
 
     return message;
 }
@@ -261,6 +323,18 @@ static uint ByteToUint(const uint8_t *x)
     ret = (ret << 8) + (uint)x[1];
     ret = (ret << 8) + (uint)x[2];
     ret = (ret << 8) + (uint)x[3];
+    return ret;
+}
+
+static std::string to_string(int x)
+{
+    std::string ret = "";
+    while (x)
+    {
+        ret.push_back(x % 10 + '0');
+        x /= 10;
+    }
+    reverse(ret.begin(), ret.end());
     return ret;
 }
 

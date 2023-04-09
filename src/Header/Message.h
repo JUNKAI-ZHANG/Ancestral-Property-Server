@@ -12,7 +12,7 @@ class MessageHead
 public:
     int m_packageSize = 0;
     int m_packageType = 0;
-    uint32_t m_token = 0;
+    int m_userid = 0;
 
     /*
     * @brief 服务器自己加的conn_id，由server负责填写
@@ -23,9 +23,11 @@ public:
 
     MessageHead(const uint8_t *buffer, int len);
 
+    MessageHead(int packageSize, int packageType, int userid);
+
     /*
-    * @brief 这里的 *buffer 是序列化后得到的结果
-    */
+     * @brief 这里的 *buffer 是序列化后得到的结果
+     */
     bool SerailizeToArray(uint8_t *buffer, int len) const;
 };
 
