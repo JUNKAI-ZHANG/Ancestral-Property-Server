@@ -2,9 +2,17 @@ syntax = "proto3";
 
 package FrameProto;
 
+enum OperateType
+{
+    FrameInfo = 0;
+    JoinGame = 1;
+    LeaveGame = 2;
+}
+
 message StartGame
 {
     int32 roomid = 1;
+    int32 room_userid = 2;
 }
 
 message CloseGame
@@ -14,15 +22,14 @@ message CloseGame
 
 message UserOperate
 {
-    bool is_down = 1;
-    int32 key_name = 2;
+    repeated int64 data = 1;   // 某帧下，玩家的按键列表
+    OperateType opt = 2;
 }
-message PlayerOperate 
+
+message Frame
 {
-    repeated UserOperate key_data = 1;   // 某帧下，玩家的按键列表
-    int32 frame_count = 2;
-    float mouse_x = 3;
-    float mouse_y = 4;
+    int32 frame_id = 1;
+    repeated UserOperate frames = 2;
 }
 
 message ChaseFrame
@@ -32,15 +39,4 @@ message ChaseFrame
 message GameReplay 
 {
     repeated Frame frames = 1;
-}
-
-message Frame
-{
-    int64 time = 1;
-}
-
-message HashString
-{
-    int32 frame = 1;
-    string hash = 2;
 }
