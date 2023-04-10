@@ -3,6 +3,8 @@
 LogicServer::LogicServer()
 {
     server_type = SERVER_TYPE::LOGIC;
+
+    StartBroadCastToClient();
 }
 
 LogicServer::~LogicServer()
@@ -24,6 +26,12 @@ void LogicServer::CloseClientSocket(int fd)
 void LogicServer::OnConnectToCenterServer()
 {
     TryToConnectAvailabeServer();
+}
+
+void LogicServer::StartBroadCastToClient()
+{
+    Timer timer;
+    timer.start(33, &LogicServer::BroadCastMsg, this);
 }
 
 void LogicServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t length, int fd)
@@ -140,6 +148,15 @@ void LogicServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_
 
         break;
     }
+    case BODYTYPE::Frame:
+    {
+        if (!user_gate.count(msg->head->m_userid))
+        {
+            user_gate[msg->head->m_userid] = fd;
+        }
+        user_now_frame[msg->head->m_userid].push(msg);
+        break;
+    }
     default:
     {
         break;
@@ -151,6 +168,7 @@ void LogicServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_
 
 void LogicServer::NotifyRoom(BODYTYPE bodytype, int roomid, int fd)
 {
+    // 1p2p
     for (int userid : room[roomid])
     {
         Message *msg = NewStartOrCloseGameMessage(bodytype, roomid, userid);
@@ -163,6 +181,19 @@ void LogicServer::BroadCastMsg()
 {
     for (int _room : broadcast_list)
     {
+        for (int _userid : room[_room])
+        {
+            auto iter = user_now_frame[_userid];
+            if (!iter.empty())
+            {
+                Message *tmp = iter.front();
+                int fd = user_gate[tmp->head->m_userid];
+                for (int __userid : room[_room])
+                {
+                    SendMsg(tmp, fd);
+                }
+            }
+        }
     }
 }
 

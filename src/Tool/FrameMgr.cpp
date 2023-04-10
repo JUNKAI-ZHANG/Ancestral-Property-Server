@@ -21,7 +21,8 @@ FrameMgr::~FrameMgr()
 bool FrameMgr::AddFrame(const int& frame_count, Message *message)
 {
     frame[frame_count].push_back(message);
-    return DelFrame(frame_count - ONE_HOUR);
+    // return DelFrame(frame_count - ONE_HOUR);
+    return true;
 }
 
 bool FrameMgr::DelFrame(const int& frame_count)
