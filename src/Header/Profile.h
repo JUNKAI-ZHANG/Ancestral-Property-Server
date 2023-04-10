@@ -42,18 +42,7 @@ enum BODYTYPE
     LoginResponse,
     RegistRequest,
     RegistResponse,
-
     LoginOut,
-
-    // JoinRoomRequest,
-    // LeaveRoomRequest,
-    // CreateRoomRequest,
-    // GetRoomListRequest,
-
-    // JoinRoomResponse,
-    // LeaveRoomResponse,
-    // CreateRoomResponse,
-    // GetRoomListResponse,
 
     JoinRoom,
     LeaveRoom,
@@ -64,8 +53,8 @@ enum BODYTYPE
     CloseGame,
 
     Frame,
-    GameState,
-    HashString,
+    UserOperate,
+    ChaseFrame,
 
     /* server之间通信协议,绝对不会发往客户端 */
     ServerInfo = 100,
