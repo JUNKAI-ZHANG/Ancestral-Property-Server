@@ -1,3 +1,6 @@
+#ifndef _FRAME_MGR
+#define _FRAME_MGR
+
 #include "../Header/FrameMgr.h"
 
 FrameMgr::FrameMgr()
@@ -21,19 +24,23 @@ FrameMgr::~FrameMgr()
 bool FrameMgr::AddFrame(const int& frame_count, Message *message)
 {
     frame[frame_count].push_back(message);
-    return DelFrame(frame_count - ONE_HOUR);
+    // return DelFrame(frame_count - ONE_HOUR);
+    return true;
 }
 
 bool FrameMgr::DelFrame(const int& frame_count)
 {
     if (frame.count(frame_count))
     {
+        for (Message *it : frame[frame_count]) 
+        {
+            pool->Return(it);
+        }
         frame.erase(frame_count);
     }
     return true;
 }
 
-/* 使用完应该release，释放掉vector的内存 */
 std::vector<Message *> FrameMgr::GetFrame(const int& frame_count)
 {
     if (frame.count(frame_count))
@@ -50,3 +57,5 @@ int FrameMgr::GetFrameCount()
 {
     return tot_count;
 }
+
+#endif

@@ -504,18 +504,13 @@ class UserInfo final :
     kFdFieldNumber = 2,
     kOptFieldNumber = 3,
   };
-  // string userid = 1;
+  // int32 userid = 1;
   void clear_userid();
-  const std::string& userid() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_userid(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_userid();
-  PROTOBUF_NODISCARD std::string* release_userid();
-  void set_allocated_userid(std::string* userid);
+  int32_t userid() const;
+  void set_userid(int32_t value);
   private:
-  const std::string& _internal_userid() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_userid(const std::string& value);
-  std::string* _internal_mutable_userid();
+  int32_t _internal_userid() const;
+  void _internal_set_userid(int32_t value);
   public:
 
   // int32 fd = 2;
@@ -543,7 +538,7 @@ class UserInfo final :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr userid_;
+  int32_t userid_;
   int32_t fd_;
   int opt_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -695,55 +690,24 @@ inline void ServerInfo::set_opt(::ServerProto::ServerInfo_Operation value) {
 
 // UserInfo
 
-// string userid = 1;
+// int32 userid = 1;
 inline void UserInfo::clear_userid() {
-  userid_.ClearToEmpty();
+  userid_ = 0;
 }
-inline const std::string& UserInfo::userid() const {
+inline int32_t UserInfo::_internal_userid() const {
+  return userid_;
+}
+inline int32_t UserInfo::userid() const {
   // @@protoc_insertion_point(field_get:ServerProto.UserInfo.userid)
   return _internal_userid();
 }
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void UserInfo::set_userid(ArgT0&& arg0, ArgT... args) {
- 
- userid_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+inline void UserInfo::_internal_set_userid(int32_t value) {
+  
+  userid_ = value;
+}
+inline void UserInfo::set_userid(int32_t value) {
+  _internal_set_userid(value);
   // @@protoc_insertion_point(field_set:ServerProto.UserInfo.userid)
-}
-inline std::string* UserInfo::mutable_userid() {
-  std::string* _s = _internal_mutable_userid();
-  // @@protoc_insertion_point(field_mutable:ServerProto.UserInfo.userid)
-  return _s;
-}
-inline const std::string& UserInfo::_internal_userid() const {
-  return userid_.Get();
-}
-inline void UserInfo::_internal_set_userid(const std::string& value) {
-  
-  userid_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
-}
-inline std::string* UserInfo::_internal_mutable_userid() {
-  
-  return userid_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
-}
-inline std::string* UserInfo::release_userid() {
-  // @@protoc_insertion_point(field_release:ServerProto.UserInfo.userid)
-  return userid_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
-}
-inline void UserInfo::set_allocated_userid(std::string* userid) {
-  if (userid != nullptr) {
-    
-  } else {
-    
-  }
-  userid_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), userid,
-      GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (userid_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
-    userid_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:ServerProto.UserInfo.userid)
 }
 
 // int32 fd = 2;

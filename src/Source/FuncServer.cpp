@@ -181,14 +181,14 @@ void FuncServer::HandleUserInfo(Message *msg, int fd)
     {
     case ServerProto::UserInfo_Operation_Register :
     {
-        user_fd_record[body->userid()] = body->fd();
+        user_fd_record[msg->head->m_userid] = body->fd();
         break;
     }
     case ServerProto::UserInfo_Operation_Logout :
     {
-        if (user_fd_record.count(body->userid()))
+        if (user_fd_record.count(msg->head->m_userid))
         {
-            user_fd_record.erase(body->userid());
+            user_fd_record.erase(msg->head->m_userid);
         }
         break;
     }

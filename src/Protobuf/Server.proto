@@ -21,7 +21,7 @@ message ServerInfo
 
 message UserInfo
 {
-    string userid = 1;
+    int32 userid = 1;
     int32 fd = 2;
 
     enum Operation

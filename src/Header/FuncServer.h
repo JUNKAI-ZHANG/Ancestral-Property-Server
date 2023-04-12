@@ -24,7 +24,10 @@ protected:
     int db_server_client = -1;
 
     /* 记录userid和fd的映射 */
-    std::map<std::string, int> user_fd_record;
+    std::map<int, int> user_fd_record;
+    
+    /* 记录fd和userid的映射 */
+    std::map<int, int> fd_user_record;
 
 private:
     void HandleServerInfo(Message *msg, int fd);

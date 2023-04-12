@@ -1,5 +1,5 @@
-#ifndef ENCRYPTION_HPP
-#define ENCRYPTION_HPP
+#ifndef _ENCRYPTION_HPP
+#define _ENCRYPTION_HPP
 
 #include <chrono>
 #include <random>

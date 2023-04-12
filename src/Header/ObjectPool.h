@@ -7,6 +7,7 @@
 
 #include "Message.h"
 
+/* Manage Message(Head is Ok)(Body need new) */
 class ObjectPool
 {
 public:
