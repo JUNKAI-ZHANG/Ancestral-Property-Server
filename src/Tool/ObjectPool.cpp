@@ -1,3 +1,6 @@
+#ifndef _OBJECT_POOL_CPP
+#define _OBJECT_POOL_CPP
+
 #include "../Header/ObjectPool.h"
 
 ObjectPool::ObjectPool()
@@ -56,3 +59,5 @@ void ObjectPool::Return(Message *msg)
         delete msg;
     }
 }
+
+#endif

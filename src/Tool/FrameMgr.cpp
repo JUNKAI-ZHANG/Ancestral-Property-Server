@@ -1,3 +1,6 @@
+#ifndef _FRAME_MGR
+#define _FRAME_MGR
+
 #include "../Header/FrameMgr.h"
 
 FrameMgr::FrameMgr()
@@ -54,3 +57,5 @@ int FrameMgr::GetFrameCount()
 {
     return tot_count;
 }
+
+#endif
