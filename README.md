@@ -19,6 +19,7 @@
 * MessageUtils.h new对应类型的body->message, 添加对应的New函数
 * 对应Server的OnMsgBodyAnalysised添加case
 * Profile.h 添加enum类型
+
 #### 客户端
 * ServerMgr AnalysisMessage添加case, CreateMessageBody中记得new对应包体
 * 需要分发给业务的消息发送到MessageFamily队列
