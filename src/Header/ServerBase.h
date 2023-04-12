@@ -24,7 +24,7 @@
 
 class ServerBase
 {
-private:
+protected:
     int listen_fd = -1;
 
     std::mutex connections_mutex;
@@ -34,7 +34,7 @@ private:
     /* 临时接收缓冲区内容 */
     uint8_t tmp[TMP_BUFFER_SIZE];
 
-private:
+protected:
     /*
      * @return 1 success -1 failed
      */
@@ -54,10 +54,12 @@ private:
      */
     void HandleReceivedMsg(RingBuffer *, int);
 
+    int64_t getCurrentTime();
+
+    void BroadCastMsg();
+
 protected:
     int listen_port = -1;
-
-    std::mutex room_mutex;
 
     SERVER_TYPE server_type;
 
@@ -92,7 +94,40 @@ public:
 
     virtual void CloseServer();
 
-    void BootServer(int port);
+    virtual void BootServer(int port);
+protected:
+    /* roomid - players */
+    std::map<int, std::set<int>> room;
+
+    /* userid - roomid */
+    std::map<int, int> user_room;
+
+    /* roomid - roomname */
+    std::map<int, std::string> room_name;
+
+    /* roomid - totFrmae */
+    std::map<int, std::vector<Message *>> room_total_frame;
+
+    /* roomid - frame(in time order) (frame per second) */
+    std::map<int, std::queue<Message *>> room_frame;
+
+    /* user - gateclient_fd */
+    std::map<int, int> user_gate;
+
+    /* userid - userpid */
+    std::map<int, int> userid_userpid;
+
+    /* roomid - now framecount */
+    std::map<int, int> room_framecount;
+
+    /* need be broadcast roomlist */
+    std::set<int> broadcast_list;
+
+    int now_room_count = 0;
+
+    int tmpx = 0;
+
+    time_t STime = 0;
 };
 
 #endif

@@ -25,10 +25,17 @@ void GateServer::CloseClientSocket(int fd)
     }
 
     // 如果和db server断开连接 则尝试重连
-    if (fd == db_server_client)
+    else if (fd == db_server_client)
     {
         db_server_client = -1;
+
         TryToConnectAvailabeServer();
+    }
+    else 
+    {
+        Message *msg = NewUserInfoMessage(fd_user_record[fd], fd, ServerProto::UserInfo_Operation::UserInfo_Operation_Logout);
+        SendMsg(msg, logic_server_client);
+        delete msg;
     }
 }
 
@@ -105,7 +112,7 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
 
     if (!CheckMessageValid(msg, fd))
     {
-        return;
+        //return;
     }
 
     switch (msg->head->m_packageType)
@@ -126,6 +133,7 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
         if (body->result())
         {
             user_fd_record[body->userid()] = msg->head->m_userid;
+            fd_user_record[msg->head->m_userid] = body->userid();
         }
 
         SendMsg(msg, msg->head->m_userid);
@@ -157,6 +165,7 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
         else if (body->type() == RoomProto::JoinRoom::Type::JoinRoom_Type_RESPONSE)
         {
             /* 转发给 client 处理 */
+            std::cout << user_fd_record[msg->head->m_userid] << std::endl;
             SendMsg(msg, user_fd_record[msg->head->m_userid]);
         }
         else 
@@ -187,6 +196,7 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
     case BODYTYPE::CreateRoom:
     {
         RoomProto::CreateRoom *body = reinterpret_cast<RoomProto::CreateRoom *>(msg->body->message);
+
         if (body->type() == RoomProto::CreateRoom::Type::CreateRoom_Type_REQUEST)
         {
             /* 转发给logic server处理 */
@@ -222,7 +232,7 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
         }
         break;
     }
-    case BODYTYPE::Frame:
+    case BODYTYPE::StartGame:
     {
         if (fd == logic_server_client)
         {
@@ -233,6 +243,20 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
             SendMsg(msg, logic_server_client);
         }
         break;
+    }
+    case BODYTYPE::UserOperate:
+    {
+        SendMsg(msg, logic_server_client);
+        break;
+    }
+    case BODYTYPE::Frame:
+    {
+        SendMsg(msg, user_fd_record[msg->head->m_userid]);
+        break;
+    }
+    case BODYTYPE::EnterGame:
+    {
+        SendMsg(msg, user_fd_record[msg->head->m_userid]);
     }
     default:
     {

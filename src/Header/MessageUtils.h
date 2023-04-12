@@ -34,6 +34,11 @@ static MessageBody *CreateMessageBody(int type)
         message = new ServerProto::ServerInfo;
         break;
     }
+    case BODYTYPE::UserInfo:
+    {
+        message = new ServerProto::UserInfo;
+        break;
+    }
     case BODYTYPE::JoinRoom:
     {
         message = new RoomProto::JoinRoom;
@@ -62,6 +67,31 @@ static MessageBody *CreateMessageBody(int type)
     case BODYTYPE::CloseGame:
     {
         message = new FrameProto::CloseGame;
+        break;
+    }
+    case BODYTYPE::EnterGame:
+    {
+       message = new FrameProto::EnterGame;
+       break;
+    }
+    case BODYTYPE::QuitGame:
+    {
+       message = new FrameProto::QuitGame;
+       break;
+    }
+    case BODYTYPE::Frame:
+    {
+        message = new FrameProto::Frame;
+        break;
+    }
+    case BODYTYPE::UserOperate:
+    {
+        message = new FrameProto::UserOperate;
+        break;
+    }
+    case BODYTYPE::ChaseFrame:
+    {
+        message = new FrameProto::ChaseFrame;
         break;
     }
     default:
@@ -107,7 +137,7 @@ static bool CheckHeaderIsValid(MessageHead *header)
         return false;
     }
 
-    if (header->m_packageType > BODYTYPE::ServerInfo)
+    if (header->m_packageType > BODYTYPE::ErrorToken)
     {
         return false;
     }
@@ -168,10 +198,23 @@ static Message *NewServerInfoMessage(std::string ip, int port, SERVER_TYPE type,
     body->set_server_free_level(level);
     message->body->message = body;
 
-    message->head = new MessageHead;
-    message->head->m_packageSize = message->length();
-    message->head->m_packageType = BODYTYPE::ServerInfo;
+    message->head = new MessageHead(message->length(), BODYTYPE::ServerInfo, 0);
 
+    return message;
+}
+
+static Message *NewUserInfoMessage(int userid, int fd, ServerProto::UserInfo_Operation opt)
+{
+    Message *message = new Message;
+
+    ServerProto::UserInfo *body = new ServerProto::UserInfo;
+    message->body = new MessageBody;
+    body->set_userid(userid);
+    body->set_fd(fd);
+    body->set_opt(opt);
+    message->body->message = body;
+
+    message->head = new MessageHead(message->length(), BODYTYPE::UserInfo, 0);
     return message;
 }
 
@@ -189,9 +232,6 @@ static Message *NewJoinRoomResponse(const std::string result, bool ret, int user
     message->body->message = body;
 
     message->head = new MessageHead(message->length(), BODYTYPE::JoinRoom, userid);
-    //message->head->m_packageSize = message->length();
-    //message->head->m_packageType = BODYTYPE::JoinRoom;
-    //message->head->m_userid = userid;
 
     return message;
 }
@@ -208,32 +248,27 @@ static Message *NewLeaveRoomResponse(const std::string result, bool ret, int use
     message->body->message = body;
 
     message->head = new MessageHead(message->length(), BODYTYPE::LeaveRoom, userid);
-    //message->head->m_packageSize = message->length();
-    //message->head->m_packageType = BODYTYPE::LeaveRoom;
-    //message->head->m_userid = userid;
 
     return message;
 }
 
-static Message *NewCreateRoomResponse(const std::string result, int roomid, std::string roomname, bool ret, int userid)
+static Message *NewCreateRoomResponse(const std::string result, int roomid, std::string roomname, bool ret, int userid, bool isRoomhost)
 {
     Message *message = new Message;
     std::mt19937 rng(std::chrono::system_clock::now().time_since_epoch().count());
 
     RoomProto::CreateRoom *body = new RoomProto::CreateRoom;
     message->body = new MessageBody;
-    body->set_ret(ret);
     body->set_result(result);
     body->set_roomid(roomid);
     body->set_roomname(roomname);
-    body->set_seed(rng() % UINT32_MAX);
+    body->set_ret(ret);
     body->set_type(RoomProto::CreateRoom::Type::CreateRoom_Type_RESPONSE);
+    body->set_seed(rng() % UINT32_MAX);
+    body->set_is_roomhost(isRoomhost);
     message->body->message = body;
 
     message->head = new MessageHead(message->length(), BODYTYPE::CreateRoom, userid);
-    //message->head->m_packageSize = message->length();
-    //message->head->m_packageType = BODYTYPE::CreateRoom;
-    //message->head->m_userid = userid;
 
     return message;
 }
@@ -257,14 +292,11 @@ static Message *NewGetRoomListResponse(const std::string result, int *roomlist, 
     message->body->message = body;
 
     message->head = new MessageHead(message->length(), BODYTYPE::GetRoomList, userid);
-    //message->head->m_packageSize = message->length();
-    //message->head->m_packageType = BODYTYPE::GetRoomList;
-    //message->head->m_userid = userid;
 
     return message;
 }
 
-static Message *NewStartOrCloseGameMessage(BODYTYPE bodytype, int userid, int roomid)
+static Message *NewStartOrCloseGameMessage(BODYTYPE bodytype, int userid, int roomid, int room_userid)
 {
     Message *message = new Message;
 
@@ -273,6 +305,7 @@ static Message *NewStartOrCloseGameMessage(BODYTYPE bodytype, int userid, int ro
         FrameProto::StartGame *body = new FrameProto::StartGame;
         message->body = new MessageBody;
         body->set_roomid(roomid);
+        body->set_userpid(room_userid);
         message->body->message = body;
     }
     if (bodytype == BODYTYPE::CloseGame)
@@ -282,6 +315,20 @@ static Message *NewStartOrCloseGameMessage(BODYTYPE bodytype, int userid, int ro
         body->set_roomid(roomid);
         message->body->message = body;
     }
+
+    message->head = new MessageHead(message->length(), bodytype, userid);
+
+    return message;
+}
+
+static Message *NewUserJoinRoomMessage(BODYTYPE bodytype, int userpid, int userid)
+{
+    Message *message = new Message;
+
+    FrameProto::EnterGame *body = new FrameProto::EnterGame;
+    message->body = new MessageBody;
+    body->set_userpid(userpid);
+    message->body->message = body;
 
     message->head = new MessageHead(message->length(), bodytype, userid);
 

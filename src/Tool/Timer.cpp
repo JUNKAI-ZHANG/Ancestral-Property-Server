@@ -23,6 +23,8 @@ public:
                 func();
             } 
         });
+
+        m_thread.detach();
     }
 
     // Timer销毁依然可以存在，且线程结束自动释放

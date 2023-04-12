@@ -12,7 +12,17 @@ enum OperateType
 message StartGame
 {
     int32 roomid = 1;
-    int32 room_userid = 2;
+    int32 userpid = 2;
+}
+
+message EnterGame
+{
+    int32 userpid = 1;
+}
+
+message QuitGame
+{
+    int32 userpid = 1;
 }
 
 message CloseGame
@@ -24,12 +34,13 @@ message UserOperate
 {
     repeated int64 data = 1;   // 某帧下，玩家的按键列表
     OperateType opt = 2;
+    int32 userpid = 3;
 }
 
 message Frame
 {
     int32 frame_id = 1;
-    repeated UserOperate frames = 2;
+    repeated UserOperate operates = 2;
 }
 
 message ChaseFrame

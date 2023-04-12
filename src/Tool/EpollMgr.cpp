@@ -17,7 +17,7 @@
  */
 class EpollMgr
 {
-private:
+public:
     int epoll_fd = -1;
 
 public:
@@ -68,7 +68,7 @@ public:
     }
 
     /*
-     * @param 需传入处理epoll事件的函数
+     * @param 需传入处理epoll事件的函数(废弃了)
      *
      * param1 function address
      *
@@ -84,7 +84,7 @@ public:
         while (true)
         {
             // 阻塞等待
-            int nfds = epoll_wait(epoll_fd, events, 10, -1);
+            int nfds = epoll_wait(epoll_fd, events, 10, 11);
             if (nfds == -1)
             {
                 std::cerr << "Failed to wait for events" << std::endl;

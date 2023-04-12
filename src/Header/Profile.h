@@ -52,6 +52,9 @@ enum BODYTYPE
     StartGame,
     CloseGame,
 
+    EnterGame, 
+    QuitGame,
+
     Frame,
     UserOperate,
     ChaseFrame,

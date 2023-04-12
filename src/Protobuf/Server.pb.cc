@@ -36,7 +36,7 @@ struct ServerInfoDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT ServerInfoDefaultTypeInternal _ServerInfo_default_instance_;
 constexpr UserInfo::UserInfo(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : userid_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  : userid_(0)
   , fd_(0)
   , opt_(0)
 {}
@@ -93,7 +93,7 @@ const char descriptor_table_protodef_Server_2eproto[] PROTOBUF_SECTION_VARIABLE(
   "opt\030\005 \001(\0162!.ServerProto.ServerInfo.Opera"
   "tion\"8\n\tOperation\022\014\n\010Register\020\000\022\020\n\014Requs"
   "tAssgin\020\001\022\013\n\007Connect\020\002\"{\n\010UserInfo\022\016\n\006us"
-  "erid\030\001 \001(\t\022\n\n\002fd\030\002 \001(\005\022,\n\003opt\030\003 \001(\0162\037.Se"
+  "erid\030\001 \001(\005\022\n\n\002fd\030\002 \001(\005\022,\n\003opt\030\003 \001(\0162\037.Se"
   "rverProto.UserInfo.Operation\"%\n\tOperatio"
   "n\022\014\n\010Register\020\000\022\n\n\006Logout\020\001b\006proto3"
   ;
@@ -484,29 +484,17 @@ UserInfo::UserInfo(::PROTOBUF_NAMESPACE_ID::Arena* arena,
 UserInfo::UserInfo(const UserInfo& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  userid_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    userid_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_userid().empty()) {
-    userid_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_userid(), 
-      GetArenaForAllocation());
-  }
-  ::memcpy(&fd_, &from.fd_,
+  ::memcpy(&userid_, &from.userid_,
     static_cast<size_t>(reinterpret_cast<char*>(&opt_) -
-    reinterpret_cast<char*>(&fd_)) + sizeof(opt_));
+    reinterpret_cast<char*>(&userid_)) + sizeof(opt_));
   // @@protoc_insertion_point(copy_constructor:ServerProto.UserInfo)
 }
 
 inline void UserInfo::SharedCtor() {
-userid_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  userid_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
-    reinterpret_cast<char*>(&fd_) - reinterpret_cast<char*>(this)),
+    reinterpret_cast<char*>(&userid_) - reinterpret_cast<char*>(this)),
     0, static_cast<size_t>(reinterpret_cast<char*>(&opt_) -
-    reinterpret_cast<char*>(&fd_)) + sizeof(opt_));
+    reinterpret_cast<char*>(&userid_)) + sizeof(opt_));
 }
 
 UserInfo::~UserInfo() {
@@ -518,7 +506,6 @@ UserInfo::~UserInfo() {
 
 inline void UserInfo::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  userid_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 
 void UserInfo::ArenaDtor(void* object) {
@@ -537,10 +524,9 @@ void UserInfo::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  userid_.ClearToEmpty();
-  ::memset(&fd_, 0, static_cast<size_t>(
+  ::memset(&userid_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&opt_) -
-      reinterpret_cast<char*>(&fd_)) + sizeof(opt_));
+      reinterpret_cast<char*>(&userid_)) + sizeof(opt_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -550,12 +536,10 @@ const char* UserInfo::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::i
     uint32_t tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // string userid = 1;
+      // int32 userid = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
-          auto str = _internal_mutable_userid();
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "ServerProto.UserInfo.userid"));
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          userid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -606,14 +590,10 @@ uint8_t* UserInfo::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // string userid = 1;
-  if (!this->_internal_userid().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_userid().data(), static_cast<int>(this->_internal_userid().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "ServerProto.UserInfo.userid");
-    target = stream->WriteStringMaybeAliased(
-        1, this->_internal_userid(), target);
+  // int32 userid = 1;
+  if (this->_internal_userid() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_userid(), target);
   }
 
   // int32 fd = 2;
@@ -645,11 +625,9 @@ size_t UserInfo::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // string userid = 1;
-  if (!this->_internal_userid().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_userid());
+  // int32 userid = 1;
+  if (this->_internal_userid() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_userid());
   }
 
   // int32 fd = 2;
@@ -685,7 +663,7 @@ void UserInfo::MergeFrom(const UserInfo& from) {
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (!from._internal_userid().empty()) {
+  if (from._internal_userid() != 0) {
     _internal_set_userid(from._internal_userid());
   }
   if (from._internal_fd() != 0) {
@@ -710,20 +688,13 @@ bool UserInfo::IsInitialized() const {
 
 void UserInfo::InternalSwap(UserInfo* other) {
   using std::swap;
-  auto* lhs_arena = GetArenaForAllocation();
-  auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
-      &userid_, lhs_arena,
-      &other->userid_, rhs_arena
-  );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
       PROTOBUF_FIELD_OFFSET(UserInfo, opt_)
       + sizeof(UserInfo::opt_)
-      - PROTOBUF_FIELD_OFFSET(UserInfo, fd_)>(
-          reinterpret_cast<char*>(&fd_),
-          reinterpret_cast<char*>(&other->fd_));
+      - PROTOBUF_FIELD_OFFSET(UserInfo, userid_)>(
+          reinterpret_cast<char*>(&userid_),
+          reinterpret_cast<char*>(&other->userid_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata UserInfo::GetMetadata() const {

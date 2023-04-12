@@ -57,6 +57,7 @@ constexpr CreateRoom::CreateRoom(
   , roomid_(0)
   , seed_(0u)
   , ret_(false)
+  , is_roomhost_(false)
   , type_(0)
 {}
 struct CreateRoomDefaultTypeInternal {
@@ -137,6 +138,7 @@ const uint32_t TableStruct_Room_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(pro
   PROTOBUF_FIELD_OFFSET(::RoomProto::CreateRoom, result_),
   PROTOBUF_FIELD_OFFSET(::RoomProto::CreateRoom, roomname_),
   PROTOBUF_FIELD_OFFSET(::RoomProto::CreateRoom, type_),
+  PROTOBUF_FIELD_OFFSET(::RoomProto::CreateRoom, is_roomhost_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::RoomProto::RoomInfo, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -161,8 +163,8 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 0, -1, -1, sizeof(::RoomProto::JoinRoom)},
   { 11, -1, -1, sizeof(::RoomProto::LeaveRoom)},
   { 21, -1, -1, sizeof(::RoomProto::CreateRoom)},
-  { 33, -1, -1, sizeof(::RoomProto::RoomInfo)},
-  { 42, -1, -1, sizeof(::RoomProto::GetRoomList)},
+  { 34, -1, -1, sizeof(::RoomProto::RoomInfo)},
+  { 43, -1, -1, sizeof(::RoomProto::GetRoomList)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -181,21 +183,22 @@ const char descriptor_table_protodef_Room_2eproto[] PROTOBUF_SECTION_VARIABLE(pr
   "RESPONSE\020\001\"\204\001\n\tLeaveRoom\022\016\n\006roomid\030\001 \001(\005"
   "\022\013\n\003ret\030\002 \001(\010\022\016\n\006result\030\003 \001(\t\022\'\n\004type\030\004 "
   "\001(\0162\031.RoomProto.LeaveRoom.Type\"!\n\004Type\022\013"
-  "\n\007REQUEST\020\000\022\014\n\010RESPONSE\020\001\"\246\001\n\nCreateRoom"
+  "\n\007REQUEST\020\000\022\014\n\010RESPONSE\020\001\"\273\001\n\nCreateRoom"
   "\022\016\n\006roomid\030\001 \001(\005\022\014\n\004seed\030\002 \001(\r\022\013\n\003ret\030\003 "
   "\001(\010\022\016\n\006result\030\004 \001(\t\022\020\n\010roomname\030\005 \001(\t\022(\n"
-  "\004type\030\006 \001(\0162\032.RoomProto.CreateRoom.Type\""
-  "!\n\004Type\022\013\n\007REQUEST\020\000\022\014\n\010RESPONSE\020\001\"B\n\010Ro"
-  "omInfo\022\016\n\006roomid\030\001 \001(\005\022\024\n\014people_count\030\002"
-  " \001(\005\022\020\n\010roomname\030\003 \001(\t\"\236\001\n\013GetRoomList\022&"
-  "\n\troom_list\030\001 \003(\0132\023.RoomProto.RoomInfo\022\014"
-  "\n\004size\030\002 \001(\005\022\013\n\003ret\030\003 \001(\010\022)\n\004type\030\004 \001(\0162"
-  "\033.RoomProto.GetRoomList.Type\"!\n\004Type\022\013\n\007"
-  "REQUEST\020\000\022\014\n\010RESPONSE\020\001b\006proto3"
+  "\004type\030\006 \001(\0162\032.RoomProto.CreateRoom.Type\022"
+  "\023\n\013is_roomhost\030\007 \001(\010\"!\n\004Type\022\013\n\007REQUEST\020"
+  "\000\022\014\n\010RESPONSE\020\001\"B\n\010RoomInfo\022\016\n\006roomid\030\001 "
+  "\001(\005\022\024\n\014people_count\030\002 \001(\005\022\020\n\010roomname\030\003 "
+  "\001(\t\"\236\001\n\013GetRoomList\022&\n\troom_list\030\001 \003(\0132\023"
+  ".RoomProto.RoomInfo\022\014\n\004size\030\002 \001(\005\022\013\n\003ret"
+  "\030\003 \001(\010\022)\n\004type\030\004 \001(\0162\033.RoomProto.GetRoom"
+  "List.Type\"!\n\004Type\022\013\n\007REQUEST\020\000\022\014\n\010RESPON"
+  "SE\020\001b\006proto3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_Room_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Room_2eproto = {
-  false, false, 711, descriptor_table_protodef_Room_2eproto, "Room.proto", 
+  false, false, 732, descriptor_table_protodef_Room_2eproto, "Room.proto", 
   &descriptor_table_Room_2eproto_once, nullptr, 0, 5,
   schemas, file_default_instances, TableStruct_Room_2eproto::offsets,
   file_level_metadata_Room_2eproto, file_level_enum_descriptors_Room_2eproto, file_level_service_descriptors_Room_2eproto,
@@ -1041,6 +1044,14 @@ const char* CreateRoom::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID:
         } else
           goto handle_unusual;
         continue;
+      // bool is_roomhost = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 56)) {
+          is_roomhost_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
       default:
         goto handle_unusual;
     }  // switch
@@ -1115,6 +1126,12 @@ uint8_t* CreateRoom::_InternalSerialize(
       6, this->_internal_type(), target);
   }
 
+  // bool is_roomhost = 7;
+  if (this->_internal_is_roomhost() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(7, this->_internal_is_roomhost(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -1160,6 +1177,11 @@ size_t CreateRoom::ByteSizeLong() const {
     total_size += 1 + 1;
   }
 
+  // bool is_roomhost = 7;
+  if (this->_internal_is_roomhost() != 0) {
+    total_size += 1 + 1;
+  }
+
   // .RoomProto.CreateRoom.Type type = 6;
   if (this->_internal_type() != 0) {
     total_size += 1 +
@@ -1202,6 +1224,9 @@ void CreateRoom::MergeFrom(const CreateRoom& from) {
   }
   if (from._internal_ret() != 0) {
     _internal_set_ret(from._internal_ret());
+  }
+  if (from._internal_is_roomhost() != 0) {
+    _internal_set_is_roomhost(from._internal_is_roomhost());
   }
   if (from._internal_type() != 0) {
     _internal_set_type(from._internal_type());
