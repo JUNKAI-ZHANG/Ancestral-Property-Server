@@ -2,12 +2,21 @@
 #define _LOGICSERVER_H
 
 #include "FuncServer.h"
+#include "Room.h"
+#include "Singleton.h"
 
 class LogicServer : public FuncServer
 {
 private:
     /* 尝试连接其他类型功能服务器 */
     virtual void TryToConnectAvailabeServer();
+
+    void BroadCastMsg();
+
+    /*
+     * @brief Notify (once) room start/close game
+     */
+
 
 protected:
     virtual void OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t length, int fd);
@@ -17,19 +26,25 @@ protected:
      */
     virtual void OnConnectToCenterServer();
 
+    virtual void Update();   
+    
+
 public:
     explicit LogicServer();
 
     virtual ~LogicServer();
-    
+
     virtual void CloseClientSocket(int fd);
 
+    void BootServer(int port);
+
+    bool SendMsg(Message *msg, int fd);
+
 private:
-    /* roomid - players */
-    std::map<int, std::set<std::string>> room; 
+    Room *room = nullptr;
 
-
-    int now_room_count = 0;
 };
+
+#define LOGICSERVER (*Singleton<LogicServer>::get())
 
 #endif

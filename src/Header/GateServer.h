@@ -12,6 +12,8 @@ private:
     virtual void TryToConnectAvailabeServer();
 
     void DisconnectAllClients();
+
+    bool CheckMessageValid(Message *msg, int fd);
     
 protected:
     virtual void OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t length, int fd);

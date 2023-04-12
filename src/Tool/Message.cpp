@@ -15,10 +15,17 @@ MessageHead::MessageHead(const uint8_t *buffer, int len)
     // 4~7位存类型
     // m_packageType = static_cast<BODYTYPE>(ntohl(*((uint32_t *)(buffer + 4))));
     m_packageType = ByteToInt(buffer + 4);
-    // 8~11位存token
-    // m_token = ntohl(*((uint32_t *)(buffer + 8)));
-    m_token = ByteToUint(buffer + 8);
+    // 8~11位存userid
+    // m_userid = ntohl(*((uint32_t *)(buffer + 8)));
+    m_userid = ByteToUint(buffer + 8);
     return;
+}
+
+MessageHead::MessageHead(int packageSize, int packageType, int userid)
+{
+    m_packageSize = packageSize;
+    m_packageType = packageType;
+    m_userid = userid;
 }
 
 bool MessageHead::SerailizeToArray(uint8_t *buffer, int len) const
@@ -32,7 +39,7 @@ bool MessageHead::SerailizeToArray(uint8_t *buffer, int len) const
         // 转大端序
         uint32_t size = htonl(m_packageSize);
         uint32_t type = htonl(static_cast<uint32_t>(m_packageType));
-        uint32_t token = htonl(static_cast<uint32_t>(m_token));
+        uint32_t userid = htonl(static_cast<uint32_t>(m_userid));
 
         uint8_t *tmp = (uint8_t *)(&size);
         for (int i = 0; i < 4; i++)
@@ -47,7 +54,7 @@ bool MessageHead::SerailizeToArray(uint8_t *buffer, int len) const
         }
 
         // 最后4Byte不处理，前端不需要解析token.(算了吧，都写了这么多了，也不差这一点了，hh)
-        tmp = (uint8_t *)(&token);
+        tmp = (uint8_t *)(&userid);
         for (int i = 0; i < 4; i++)
         {
             buffer[i + 8] = tmp[i];
@@ -66,7 +73,7 @@ bool MessageHead::SerailizeToArray(uint8_t *buffer, int len) const
     }
 
     // 最后4Byte不处理，前端不需要解析token.(算了吧，都写了这么多了，也不差这一点了，hh)
-    tmp = UintToByte(m_token);
+    tmp = UintToByte(m_userid);
     for (int i = 0; i < 4; i++)
     {
         buffer[i + 8] = tmp[i];

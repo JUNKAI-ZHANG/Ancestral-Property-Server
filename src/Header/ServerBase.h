@@ -3,10 +3,12 @@
 
 #include <map>
 #include <set>
+#include <queue>
 #include <random>
 #include <chrono>
 #include <vector>
 #include <cstring>
+#include <utility>
 #include <iostream>
 #include <unistd.h>
 #include <arpa/inet.h>
@@ -22,7 +24,7 @@
 
 class ServerBase
 {
-private:
+protected:
     int listen_fd = -1;
 
     std::mutex connections_mutex;
@@ -32,7 +34,7 @@ private:
     /* 临时接收缓冲区内容 */
     uint8_t tmp[TMP_BUFFER_SIZE];
 
-private:
+protected:
     /*
      * @return 1 success -1 failed
      */
@@ -52,6 +54,10 @@ private:
      */
     void HandleReceivedMsg(RingBuffer *, int);
 
+    void BroadCastMsg();
+
+    int64_t getCurrentTime();
+
 protected:
     int listen_port = -1;
 
@@ -67,10 +73,6 @@ protected:
 protected:
     bool ConnectToOtherServer(std::string ip, int port, int &fd);
 
-    bool SendMsg(Message *msg, int fd);
-
-    // if hasSelf = false, multicast will not send to self
-    void MulticastMsg(size_t totalSize, uint8_t *data_array, int self_fd, bool hasSelf = true);
 
     /*
      * @brief 服务端成功开启监听后进行的初始化操作
@@ -82,6 +84,8 @@ protected:
      */
     virtual void OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t length, int fd);
 
+    virtual void Update();
+
 public:
     explicit ServerBase();
 
@@ -91,7 +95,13 @@ public:
 
     virtual void CloseServer();
 
-    void BootServer(int port);
+    virtual void BootServer(int port);
+
+    bool SendMsg(Message *msg, int fd);
+
+protected:
+    
+    time_t STime = 0;
 };
 
 #endif

@@ -1,4 +1,5 @@
 #ifndef _PROFILE_H
+
 #define _PROFILE_H
 
 #define HEAD_SIZE       12
@@ -41,7 +42,6 @@ enum BODYTYPE
     LoginResponse,
     RegistRequest,
     RegistResponse,
-
     LoginOut,
 
     JoinRoom,
@@ -49,9 +49,15 @@ enum BODYTYPE
     CreateRoom,
     GetRoomList,
 
+    StartGame,
+    CloseGame,
+
+    EnterGame, 
+    QuitGame,
+
     Frame,
-    GameState,
-    HashString,
+    UserOperate,
+    ChaseFrame,
 
     /* server之间通信协议,绝对不会发往客户端 */
     ServerInfo = 100,

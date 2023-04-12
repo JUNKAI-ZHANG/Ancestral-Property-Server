@@ -26,6 +26,7 @@ add_library(CommonUtilLib STATIC
     src/Tool/Event.cpp
     src/Tool/RingBuffer.cpp
     src/Tool/Timer.cpp
+    src/Tool/Room.cpp
 )
 
 add_library(BaseObj OBJECT
@@ -48,24 +49,28 @@ add_executable(CenterServer
     $<TARGET_OBJECTS:BaseObj>
     src/Source/CenterServer.cpp
 )
+add_compile_options(CenterServer -g)
 target_link_libraries(CenterServer  ${libraries_to_link})
 
 add_executable(DBServer
     $<TARGET_OBJECTS:BaseObj>
     src/Source/DBServer.cpp
 )
+add_compile_options(DBServer -g)
 target_link_libraries(DBServer  ${libraries_to_link})
 
 add_executable(GateServer
     $<TARGET_OBJECTS:BaseObj>
     src/Source/GateServer.cpp
 )
+add_compile_options(GateServer -g)
 target_link_libraries(GateServer  ${libraries_to_link})
 
 add_executable(LogicServer
     $<TARGET_OBJECTS:BaseObj>
     src/Source/LogicServer.cpp
 )
+add_compile_options(LogicServer -g)
 target_link_libraries(LogicServer  ${libraries_to_link})
 
 
