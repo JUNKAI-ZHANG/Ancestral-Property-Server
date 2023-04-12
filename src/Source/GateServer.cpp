@@ -112,7 +112,7 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
 
     if (!CheckMessageValid(msg, fd))
     {
-        //return;
+        return;
     }
 
     switch (msg->head->m_packageType)
