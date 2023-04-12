@@ -100,46 +100,7 @@ void ServerBase::HandleListenerEvent(std::map<int, RingBuffer *> &conns, int fd)
 
 void ServerBase::BroadCastMsg()
 {
-    for (int _room : broadcast_list)
-    {
-        room_framecount[_room]++;
-
-        Message *msg = new Message;
-        msg->body = new MessageBody;
-        FrameProto::Frame *body = new FrameProto::Frame;
-        while (!room_frame[_room].empty())
-        {
-            Message *tmp = room_frame[_room].front();
-            room_frame[_room].pop();
-
-            FrameProto::UserOperate *tmP = reinterpret_cast<FrameProto::UserOperate *>(tmp->body->message);
-
-            FrameProto::UserOperate *user_data = body->add_operates();
-            
-            for (int64_t i : tmP->data())
-            {
-                user_data->add_data(i);
-            }
-            user_data->set_opt(tmP->opt());
-            user_data->set_userpid(tmP->userpid());
-
-        }
-        body->set_frame_id(room_framecount[_room]);
-        msg->body->message = body;
-
-        msg->head = new MessageHead(msg->length(), BODYTYPE::Frame, 0);
-
-        for (int _userid : room[_room])
-        {
-            msg->head->m_userid = _userid;
-            int fd = user_gate[_userid];
-            ServerBase::SendMsg(msg, fd);
-        }
-        if (msg != nullptr) 
-        {
-            delete msg;
-        }
-    }
+    
 }
 
 time_t ServerBase::getCurrentTime() // 直接调用这个函数就行了，返回值最好是int64_t，long long应该也可以
@@ -302,6 +263,11 @@ void ServerBase::CloseServer()
     }
 }
 
+void ServerBase::Update()
+{
+    
+}
+
 void ServerBase::BootServer(int port)
 {
     // 如果conn epoll启动失败直接return 
@@ -364,7 +330,7 @@ void ServerBase::BootServer(int port)
             if (nowTime - STime >= 33)
             {
                 STime = nowTime;
-                BroadCastMsg();
+                Update();
             }
 
         }

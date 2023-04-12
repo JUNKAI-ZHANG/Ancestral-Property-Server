@@ -207,7 +207,6 @@ bool DBServer::IsExistUser(const std::string username)
     }
 
     std::string sql = "SELECT * FROM user where username = '" + username + "'";
-    std::cout << sql << std::endl;
 
     if (mysql_query(mysql, sql.c_str()))
     {
