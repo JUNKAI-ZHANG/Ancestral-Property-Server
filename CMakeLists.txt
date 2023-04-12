@@ -26,6 +26,7 @@ add_library(CommonUtilLib STATIC
     src/Tool/Event.cpp
     src/Tool/RingBuffer.cpp
     src/Tool/Timer.cpp
+    src/Tool/Room.cpp
 )
 
 add_library(BaseObj OBJECT
