@@ -3,8 +3,6 @@
 LogicServer::LogicServer()
 {
     server_type = SERVER_TYPE::LOGIC;
-
-    StartBroadCastToClient();
 }
 
 LogicServer::~LogicServer()
@@ -28,10 +26,50 @@ void LogicServer::OnConnectToCenterServer()
     TryToConnectAvailabeServer();
 }
 
-void LogicServer::StartBroadCastToClient()
+void LogicServer::BroadCastMsg()
 {
-    Timer timer;
-    timer.start(33, &LogicServer::BroadCastMsg, this);
+    for (int _room : broadcast_list)
+    {
+        std::cout << 123 << std::endl;
+        room_framecount[_room]++;
+
+        // bcast.lock();
+        Message *msg = new Message;
+        msg->body = new MessageBody;
+        FrameProto::Frame *body = new FrameProto::Frame;
+        while (!room_frame[_room].empty())
+        {
+            Message *tmp = room_frame[_room].front();
+            room_frame[_room].pop();
+
+            FrameProto::UserOperate *tmP = reinterpret_cast<FrameProto::UserOperate *>(tmp->body->message);
+
+            FrameProto::UserOperate *user_data = body->add_operates();
+            
+            for (int64_t i : tmP->data())
+            {
+                user_data->add_data(i);
+            }
+            user_data->set_opt(tmP->opt());
+
+        }
+        body->set_frame_id(room_framecount[_room]);
+        msg->body->message = body;
+
+        msg->head = new MessageHead(msg->length(), BODYTYPE::Frame, 0);
+
+        for (int _userid : room[_room])
+        {
+            msg->head->m_userid = _userid;
+            int fd = user_gate[_userid];
+            ServerBase::SendMsg(msg, fd);
+        }
+        if (msg != nullptr) 
+        {
+            delete msg;
+        }
+        // bcast.unlock();
+    }
 }
 
 void LogicServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t length, int fd)
@@ -53,16 +91,11 @@ void LogicServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_
         {
             if (room[body->roomid()].size() == 1)
             {
-                room_mutex.lock();
                 room[body->roomid()].insert(userid);
-                broadcast_list.insert(body->roomid());
                 user_room[userid] = body->roomid();
-                room_mutex.unlock();
 
                 message = NewJoinRoomResponse("Join success!", true, userid);
                 SendMsg(message, fd);
-                // StartGame 
-                NotifyRoom(BODYTYPE::StartGame, body->roomid(), fd);
             }
             else
             {
@@ -85,20 +118,16 @@ void LogicServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_
             auto _room = room[body->roomid()];
             if (_room.size() == 2)
             {
-                room_mutex.lock();
                 _room.erase(userid);
                 user_room.erase(userid);
-                room_mutex.unlock();
 
                 message = NewLeaveRoomResponse("Exit success!", true, userid);
                 SendMsg(message, fd);
             }
             else if (_room.size() == 1)
             {
-                room_mutex.lock();
                 user_room.erase(userid);
                 room.erase(body->roomid());
-                room_mutex.unlock();
 
                 message = NewLeaveRoomResponse("Exit success, Room destroy", true, userid);
                 SendMsg(message, fd);
@@ -117,13 +146,11 @@ void LogicServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_
 
         int room_id = ++now_room_count;
 
-        room_mutex.lock();
         room[room_id].insert(userid);
         user_room[userid] = room_id;
         room_name[room_id] = body->roomname();
-        room_mutex.unlock();
 
-        message = NewCreateRoomResponse("Create room success!", room_id, body->roomname(), true, userid);
+        message = NewCreateRoomResponse("Create room success!", room_id, body->roomname(), true, userid, true);
         SendMsg(message, fd);
 
         break;
@@ -148,13 +175,25 @@ void LogicServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_
 
         break;
     }
-    case BODYTYPE::Frame:
+    case BODYTYPE::StartGame:
     {
-        if (!user_gate.count(msg->head->m_userid))
-        {
-            user_gate[msg->head->m_userid] = fd;
-        }
-        user_now_frame[msg->head->m_userid].push(msg);
+        FrameProto::StartGame *body = reinterpret_cast<FrameProto::StartGame *>(msg->body->message);
+        // StartGame
+        broadcast_list.insert(body->roomid());
+        NotifyRoom(BODYTYPE::StartGame, body->roomid(), fd);
+
+        break;
+    }
+    case BODYTYPE::UserOperate:
+    {
+        user_gate[msg->head->m_userid] = fd;
+        int roomid = user_room[msg->head->m_userid];
+        room_frame[roomid].push(msg);
+        room_total_frame[roomid].push_back(msg);
+
+        FrameProto::UserOperate *body = reinterpret_cast<FrameProto::UserOperate *>(msg->body->message);
+
+
         break;
     }
     default:
@@ -169,31 +208,14 @@ void LogicServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_
 void LogicServer::NotifyRoom(BODYTYPE bodytype, int roomid, int fd)
 {
     // 1p2p
+    int id = 0;
     for (int userid : room[roomid])
     {
-        Message *msg = NewStartOrCloseGameMessage(bodytype, roomid, userid);
+        ++id;
+        userid_userpid[userid] = id;
+        Message *msg = NewStartOrCloseGameMessage(bodytype, userid, roomid, id);
         SendMsg(msg, fd);
         delete msg;
-    }
-}
-
-void LogicServer::BroadCastMsg()
-{
-    for (int _room : broadcast_list)
-    {
-        for (int _userid : room[_room])
-        {
-            auto iter = user_now_frame[_userid];
-            if (!iter.empty())
-            {
-                Message *tmp = iter.front();
-                int fd = user_gate[tmp->head->m_userid];
-                for (int __userid : room[_room])
-                {
-                    SendMsg(tmp, fd);
-                }
-            }
-        }
     }
 }
 

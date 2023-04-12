@@ -125,6 +125,7 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
 
         if (body->result())
         {
+            std::cout << "Reset" << std::endl;
             user_fd_record[body->userid()] = msg->head->m_userid;
         }
 
@@ -222,7 +223,7 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
         }
         break;
     }
-    case BODYTYPE::Frame:
+    case BODYTYPE::StartGame:
     {
         if (fd == logic_server_client)
         {
@@ -232,6 +233,16 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
         {
             SendMsg(msg, logic_server_client);
         }
+        break;
+    }
+    case BODYTYPE::UserOperate:
+    {
+        SendMsg(msg, logic_server_client);
+        break;
+    }
+    case BODYTYPE::Frame:
+    {
+        SendMsg(msg, user_fd_record[msg->head->m_userid]);
         break;
     }
     default:

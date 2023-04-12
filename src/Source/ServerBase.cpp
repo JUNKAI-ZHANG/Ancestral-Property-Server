@@ -6,6 +6,8 @@ ServerBase::ServerBase()
 {
     listen_epoll = new EpollMgr();
     conn_epoll = new EpollMgr();
+
+    STime = getCurrentTime();
     
     CreateConnEpoll();
 }
@@ -96,6 +98,56 @@ void ServerBase::HandleListenerEvent(std::map<int, RingBuffer *> &conns, int fd)
     }
 }
 
+void ServerBase::BroadCastMsg()
+{
+    for (int _room : broadcast_list)
+    {
+        room_framecount[_room]++;
+
+        Message *msg = new Message;
+        msg->body = new MessageBody;
+        FrameProto::Frame *body = new FrameProto::Frame;
+        while (!room_frame[_room].empty())
+        {
+            Message *tmp = room_frame[_room].front();
+            room_frame[_room].pop();
+
+            FrameProto::UserOperate *tmP = reinterpret_cast<FrameProto::UserOperate *>(tmp->body->message);
+
+            FrameProto::UserOperate *user_data = body->add_operates();
+            
+            for (int64_t i : tmP->data())
+            {
+                user_data->add_data(i);
+            }
+            user_data->set_opt(tmP->opt());
+
+        }
+        body->set_frame_id(room_framecount[_room]);
+        msg->body->message = body;
+
+        msg->head = new MessageHead(msg->length(), BODYTYPE::Frame, 0);
+
+        for (int _userid : room[_room])
+        {
+            msg->head->m_userid = _userid;
+            int fd = user_gate[_userid];
+            ServerBase::SendMsg(msg, fd);
+        }
+        if (msg != nullptr) 
+        {
+            delete msg;
+        }
+    }
+}
+
+time_t ServerBase::getCurrentTime() // 直接调用这个函数就行了，返回值最好是int64_t，long long应该也可以
+{
+    auto now = std::chrono::system_clock::now();
+    auto now_ms = std::chrono::time_point_cast<std::chrono::milliseconds>(now);
+    return now_ms.time_since_epoch().count();
+}
+
 void ServerBase::HandleConnEvent(std::map<int, RingBuffer *> &conn, int conn_fd)
 {
     // 接收数据
@@ -182,6 +234,11 @@ void ServerBase::HandleReceivedMsg(RingBuffer *buffer, int fd)
             buffer_size = 0;
             std::cerr << "ServerBase : Parse Header Error" << std::endl;
         }
+        int type = message->head->m_packageType;
+        if (type == BODYTYPE::ChaseFrame || type == BODYTYPE::Frame || type == BODYTYPE::UserOperate)
+        {
+            continue;
+        }
         delete message;
     }
 
@@ -198,7 +255,6 @@ bool ServerBase::SendMsg(Message *msg, int fd)
         if (!msg->SerializeToArray(resp, msg->head->m_packageSize))
         {
             std::cerr << "ServerBase : Parse Msg Error (SendMsg)" << std::endl;
-            // CloseClientSocket(fd); // 此处不应close
             return false;
         }
 
@@ -278,7 +334,43 @@ void ServerBase::BootServer(int port)
             return;
         }
         // 主线程处理监听epoll
-        listen_epoll->WaitEpollEvent(&ServerBase::HandleListenerEvent, this, ref(connections));
+        // listen_epoll->WaitEpollEvent(&ServerBase::HandleListenerEvent, this, ref(connections));
+
+        // 等待连接和数据
+        struct epoll_event events[MAX_CLIENTS];
+
+        while (true)
+        {
+            // 阻塞等待
+            int nfds = epoll_wait(listen_epoll->epoll_fd, events, 10, 11);
+            if (nfds == -1)
+            {
+                std::cerr << "Failed to wait for events" << std::endl;
+                break;
+            }
+
+            for (int i = 0; i < nfds; i++)
+            {
+                // address client socket data
+                int conn_fd = events[i].data.fd;
+
+                //std::bind(std::forward<_Callable>(__f), std::forward<_Args>(__args)..., conn_fd)();
+                ServerBase::HandleListenerEvent(connections, conn_fd);
+            }
+
+            time_t nowTime = getCurrentTime();
+
+            if (nowTime - STime >= 33)
+            {
+                STime = nowTime;
+                BroadCastMsg();
+            }
+
+        }
+
+        // 关闭 epoll 实例
+        close(listen_epoll->epoll_fd);
+
     }
     else
     {
