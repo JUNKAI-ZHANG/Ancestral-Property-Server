@@ -2,6 +2,8 @@
 #define _LOGICSERVER_H
 
 #include "FuncServer.h"
+#include "Room.h"
+#include "Singleton.h"
 
 class LogicServer : public FuncServer
 {
@@ -14,8 +16,6 @@ private:
     /*
      * @brief Notify (once) room start/close game
      */
-    void NotifyRoom(BODYTYPE bodytype, int roomid, int fd);
-    void NotifyUserJoin(int userid);
 
 
 protected:
@@ -25,6 +25,8 @@ protected:
      * @brief 成功连接到center server后触发
      */
     virtual void OnConnectToCenterServer();
+
+    virtual void Update();   
     
 
 public:
@@ -36,8 +38,13 @@ public:
 
     void BootServer(int port);
 
+    bool SendMsg(Message *msg, int fd);
+
 private:
+    Room *room = nullptr;
 
 };
+
+#define LOGICSERVER (*Singleton<LogicServer>::get())
 
 #endif

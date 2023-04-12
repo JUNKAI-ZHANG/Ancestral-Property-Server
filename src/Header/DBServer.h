@@ -56,14 +56,14 @@ public:
     bool ConnectToMysqlAndRedis();
     
 private:
-    // mysql config
+    // mysql config - 我为了开发方便，你别偷我鸡
     const char *mysql_ip = "124.223.73.248";
     int mysql_port = 3306;
     const char *mysql_user = "root";
     const char *mysql_password = "Zjk20011019#";
     const char *db_name = "AncestralProperty";
 
-    // redis config
+    // redis config - 我为了开发方便，你别偷我鸡
     const char *redis_ip = "110.42.203.195";
     int redis_port = 6379;
     const char *redis_password = "Aa20010621++";

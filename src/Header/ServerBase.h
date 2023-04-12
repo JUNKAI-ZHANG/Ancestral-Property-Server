@@ -54,9 +54,9 @@ protected:
      */
     void HandleReceivedMsg(RingBuffer *, int);
 
-    int64_t getCurrentTime();
-
     void BroadCastMsg();
+
+    int64_t getCurrentTime();
 
 protected:
     int listen_port = -1;
@@ -73,7 +73,6 @@ protected:
 protected:
     bool ConnectToOtherServer(std::string ip, int port, int &fd);
 
-    bool SendMsg(Message *msg, int fd);
 
     /*
      * @brief 服务端成功开启监听后进行的初始化操作
@@ -85,6 +84,8 @@ protected:
      */
     virtual void OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t length, int fd);
 
+    virtual void Update();
+
 public:
     explicit ServerBase();
 
@@ -95,38 +96,11 @@ public:
     virtual void CloseServer();
 
     virtual void BootServer(int port);
+
+    bool SendMsg(Message *msg, int fd);
+
 protected:
-    /* roomid - players */
-    std::map<int, std::set<int>> room;
-
-    /* userid - roomid */
-    std::map<int, int> user_room;
-
-    /* roomid - roomname */
-    std::map<int, std::string> room_name;
-
-    /* roomid - totFrmae */
-    std::map<int, std::vector<Message *>> room_total_frame;
-
-    /* roomid - frame(in time order) (frame per second) */
-    std::map<int, std::queue<Message *>> room_frame;
-
-    /* user - gateclient_fd */
-    std::map<int, int> user_gate;
-
-    /* userid - userpid */
-    std::map<int, int> userid_userpid;
-
-    /* roomid - now framecount */
-    std::map<int, int> room_framecount;
-
-    /* need be broadcast roomlist */
-    std::set<int> broadcast_list;
-
-    int now_room_count = 0;
-
-    int tmpx = 0;
-
+    
     time_t STime = 0;
 };
 
