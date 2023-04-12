@@ -778,6 +778,7 @@ class CreateRoom final :
     kRoomidFieldNumber = 1,
     kSeedFieldNumber = 2,
     kRetFieldNumber = 3,
+    kIsRoomhostFieldNumber = 7,
     kTypeFieldNumber = 6,
   };
   // string result = 4;
@@ -835,6 +836,15 @@ class CreateRoom final :
   void _internal_set_ret(bool value);
   public:
 
+  // bool is_roomhost = 7;
+  void clear_is_roomhost();
+  bool is_roomhost() const;
+  void set_is_roomhost(bool value);
+  private:
+  bool _internal_is_roomhost() const;
+  void _internal_set_is_roomhost(bool value);
+  public:
+
   // .RoomProto.CreateRoom.Type type = 6;
   void clear_type();
   ::RoomProto::CreateRoom_Type type() const;
@@ -856,6 +866,7 @@ class CreateRoom final :
   int32_t roomid_;
   uint32_t seed_;
   bool ret_;
+  bool is_roomhost_;
   int type_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_Room_2eproto;
@@ -1692,6 +1703,26 @@ inline void CreateRoom::_internal_set_type(::RoomProto::CreateRoom_Type value) {
 inline void CreateRoom::set_type(::RoomProto::CreateRoom_Type value) {
   _internal_set_type(value);
   // @@protoc_insertion_point(field_set:RoomProto.CreateRoom.type)
+}
+
+// bool is_roomhost = 7;
+inline void CreateRoom::clear_is_roomhost() {
+  is_roomhost_ = false;
+}
+inline bool CreateRoom::_internal_is_roomhost() const {
+  return is_roomhost_;
+}
+inline bool CreateRoom::is_roomhost() const {
+  // @@protoc_insertion_point(field_get:RoomProto.CreateRoom.is_roomhost)
+  return _internal_is_roomhost();
+}
+inline void CreateRoom::_internal_set_is_roomhost(bool value) {
+  
+  is_roomhost_ = value;
+}
+inline void CreateRoom::set_is_roomhost(bool value) {
+  _internal_set_is_roomhost(value);
+  // @@protoc_insertion_point(field_set:RoomProto.CreateRoom.is_roomhost)
 }
 
 // -------------------------------------------------------------------
