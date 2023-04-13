@@ -165,7 +165,6 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
         else if (body->type() == RoomProto::JoinRoom::Type::JoinRoom_Type_RESPONSE)
         {
             /* 转发给 client 处理 */
-            std::cout << user_fd_record[msg->head->m_userid] << std::endl;
             SendMsg(msg, user_fd_record[msg->head->m_userid]);
         }
         else 
