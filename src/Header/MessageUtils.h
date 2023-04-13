@@ -218,7 +218,7 @@ static Message *NewUserInfoMessage(int userid, int fd, ServerProto::UserInfo_Ope
     return message;
 }
 
-static Message *NewJoinRoomResponse(const std::string result, bool ret, int userid)
+static Message *NewJoinRoomResponse(const std::string result, bool ret, int userid, int roomid)
 {
     Message *message = new Message;
     std::mt19937 rng(std::chrono::system_clock::now().time_since_epoch().count());
@@ -228,6 +228,7 @@ static Message *NewJoinRoomResponse(const std::string result, bool ret, int user
     body->set_ret(ret);
     body->set_result(result);
     body->set_seed(rng() % UINT32_MAX);
+    body->set_roomid(roomid);
     body->set_type(RoomProto::JoinRoom::Type::JoinRoom_Type_RESPONSE);
     message->body->message = body;
 
