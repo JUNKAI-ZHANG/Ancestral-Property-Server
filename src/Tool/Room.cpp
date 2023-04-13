@@ -21,25 +21,26 @@ void Room::JoinRoom(Message *msg, int fd)
     user_gate[msg->head->m_userid] = fd;
     if (user_room.count(msg->head->m_userid))
     {
-        message = NewJoinRoomResponse("Already in room " + to_string(user_room[msg->head->m_userid]), false, msg->head->m_userid);
+        message = NewJoinRoomResponse("Already in room " + to_string(user_room[msg->head->m_userid]), false, msg->head->m_userid, -1);
     }
     else if (room.count(body->roomid()))
     {
-        if (room[body->roomid()].size() == 1)
+        // if (room[body->roomid()].size() == 1) // ???
+        if (room[body->roomid()].size() <= 9) // ???
         {
             room[body->roomid()].insert(msg->head->m_userid);
             user_room[msg->head->m_userid] = body->roomid();
 
-            message = NewJoinRoomResponse("Join success!", true, msg->head->m_userid);
+            message = NewJoinRoomResponse("Join success!", true, msg->head->m_userid, body->roomid());
         }
         else
         {
-            message = NewJoinRoomResponse("Full of people...", false, msg->head->m_userid);
+            message = NewJoinRoomResponse("Full of people...", false, msg->head->m_userid, -1);
         }
     }
     else
     {
-        message = NewJoinRoomResponse("Room is not exist...", false, msg->head->m_userid);
+        message = NewJoinRoomResponse("Room is not exist...", false, msg->head->m_userid, -1);
     }
     SendMsg(message, fd);
     delete message;
@@ -51,18 +52,21 @@ void Room::LeaveRoom(Message *msg, int fd)
     RoomProto::LeaveRoom *body = reinterpret_cast<RoomProto::LeaveRoom *>(msg->body->message);
     if (room.count(body->roomid()))
     {
-        auto _room = room[body->roomid()];
-        if (_room.size() == 2)
+        auto &_room = room[body->roomid()];
+        // if (_room.size() == 2)
+        if (_room.size() <= 9)
         {
             _room.erase(msg->head->m_userid);
             user_room.erase(msg->head->m_userid);
+            userid_userpid.erase(msg->head->m_userid);
 
             message = NewLeaveRoomResponse("Exit success!", true, msg->head->m_userid);
         }
         else if (_room.size() == 1)
         {
-            user_room.erase(msg->head->m_userid);
             room.erase(body->roomid());
+            user_room.erase(msg->head->m_userid);
+            userid_userpid.erase(msg->head->m_userid);
 
             message = NewLeaveRoomResponse("Exit success, Room destroy", true, msg->head->m_userid);
         }
@@ -82,14 +86,21 @@ void Room::CreateRoom(Message *msg, int fd)
 
     user_gate[msg->head->m_userid] = fd;
 
-    int room_id = ++now_room_count;
+    if (user_room.count(msg->head->m_userid))
+    {
+        message = NewCreateRoomResponse("Already in room " + to_string(user_room[msg->head->m_userid]), -1, "NULL", false, msg->head->m_userid, false);
+    }
+    else
+    {
+        // 可以考虑换成mex(room)
+        int room_id = ++now_room_count;
 
-    room[room_id].insert(msg->head->m_userid);
-    user_room[msg->head->m_userid] = room_id;
-    room_name[room_id] = body->roomname();
+        room[room_id].insert(msg->head->m_userid);
+        user_room[msg->head->m_userid] = room_id;
+        room_name[room_id] = body->roomname();
 
-    message = NewCreateRoomResponse("Create room success!", room_id, body->roomname(), true, msg->head->m_userid, true);
-
+        message = NewCreateRoomResponse("Create room success!", room_id, body->roomname(), true, msg->head->m_userid, true);
+    }
     SendMsg(message, fd);
     delete message;
 }
@@ -125,34 +136,34 @@ void Room::UserLogout(ServerProto::UserInfo *body)
     {
         room[roomid].erase(userid);
         std::cout << "user delete" << std::endl;
+
+        user_room.erase(userid);
+        std::cout << "user_room delete" << std::endl;
+
+        user_gate.erase(userid);
+        std::cout << "user_gate delete" << std::endl;
+
+        userid_userpid.erase(userid);
+        std::cout << "userid_userpid delete" << std::endl;
         if (room[roomid].empty())
         {
             room.erase(roomid);
-            // std::cout << "room delete" << std::endl;
-
-            user_room.erase(userid);
-            // std::cout << "user_room delete" << std::endl;
+            std::cout << "room delete" << std::endl;
 
             room_name.erase(roomid);
-            // std::cout << "roomname delete" << std::endl;
+            std::cout << "roomname delete" << std::endl;
 
             room_total_frame.erase(roomid);
-            // std::cout << "room_total_frame delete" << std::endl;
+            std::cout << "room_total_frame delete" << std::endl;
 
             room_frame.erase(roomid);
-            // std::cout << "room_frame delete" << std::endl;
-
-            user_gate.erase(userid);
-            // std::cout << "user_gate delete" << std::endl;
-
-            userid_userpid.erase(userid);
-            // std::cout << "userid_userpid delete" << std::endl;
+            std::cout << "room_frame delete" << std::endl;
 
             room_framecount.erase(roomid);
-            // std::cout << "room_framecount delete" << std::endl;
+            std::cout << "room_framecount delete" << std::endl;
 
             broadcast_list.erase(roomid);
-            // std::cout << "room remove from broadcast_list" << std::endl;
+            std::cout << "room remove from broadcast_list" << std::endl;
         }
     }
     else
@@ -194,7 +205,7 @@ void Room::BroadCastMsg()
                 user_data->add_data(i);
             }
             user_data->set_opt(tmP->opt());
-            user_data->set_userpid(tmP->userpid());
+            user_data->set_userpid(userid_userpid[tmp->head->m_userid]);
         }
         body->set_frame_id(room_framecount[_room]);
         msg->body->message = body;
