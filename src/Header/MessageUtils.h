@@ -218,6 +218,7 @@ static Message *NewJoinRoomResponse(const std::string result, bool ret, int user
     body->set_ret(ret);
     body->set_result(result);
     body->set_roomid(roomid);
+    body->set_roomid(roomid);
     body->set_type(RoomProto::JoinRoom::Type::JoinRoom_Type_RESPONSE);
     message->body->message = body;
 
