@@ -93,6 +93,7 @@ bool FuncServer::OnListenerStart()
 
 void FuncServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t length, int fd)
 {
+    ServerBase::OnMsgBodyAnalysised(msg, body, length, fd);
     switch (msg->head->m_packageType)
     {
     case BODYTYPE::ServerInfo:

@@ -5,8 +5,7 @@ package RoomProto;
 message JoinRoom
 {
     int32 roomid = 1;
-    uint32 seed = 2;
-    string result = 3;
+    string result = 2;
 
     enum Type
     {
@@ -14,8 +13,8 @@ message JoinRoom
         RESPONSE = 1;
     }
 
-    Type type = 4;
-    bool ret = 5;
+    Type type = 3;
+    bool ret = 4;
 }
 
 message LeaveRoom
@@ -36,10 +35,9 @@ message LeaveRoom
 message CreateRoom
 {
     int32 roomid = 1;
-    uint32 seed = 2;
-    bool ret = 3; // 创建结果
-    string result = 4;
-    string roomname = 5;
+    bool ret = 2; // 创建结果
+    string result = 3;
+    string roomname = 4;
 
     enum Type
     {
@@ -47,8 +45,8 @@ message CreateRoom
         RESPONSE = 1;
     }
 
-    Type type = 6;
-    bool is_roomhost = 7;
+    Type type = 5;
+    bool is_roomhost = 6;
 }
 
 message RoomInfo
@@ -57,6 +55,7 @@ message RoomInfo
     int32 people_count = 2;
     string roomname = 3;
 }
+
 message GetRoomList
 {
     repeated RoomInfo room_list = 1;
@@ -71,4 +70,3 @@ message GetRoomList
 
     Type type = 4;
 }
-

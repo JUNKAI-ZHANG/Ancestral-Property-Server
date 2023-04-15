@@ -69,16 +69,6 @@ static MessageBody *CreateMessageBody(int type)
         message = new FrameProto::CloseGame;
         break;
     }
-    case BODYTYPE::EnterGame:
-    {
-       message = new FrameProto::EnterGame;
-       break;
-    }
-    case BODYTYPE::QuitGame:
-    {
-       message = new FrameProto::QuitGame;
-       break;
-    }
     case BODYTYPE::Frame:
     {
         message = new FrameProto::Frame;
@@ -218,7 +208,7 @@ static Message *NewUserInfoMessage(int userid, int fd, ServerProto::UserInfo_Ope
     return message;
 }
 
-static Message *NewJoinRoomResponse(const std::string result, bool ret, int userid)
+static Message *NewJoinRoomResponse(const std::string result, bool ret, int userid, int roomid)
 {
     Message *message = new Message;
     std::mt19937 rng(std::chrono::system_clock::now().time_since_epoch().count());
@@ -227,7 +217,7 @@ static Message *NewJoinRoomResponse(const std::string result, bool ret, int user
     message->body = new MessageBody;
     body->set_ret(ret);
     body->set_result(result);
-    body->set_seed(rng() % UINT32_MAX);
+    body->set_roomid(roomid);
     body->set_type(RoomProto::JoinRoom::Type::JoinRoom_Type_RESPONSE);
     message->body->message = body;
 
@@ -264,7 +254,6 @@ static Message *NewCreateRoomResponse(const std::string result, int roomid, std:
     body->set_roomname(roomname);
     body->set_ret(ret);
     body->set_type(RoomProto::CreateRoom::Type::CreateRoom_Type_RESPONSE);
-    body->set_seed(rng() % UINT32_MAX);
     body->set_is_roomhost(isRoomhost);
     message->body->message = body;
 
@@ -315,20 +304,6 @@ static Message *NewStartOrCloseGameMessage(BODYTYPE bodytype, int userid, int ro
         body->set_roomid(roomid);
         message->body->message = body;
     }
-
-    message->head = new MessageHead(message->length(), bodytype, userid);
-
-    return message;
-}
-
-static Message *NewUserJoinRoomMessage(BODYTYPE bodytype, int userpid, int userid)
-{
-    Message *message = new Message;
-
-    FrameProto::EnterGame *body = new FrameProto::EnterGame;
-    message->body = new MessageBody;
-    body->set_userpid(userpid);
-    message->body->message = body;
 
     message->head = new MessageHead(message->length(), bodytype, userid);
 

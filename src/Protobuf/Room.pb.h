@@ -334,13 +334,12 @@ class JoinRoom final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kResultFieldNumber = 3,
+    kResultFieldNumber = 2,
     kRoomidFieldNumber = 1,
-    kSeedFieldNumber = 2,
-    kTypeFieldNumber = 4,
-    kRetFieldNumber = 5,
+    kTypeFieldNumber = 3,
+    kRetFieldNumber = 4,
   };
-  // string result = 3;
+  // string result = 2;
   void clear_result();
   const std::string& result() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -363,16 +362,7 @@ class JoinRoom final :
   void _internal_set_roomid(int32_t value);
   public:
 
-  // uint32 seed = 2;
-  void clear_seed();
-  uint32_t seed() const;
-  void set_seed(uint32_t value);
-  private:
-  uint32_t _internal_seed() const;
-  void _internal_set_seed(uint32_t value);
-  public:
-
-  // .RoomProto.JoinRoom.Type type = 4;
+  // .RoomProto.JoinRoom.Type type = 3;
   void clear_type();
   ::RoomProto::JoinRoom_Type type() const;
   void set_type(::RoomProto::JoinRoom_Type value);
@@ -381,7 +371,7 @@ class JoinRoom final :
   void _internal_set_type(::RoomProto::JoinRoom_Type value);
   public:
 
-  // bool ret = 5;
+  // bool ret = 4;
   void clear_ret();
   bool ret() const;
   void set_ret(bool value);
@@ -399,7 +389,6 @@ class JoinRoom final :
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr result_;
   int32_t roomid_;
-  uint32_t seed_;
   int type_;
   bool ret_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -773,15 +762,14 @@ class CreateRoom final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kResultFieldNumber = 4,
-    kRoomnameFieldNumber = 5,
+    kResultFieldNumber = 3,
+    kRoomnameFieldNumber = 4,
     kRoomidFieldNumber = 1,
-    kSeedFieldNumber = 2,
-    kRetFieldNumber = 3,
-    kIsRoomhostFieldNumber = 7,
-    kTypeFieldNumber = 6,
+    kRetFieldNumber = 2,
+    kIsRoomhostFieldNumber = 6,
+    kTypeFieldNumber = 5,
   };
-  // string result = 4;
+  // string result = 3;
   void clear_result();
   const std::string& result() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -795,7 +783,7 @@ class CreateRoom final :
   std::string* _internal_mutable_result();
   public:
 
-  // string roomname = 5;
+  // string roomname = 4;
   void clear_roomname();
   const std::string& roomname() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -818,16 +806,7 @@ class CreateRoom final :
   void _internal_set_roomid(int32_t value);
   public:
 
-  // uint32 seed = 2;
-  void clear_seed();
-  uint32_t seed() const;
-  void set_seed(uint32_t value);
-  private:
-  uint32_t _internal_seed() const;
-  void _internal_set_seed(uint32_t value);
-  public:
-
-  // bool ret = 3;
+  // bool ret = 2;
   void clear_ret();
   bool ret() const;
   void set_ret(bool value);
@@ -836,7 +815,7 @@ class CreateRoom final :
   void _internal_set_ret(bool value);
   public:
 
-  // bool is_roomhost = 7;
+  // bool is_roomhost = 6;
   void clear_is_roomhost();
   bool is_roomhost() const;
   void set_is_roomhost(bool value);
@@ -845,7 +824,7 @@ class CreateRoom final :
   void _internal_set_is_roomhost(bool value);
   public:
 
-  // .RoomProto.CreateRoom.Type type = 6;
+  // .RoomProto.CreateRoom.Type type = 5;
   void clear_type();
   ::RoomProto::CreateRoom_Type type() const;
   void set_type(::RoomProto::CreateRoom_Type value);
@@ -864,7 +843,6 @@ class CreateRoom final :
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr result_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr roomname_;
   int32_t roomid_;
-  uint32_t seed_;
   bool ret_;
   bool is_roomhost_;
   int type_;
@@ -1293,27 +1271,7 @@ inline void JoinRoom::set_roomid(int32_t value) {
   // @@protoc_insertion_point(field_set:RoomProto.JoinRoom.roomid)
 }
 
-// uint32 seed = 2;
-inline void JoinRoom::clear_seed() {
-  seed_ = 0u;
-}
-inline uint32_t JoinRoom::_internal_seed() const {
-  return seed_;
-}
-inline uint32_t JoinRoom::seed() const {
-  // @@protoc_insertion_point(field_get:RoomProto.JoinRoom.seed)
-  return _internal_seed();
-}
-inline void JoinRoom::_internal_set_seed(uint32_t value) {
-  
-  seed_ = value;
-}
-inline void JoinRoom::set_seed(uint32_t value) {
-  _internal_set_seed(value);
-  // @@protoc_insertion_point(field_set:RoomProto.JoinRoom.seed)
-}
-
-// string result = 3;
+// string result = 2;
 inline void JoinRoom::clear_result() {
   result_.ClearToEmpty();
 }
@@ -1364,7 +1322,7 @@ inline void JoinRoom::set_allocated_result(std::string* result) {
   // @@protoc_insertion_point(field_set_allocated:RoomProto.JoinRoom.result)
 }
 
-// .RoomProto.JoinRoom.Type type = 4;
+// .RoomProto.JoinRoom.Type type = 3;
 inline void JoinRoom::clear_type() {
   type_ = 0;
 }
@@ -1384,7 +1342,7 @@ inline void JoinRoom::set_type(::RoomProto::JoinRoom_Type value) {
   // @@protoc_insertion_point(field_set:RoomProto.JoinRoom.type)
 }
 
-// bool ret = 5;
+// bool ret = 4;
 inline void JoinRoom::clear_ret() {
   ret_ = false;
 }
@@ -1543,27 +1501,7 @@ inline void CreateRoom::set_roomid(int32_t value) {
   // @@protoc_insertion_point(field_set:RoomProto.CreateRoom.roomid)
 }
 
-// uint32 seed = 2;
-inline void CreateRoom::clear_seed() {
-  seed_ = 0u;
-}
-inline uint32_t CreateRoom::_internal_seed() const {
-  return seed_;
-}
-inline uint32_t CreateRoom::seed() const {
-  // @@protoc_insertion_point(field_get:RoomProto.CreateRoom.seed)
-  return _internal_seed();
-}
-inline void CreateRoom::_internal_set_seed(uint32_t value) {
-  
-  seed_ = value;
-}
-inline void CreateRoom::set_seed(uint32_t value) {
-  _internal_set_seed(value);
-  // @@protoc_insertion_point(field_set:RoomProto.CreateRoom.seed)
-}
-
-// bool ret = 3;
+// bool ret = 2;
 inline void CreateRoom::clear_ret() {
   ret_ = false;
 }
@@ -1583,7 +1521,7 @@ inline void CreateRoom::set_ret(bool value) {
   // @@protoc_insertion_point(field_set:RoomProto.CreateRoom.ret)
 }
 
-// string result = 4;
+// string result = 3;
 inline void CreateRoom::clear_result() {
   result_.ClearToEmpty();
 }
@@ -1634,7 +1572,7 @@ inline void CreateRoom::set_allocated_result(std::string* result) {
   // @@protoc_insertion_point(field_set_allocated:RoomProto.CreateRoom.result)
 }
 
-// string roomname = 5;
+// string roomname = 4;
 inline void CreateRoom::clear_roomname() {
   roomname_.ClearToEmpty();
 }
@@ -1685,7 +1623,7 @@ inline void CreateRoom::set_allocated_roomname(std::string* roomname) {
   // @@protoc_insertion_point(field_set_allocated:RoomProto.CreateRoom.roomname)
 }
 
-// .RoomProto.CreateRoom.Type type = 6;
+// .RoomProto.CreateRoom.Type type = 5;
 inline void CreateRoom::clear_type() {
   type_ = 0;
 }
@@ -1705,7 +1643,7 @@ inline void CreateRoom::set_type(::RoomProto::CreateRoom_Type value) {
   // @@protoc_insertion_point(field_set:RoomProto.CreateRoom.type)
 }
 
-// bool is_roomhost = 7;
+// bool is_roomhost = 6;
 inline void CreateRoom::clear_is_roomhost() {
   is_roomhost_ = false;
 }

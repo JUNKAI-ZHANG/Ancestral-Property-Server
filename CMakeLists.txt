@@ -26,7 +26,6 @@ add_library(CommonUtilLib STATIC
     src/Tool/Event.cpp
     src/Tool/RingBuffer.cpp
     src/Tool/Timer.cpp
-    src/Tool/Room.cpp
 )
 
 add_library(BaseObj OBJECT
@@ -69,6 +68,8 @@ target_link_libraries(GateServer  ${libraries_to_link})
 add_executable(LogicServer
     $<TARGET_OBJECTS:BaseObj>
     src/Source/LogicServer.cpp
+    src/Logic/Room.cpp
+    src/Logic/Room.h
 )
 add_compile_options(LogicServer -g)
 target_link_libraries(LogicServer  ${libraries_to_link})

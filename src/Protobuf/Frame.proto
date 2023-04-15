@@ -13,16 +13,7 @@ message StartGame
 {
     int32 roomid = 1;
     int32 userpid = 2;
-}
-
-message EnterGame
-{
-    int32 userpid = 1;
-}
-
-message QuitGame
-{
-    int32 userpid = 1;
+    uint32 seed = 3;
 }
 
 message CloseGame

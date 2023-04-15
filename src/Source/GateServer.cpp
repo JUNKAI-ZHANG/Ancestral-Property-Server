@@ -108,7 +108,7 @@ bool GateServer::CheckMessageValid(Message *msg, int fd)
 
 void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t length, int fd)
 {
-    ServerBase::OnMsgBodyAnalysised(msg, body, length, fd);
+    FuncServer::OnMsgBodyAnalysised(msg, body, length, fd);
 
     if (!CheckMessageValid(msg, fd))
     {
@@ -165,7 +165,6 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
         else if (body->type() == RoomProto::JoinRoom::Type::JoinRoom_Type_RESPONSE)
         {
             /* 转发给 client 处理 */
-            std::cout << user_fd_record[msg->head->m_userid] << std::endl;
             SendMsg(msg, user_fd_record[msg->head->m_userid]);
         }
         else 
@@ -246,11 +245,13 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
     }
     case BODYTYPE::UserOperate:
     {
+        std::cout << "into" << std::endl;
         SendMsg(msg, logic_server_client);
         break;
     }
     case BODYTYPE::Frame:
     {
+        std::cout << "recv resp" << std::endl;
         SendMsg(msg, user_fd_record[msg->head->m_userid]);
         break;
     }
@@ -263,8 +264,6 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
         break;
     }
     }
-
-    FuncServer::OnMsgBodyAnalysised(msg, body, length, fd);
 }
 
 int main(int argc, char **argv)

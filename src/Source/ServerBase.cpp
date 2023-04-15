@@ -197,10 +197,6 @@ void ServerBase::HandleReceivedMsg(RingBuffer *buffer, int fd)
             std::cerr << "ServerBase : Parse Header Error" << std::endl;
         }
         int type = message->head->m_packageType;
-        if (type == BODYTYPE::ChaseFrame || type == BODYTYPE::Frame || type == BODYTYPE::UserOperate)
-        {
-            continue;
-        }
         delete message;
     }
 
