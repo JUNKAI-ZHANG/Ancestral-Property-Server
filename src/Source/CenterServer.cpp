@@ -7,7 +7,6 @@ CenterServer::CenterServer()
 
 CenterServer::~CenterServer()
 {
-
 }
 
 void CenterServer::CloseClientSocket(int fd)
@@ -142,7 +141,9 @@ void CenterServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32
 void CenterServer::HandleServerInfo(Message *msg, int fd)
 {
     // 千万不要delete body;
-    ServerProto::ServerInfo *body = reinterpret_cast<ServerProto::ServerInfo *>(msg->body->message);
+    auto body = dynamic_cast<ServerProto::ServerInfo *>(msg->body->message);
+    if (body == nullptr)
+        return;
 
     switch (body->opt())
     {
@@ -152,7 +153,7 @@ void CenterServer::HandleServerInfo(Message *msg, int fd)
         if (!MachineRecord.count(fd))
         {
             MachineRecord[fd] = new Server_Info();
-            MachineRecord[fd]->ip   = body->ip();
+            MachineRecord[fd]->ip = body->ip();
             MachineRecord[fd]->port = body->port();
             MachineRecord[fd]->type = static_cast<SERVER_TYPE>(body->server_type());
 
@@ -185,7 +186,7 @@ void CenterServer::HandleServerInfo(Message *msg, int fd)
         }
         break;
     }
-    default :
+    default:
     {
         std::cerr << "Error ServerInfo Type = " << msg->head->m_packageType << std::endl;
         break;

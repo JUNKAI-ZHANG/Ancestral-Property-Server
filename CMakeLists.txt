@@ -69,6 +69,8 @@ target_link_libraries(GateServer  ${libraries_to_link})
 add_executable(LogicServer
     $<TARGET_OBJECTS:BaseObj>
     src/Source/LogicServer.cpp
+    src/Logic/Room.cpp
+    src/Logic/Room.h
 )
 add_compile_options(LogicServer -g)
 target_link_libraries(LogicServer  ${libraries_to_link})
