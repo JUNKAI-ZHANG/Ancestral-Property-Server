@@ -27,7 +27,7 @@ void DBServer::TryToConnectAvailabeServer()
 
 void DBServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t length, int fd)
 {
-    ServerBase::OnMsgBodyAnalysised(msg, body, length, fd);
+    FuncServer::OnMsgBodyAnalysised(msg, body, length, fd);
 
     switch (msg->head->m_packageType)
     {
@@ -46,8 +46,6 @@ void DBServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t l
         break;
     }
     }
-
-    FuncServer::OnMsgBodyAnalysised(msg, body, length, fd);
 }
 
 // ---------------------------------------------------------------------

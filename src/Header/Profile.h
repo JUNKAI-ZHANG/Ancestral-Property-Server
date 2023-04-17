@@ -36,7 +36,7 @@ enum SERVER_FREE_LEVEL
  */
 enum BODYTYPE
 {
-    ErrorPackage = -1,
+    ErrorPackage = -1, // 错误的包体类型
 
     LoginRequest = 0,
     LoginResponse,
