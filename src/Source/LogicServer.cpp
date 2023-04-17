@@ -1,11 +1,11 @@
 #include "../Logic/LogicServer.h"
 #include "../Logic/Room.h"
 
-LogicServer::LogicServer()
+LogicServer::LogicServer() 
 {
     server_type = SERVER_TYPE::LOGIC;
 
-    for (int i = 1; i <= 32; i++) roomid_pool.insert(i);
+    for (int i = 1; i <= 32; i++) roomid_pool.insert(i); // zjk 
 }
 
 LogicServer::~LogicServer()
@@ -63,7 +63,6 @@ void LogicServer::Update()
 {
     for (auto room : rooms)
     {
-        // std::cout << "room = " << room.first << std::endl;
         room.second->Tick();
     }
 }
@@ -72,6 +71,7 @@ void LogicServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_
 {
     FuncServer::OnMsgBodyAnalysised(msg, body, length, fd);
 
+    // 因为现在logic收到的消息全部来自于gate
     user_gate[msg->head->m_userid] = fd;
 
     switch (msg->head->m_packageType)
@@ -113,13 +113,15 @@ void LogicServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_
     case BODYTYPE::UserInfo:
     {
         ServerProto::UserInfo *body = dynamic_cast<ServerProto::UserInfo *>(msg->body->message);
+
         if (body->opt() == ServerProto::UserInfo_Operation::UserInfo_Operation_Logout)
         {
-            // rooms[userid2roomid[msg->head->m_userid]]->LeaveRoom(msg->head->m_userid);
+            // rooms[userid2roomid[body->userid()]]->RemovePlayer(body->userid());
+            RemovePlayerFromRoom(body->userid()); // zjk
         }
         else if (body->opt() == ServerProto::UserInfo_Operation::UserInfo_Operation_Register)
         {
-            
+            // 暂时没有功能需要实现
         }
         else 
         {
@@ -142,6 +144,7 @@ void LogicServer::TryToConnectAvailabeServer()
     }
 }
 
+// 下面的函数是一些业务处理函数，将逻辑与消息发送分开处理
 void LogicServer::HandleJoinRoom(Message *msg)
 {
     auto body = dynamic_cast<RoomProto::JoinRoom *>(msg->body->message);
@@ -188,18 +191,30 @@ void LogicServer::HandleCreateRoom(Message *msg)
     auto body = dynamic_cast<RoomProto::CreateRoom *>(msg->body->message);
     if (body == nullptr) return;
 
-    int roomid = AddRoom(body->roomname());
     RoomProto::CreateRoom createRoom;
-    createRoom.set_roomid(roomid);
-    createRoom.set_ret(true);
-    createRoom.set_result("创建成功");
-    createRoom.set_roomname(rooms[roomid]->Name());
-    createRoom.set_type(RoomProto::CreateRoom_Type_RESPONSE);
-    createRoom.set_is_roomhost(true);
+
+    if (userid2roomid.count(msg->head->m_userid))
+    {
+        createRoom.set_roomid(-1);
+        createRoom.set_ret(false);
+        createRoom.set_result("你已在房间中");
+        createRoom.set_roomname("Error");
+        createRoom.set_type(RoomProto::CreateRoom_Type_RESPONSE);
+        createRoom.set_is_roomhost(false);
+    }
+    else
+    {
+        int roomid = AddRoom(body->roomname());
+        createRoom.set_roomid(roomid);
+        createRoom.set_ret(true);
+        createRoom.set_result("创建成功");
+        createRoom.set_roomname(rooms[roomid]->Name());
+        createRoom.set_type(RoomProto::CreateRoom_Type_RESPONSE);
+        createRoom.set_is_roomhost(true);
+        MovePlayerToRoom(msg->head->m_userid, roomid);
+    }
 
     SendToClient(BODYTYPE::CreateRoom, &createRoom, msg->head->m_userid); // zjk
-
-    MovePlayerToRoom(msg->head->m_userid, roomid);
 }
 
 void LogicServer::HandleGetRoomList(Message *msg)
@@ -273,7 +288,8 @@ void LogicServer::RemoveRoom(int roomid)
 
 void LogicServer::HandleStartGame(Message *msg)
 {
-    if (!rooms.count(msg->head->m_userid)) return;
+    if (!rooms.count(userid2roomid[msg->head->m_userid])) return;
+    // if (!rooms.count(msg->head->m_userid)) return;
     rooms[userid2roomid[msg->head->m_userid]]->StartGame(msg->head->m_userid);
 }
 
@@ -300,7 +316,6 @@ void LogicServer::HandleCloseGame(Message *msg)
 void LogicServer::HandleUserOperate(Message *msg)
 {
     rooms[userid2roomid[msg->head->m_userid]]->OnUserOperate(msg);
-    std::cout << "recv end" << std::endl;
 }
 
 int main(int argc, char **argv)

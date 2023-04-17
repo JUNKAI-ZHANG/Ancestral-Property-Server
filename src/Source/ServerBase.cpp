@@ -317,7 +317,6 @@ void ServerBase::BootServer(int port)
                 // address client socket data
                 int conn_fd = events[i].data.fd;
 
-                //std::bind(std::forward<_Callable>(__f), std::forward<_Args>(__args)..., conn_fd)();
                 ServerBase::HandleListenerEvent(connections, conn_fd);
             }
 

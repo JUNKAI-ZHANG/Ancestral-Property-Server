@@ -168,7 +168,7 @@ void Room::EndGame()
     NotifyGameEnd();
 }
 
-void Room::Tick() // 有很大的问题吧
+void Room::Tick()
 {
     if (!m_gameStarted) return;
     frame_id++;

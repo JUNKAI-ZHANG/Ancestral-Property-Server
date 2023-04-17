@@ -115,6 +115,12 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
         return;
     }
 
+    if (fd_user_record.count(fd))
+    {
+        // GateServer 根据fd将userid修改为信任值
+        msg->head->m_userid = fd_user_record[fd];
+    }
+
     switch (msg->head->m_packageType)
     {
     case BODYTYPE::LoginRequest:
@@ -128,7 +134,8 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
     }
     case BODYTYPE::LoginResponse:
     {
-        LoginProto::LoginResponse *body = reinterpret_cast<LoginProto::LoginResponse *>(msg->body->message);
+        LoginProto::LoginResponse *body = dynamic_cast<LoginProto::LoginResponse *>(msg->body->message);
+        if (body == nullptr) return ;
 
         if (body->result())
         {
@@ -156,7 +163,9 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
     }
     case BODYTYPE::JoinRoom:
     {
-        RoomProto::JoinRoom *body = reinterpret_cast<RoomProto::JoinRoom *>(msg->body->message);
+        RoomProto::JoinRoom *body = dynamic_cast<RoomProto::JoinRoom *>(msg->body->message);
+        if (body == nullptr) return ;
+
         if (body->type() == RoomProto::JoinRoom::Type::JoinRoom_Type_REQUEST)
         {
             /* 转发给logic server处理 */
@@ -175,7 +184,9 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
     }
     case BODYTYPE::LeaveRoom:
     {
-        RoomProto::LeaveRoom *body = reinterpret_cast<RoomProto::LeaveRoom *>(msg->body->message);
+        RoomProto::LeaveRoom *body = dynamic_cast<RoomProto::LeaveRoom *>(msg->body->message);
+        if (body == nullptr) return ;
+
         if (body->type() == RoomProto::LeaveRoom::Type::LeaveRoom_Type_REQUEST)
         {
             /* 转发给logic server处理 */
@@ -194,7 +205,8 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
     }
     case BODYTYPE::CreateRoom:
     {
-        RoomProto::CreateRoom *body = reinterpret_cast<RoomProto::CreateRoom *>(msg->body->message);
+        RoomProto::CreateRoom *body = dynamic_cast<RoomProto::CreateRoom *>(msg->body->message);
+        if (body == nullptr) return ;
 
         if (body->type() == RoomProto::CreateRoom::Type::CreateRoom_Type_REQUEST)
         {
@@ -214,7 +226,9 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
     }
     case BODYTYPE::GetRoomList:
     {
-        RoomProto::GetRoomList *body = reinterpret_cast<RoomProto::GetRoomList *>(msg->body->message);
+        RoomProto::GetRoomList *body = dynamic_cast<RoomProto::GetRoomList *>(msg->body->message);
+        if (body == nullptr) return ;
+        
         if (body->type() == RoomProto::GetRoomList::Type::GetRoomList_Type_REQUEST)
         {
             /* 转发给logic server处理 */
@@ -245,13 +259,11 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
     }
     case BODYTYPE::UserOperate:
     {
-        std::cout << "into" << std::endl;
         SendMsg(msg, logic_server_client);
         break;
     }
     case BODYTYPE::Frame:
     {
-        std::cout << "recv resp" << std::endl;
         SendMsg(msg, user_fd_record[msg->head->m_userid]);
         break;
     }
