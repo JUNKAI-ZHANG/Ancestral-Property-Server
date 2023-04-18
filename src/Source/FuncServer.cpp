@@ -63,7 +63,7 @@ void FuncServer::SendSelfInfoToCenter()
             return;
         }
 
-        if (conn_epoll->AddEventToEpoll(center_server_client) == -1)
+        if (listen_epoll->AddEventToEpoll(center_server_client) == -1)
         {
             close(center_server_client);
             return;
@@ -89,6 +89,11 @@ bool FuncServer::OnListenerStart()
     center_connect_timer.start(5000, &FuncServer::SendSelfInfoToCenter, this);
 
     return true;
+}
+
+void FuncServer::Update()
+{
+
 }
 
 void FuncServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t length, int fd)
@@ -135,7 +140,7 @@ void FuncServer::HandleServerInfo(Message *msg, int fd)
                 return;
             }
 
-            if (conn_epoll->AddEventToEpoll(logic_server_client) == -1)
+            if (listen_epoll->AddEventToEpoll(logic_server_client) == -1)
             {
                 close(logic_server_client);
                 return;
@@ -159,7 +164,7 @@ void FuncServer::HandleServerInfo(Message *msg, int fd)
                 return;
             }
 
-            if (conn_epoll->AddEventToEpoll(db_server_client) == -1)
+            if (listen_epoll->AddEventToEpoll(db_server_client) == -1)
             {
                 close(db_server_client);
                 return;

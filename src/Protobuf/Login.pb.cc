@@ -33,6 +33,7 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT LoginRequestDefaultTypeInternal
 constexpr LoginResponse::LoginResponse(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : msg_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , username_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
   , result_(false)
   , userid_(0)
   , token_(0u){}
@@ -108,6 +109,7 @@ const uint32_t TableStruct_Login_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(pr
   PROTOBUF_FIELD_OFFSET(::LoginProto::LoginResponse, msg_),
   PROTOBUF_FIELD_OFFSET(::LoginProto::LoginResponse, userid_),
   PROTOBUF_FIELD_OFFSET(::LoginProto::LoginResponse, token_),
+  PROTOBUF_FIELD_OFFSET(::LoginProto::LoginResponse, username_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::LoginProto::RegistRequest, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -136,9 +138,9 @@ const uint32_t TableStruct_Login_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(pr
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::LoginProto::LoginRequest)},
   { 8, -1, -1, sizeof(::LoginProto::LoginResponse)},
-  { 18, -1, -1, sizeof(::LoginProto::RegistRequest)},
-  { 26, -1, -1, sizeof(::LoginProto::RegistResponse)},
-  { 34, -1, -1, sizeof(::LoginProto::LoginOut)},
+  { 19, -1, -1, sizeof(::LoginProto::RegistRequest)},
+  { 27, -1, -1, sizeof(::LoginProto::RegistResponse)},
+  { 35, -1, -1, sizeof(::LoginProto::LoginOut)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -151,17 +153,17 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
 
 const char descriptor_table_protodef_Login_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\013Login.proto\022\nLoginProto\"0\n\014LoginReques"
-  "t\022\020\n\010username\030\001 \001(\t\022\016\n\006passwd\030\002 \001(\t\"K\n\rL"
+  "t\022\020\n\010username\030\001 \001(\t\022\016\n\006passwd\030\002 \001(\t\"]\n\rL"
   "oginResponse\022\016\n\006result\030\001 \001(\010\022\013\n\003msg\030\002 \001("
-  "\t\022\016\n\006userid\030\003 \001(\005\022\r\n\005token\030\004 \001(\r\"1\n\rRegi"
-  "stRequest\022\020\n\010username\030\001 \001(\t\022\016\n\006passwd\030\002 "
-  "\001(\t\"-\n\016RegistResponse\022\016\n\006result\030\001 \001(\010\022\013\n"
-  "\003msg\030\002 \001(\t\"*\n\010LoginOut\022\016\n\006userid\030\001 \001(\005\022\016"
-  "\n\006reason\030\002 \001(\tb\006proto3"
+  "\t\022\016\n\006userid\030\003 \001(\005\022\r\n\005token\030\004 \001(\r\022\020\n\010user"
+  "name\030\005 \001(\t\"1\n\rRegistRequest\022\020\n\010username\030"
+  "\001 \001(\t\022\016\n\006passwd\030\002 \001(\t\"-\n\016RegistResponse\022"
+  "\016\n\006result\030\001 \001(\010\022\013\n\003msg\030\002 \001(\t\"*\n\010LoginOut"
+  "\022\016\n\006userid\030\001 \001(\005\022\016\n\006reason\030\002 \001(\tb\006proto3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_Login_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Login_2eproto = {
-  false, false, 302, descriptor_table_protodef_Login_2eproto, "Login.proto", 
+  false, false, 320, descriptor_table_protodef_Login_2eproto, "Login.proto", 
   &descriptor_table_Login_2eproto_once, nullptr, 0, 5,
   schemas, file_default_instances, TableStruct_Login_2eproto::offsets,
   file_level_metadata_Login_2eproto, file_level_enum_descriptors_Login_2eproto, file_level_service_descriptors_Login_2eproto,
@@ -452,6 +454,14 @@ LoginResponse::LoginResponse(const LoginResponse& from)
     msg_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_msg(), 
       GetArenaForAllocation());
   }
+  username_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    username_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_username().empty()) {
+    username_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_username(), 
+      GetArenaForAllocation());
+  }
   ::memcpy(&result_, &from.result_,
     static_cast<size_t>(reinterpret_cast<char*>(&token_) -
     reinterpret_cast<char*>(&result_)) + sizeof(token_));
@@ -462,6 +472,10 @@ inline void LoginResponse::SharedCtor() {
 msg_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
   msg_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+username_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  username_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
     reinterpret_cast<char*>(&result_) - reinterpret_cast<char*>(this)),
@@ -479,6 +493,7 @@ LoginResponse::~LoginResponse() {
 inline void LoginResponse::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   msg_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  username_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 
 void LoginResponse::ArenaDtor(void* object) {
@@ -498,6 +513,7 @@ void LoginResponse::Clear() {
   (void) cached_has_bits;
 
   msg_.ClearToEmpty();
+  username_.ClearToEmpty();
   ::memset(&result_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&token_) -
       reinterpret_cast<char*>(&result_)) + sizeof(token_));
@@ -540,6 +556,16 @@ const char* LoginResponse::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_
       case 4:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
           token_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // string username = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 42)) {
+          auto str = _internal_mutable_username();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "LoginProto.LoginResponse.username"));
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -601,6 +627,16 @@ uint8_t* LoginResponse::_InternalSerialize(
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(4, this->_internal_token(), target);
   }
 
+  // string username = 5;
+  if (!this->_internal_username().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_username().data(), static_cast<int>(this->_internal_username().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "LoginProto.LoginResponse.username");
+    target = stream->WriteStringMaybeAliased(
+        5, this->_internal_username(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -622,6 +658,13 @@ size_t LoginResponse::ByteSizeLong() const {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_msg());
+  }
+
+  // string username = 5;
+  if (!this->_internal_username().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_username());
   }
 
   // bool result = 1;
@@ -664,6 +707,9 @@ void LoginResponse::MergeFrom(const LoginResponse& from) {
   if (!from._internal_msg().empty()) {
     _internal_set_msg(from._internal_msg());
   }
+  if (!from._internal_username().empty()) {
+    _internal_set_username(from._internal_username());
+  }
   if (from._internal_result() != 0) {
     _internal_set_result(from._internal_result());
   }
@@ -696,6 +742,11 @@ void LoginResponse::InternalSwap(LoginResponse* other) {
       &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       &msg_, lhs_arena,
       &other->msg_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &username_, lhs_arena,
+      &other->username_, rhs_arena
   );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
       PROTOBUF_FIELD_OFFSET(LoginResponse, token_)

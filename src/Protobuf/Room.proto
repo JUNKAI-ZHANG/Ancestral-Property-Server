@@ -2,6 +2,12 @@ syntax = "proto3";
 
 package RoomProto;
 
+message UserInfo
+{
+    string username = 1;
+    int32 userid = 2;
+}
+
 message JoinRoom
 {
     int32 roomid = 1;
@@ -15,6 +21,7 @@ message JoinRoom
 
     Type type = 3;
     bool ret = 4;
+    repeated UserInfo users = 5;
 }
 
 message LeaveRoom
@@ -30,6 +37,8 @@ message LeaveRoom
     }
 
     Type type = 4;
+    int32 userid = 5;
+    int32 userpid = 6;
 }
 
 message CreateRoom

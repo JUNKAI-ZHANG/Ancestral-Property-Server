@@ -65,12 +65,14 @@ bool MessageHead::SerailizeToArray(uint8_t *buffer, int len) const
     {
         buffer[i] = tmp[i];
     }
+    delete tmp;
 
     tmp = IntToByte(m_packageType);
     for (int i = 0; i < 4; i++)
     {
         buffer[i + 4] = tmp[i];
     }
+    delete tmp;
 
     // 最后4Byte不处理，前端不需要解析token.(算了吧，都写了这么多了，也不差这一点了，hh)
     tmp = UintToByte(m_userid);
