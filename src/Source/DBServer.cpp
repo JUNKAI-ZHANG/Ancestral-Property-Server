@@ -103,7 +103,7 @@ void DBServer::HandleUserLogin(Message *msg, int fd)
         userid = GetUserid(body->username());
     }
 
-    Message *message = NewLoginResponseMessage(ret, resp_msg, token, userid, msg->head->m_userid);
+    Message *message = NewLoginResponseMessage(ret, resp_msg, token, userid, msg->head->m_userid, body->username());
 
     if (message != nullptr)
     {
@@ -388,73 +388,6 @@ int DBServer::GetRowCount(std::string tablename)
     MYSQL_ROW row;
     row = mysql_fetch_row(result);
     return atoi(row[0]);
-}
-
-bool DBServer::ChangeUserMoney(const std::string username, int money, int &allMoney)
-{
-    if (mysql == nullptr)
-    {
-        std::cerr << "Connection with mysql was closed" << std::endl;
-        return false;
-    }
-
-    try
-    {
-        int num = std::stoi(username);
-    }
-    catch (const std::invalid_argument &e)
-    {
-        std::cerr << "username format error" << std::endl;
-        return false;
-    }
-
-    // 执行 SQL 查询
-    std::string sql = "SELECT * FROM user_money where username = '" + username + "'";
-
-    if (mysql_query(mysql, sql.c_str()))
-    {
-        std::cerr << "Error: " << mysql_error(mysql) << std::endl;
-        return false;
-    }
-
-    int currentMoney = 0;
-
-    // 获取查询结果
-    MYSQL_RES *result = mysql_store_result(mysql);
-    if (result == nullptr)
-    {
-        std::cerr << "Error: " << mysql_error(mysql) << std::endl;
-        return false;
-    }
-
-    MYSQL_ROW row;
-    if ((row = mysql_fetch_row(result)))
-    {
-        currentMoney = std::stoi(row[1]);
-    }
-    else
-    {
-        return false;
-    }
-
-    // 如果是get opt 直接终止
-    if (money == 0)
-    {
-        allMoney = currentMoney;
-        return true;
-    }
-
-    // 执行 SQL 语句修改金币
-    sql = "update user_money set money = " + std::to_string(currentMoney + money) + " where username = '" + username + "'";
-
-    if (mysql_query(mysql, sql.c_str()) != 0)
-    {
-        std::cerr << "Error: " << mysql_error(mysql) << std::endl;
-        return false;
-    }
-
-    allMoney = currentMoney + money;
-    return true;
 }
 
 // ---------------------------------------------------------------------

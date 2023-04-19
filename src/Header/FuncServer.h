@@ -12,7 +12,6 @@ private:
     /* 中心服务器端口 */
     int center_port = 8088;
 
-    Timer center_connect_timer;
 protected:
     /* 用于和中心服务器连接 */
     int center_server_client = -1;
@@ -28,6 +27,8 @@ protected:
     
     /* 记录fd和userid的映射 */
     std::map<int, int> fd_user_record;
+
+    virtual void Update();
 
 private:
     void HandleServerInfo(Message *msg, int fd);
