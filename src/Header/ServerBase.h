@@ -27,10 +27,6 @@ class ServerBase
 protected:
     int listen_fd = -1;
 
-    std::mutex connections_mutex;
-
-    bool isConnEpollStart = false;
-
     /* 临时接收缓冲区内容 */
     uint8_t tmp[TMP_BUFFER_SIZE];
 
@@ -40,11 +36,6 @@ protected:
      */
     int StartListener(int port);
 
-    /*
-     * 启动tcp server前自动创建处理连接的epoll实例
-     */
-    void CreateConnEpoll();
-
     void HandleListenerEvent(std::map<int, RingBuffer *> &, int);
 
     void HandleConnEvent(std::map<int, RingBuffer *> &, int);
@@ -53,10 +44,6 @@ protected:
      * 解决序列化和粘包,并在OnMsgBodyAnalysised统一处理
      */
     void HandleReceivedMsg(RingBuffer *, int);
-
-    void BroadCastMsg();
-
-    int64_t getCurrentTime();
 
 protected:
     int listen_port = -1;
@@ -68,11 +55,9 @@ protected:
 
     EpollMgr *listen_epoll = nullptr;
 
-    EpollMgr *conn_epoll = nullptr;
 
 protected:
     bool ConnectToOtherServer(std::string ip, int port, int &fd);
-
 
     /*
      * @brief 服务端成功开启监听后进行的初始化操作
@@ -100,8 +85,8 @@ public:
     bool SendMsg(Message *msg, int fd);
 
 protected:
-    
-    time_t STime = 0;
+    std::vector<Timer *> m_callfuncList;
+
 };
 
 #endif

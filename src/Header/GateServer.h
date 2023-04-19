@@ -18,9 +18,7 @@ private:
 protected:
     virtual void OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t length, int fd);
 
-    /*
-     * @brief 成功连接到center server后触发
-     */
+    /* 成功连接到center server后触发 */
     virtual void OnConnectToCenterServer();
 
 public:

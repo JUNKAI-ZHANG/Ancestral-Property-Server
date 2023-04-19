@@ -16,9 +16,7 @@ private:
 protected:
     virtual void OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t length, int fd);
 
-    /*
-     * @brief 成功连接到center server后触发
-     */
+    /* 成功连接到center server后触发 */
     virtual void OnConnectToCenterServer();
 
     virtual void Update();
@@ -51,11 +49,21 @@ public:// 业务逻辑
 
     void HandleGetRoomList(Message *msg);
 
+    void HandleReconnect(int userid);
+
+    /* 从房间到游戏*/
     void HandleStartGame(Message *msg);
 
-    void HandleCloseGame(Message *msg);
+    /* 从游戏到房间 */
+    void HandleEndGame(Message *msg);
 
     void HandleUserOperate(Message *msg);
+
+    std::string GetUserName(int userid);
+
+    bool CheckUserInRoom(int userid);
+
+    void RemoveUser(int userid);
 
 private:
     int AddRoom(std::string roomname);
@@ -72,13 +80,14 @@ private:
     /* 正在使用的房间池 */
     std::set<int> roomid_using;
 
-    const int DefaultRoomCount = 10;
-
     /* 保存每个user对应的roomid */
     std::map<int, int> userid2roomid; 
 
     /* 保存user和gate的映射 */
     std::map<int, int> user_gate;
+
+    /* 保存userid对应的username */
+    std::map<int, std::string> userid2username;
 
 };
 

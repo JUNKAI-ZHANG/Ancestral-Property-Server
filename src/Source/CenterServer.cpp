@@ -203,7 +203,7 @@ int main(int argc, char **argv)
     }
 
     // int port = std::atoi(argv[1]);
-    int port = 8088;
+    int port = CENTER_SERVER_PORT;
 
     CenterServer centerServer;
 

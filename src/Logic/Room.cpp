@@ -1,7 +1,3 @@
-//
-// Created by jiubei on 4/14/23.
-//
-
 #include "Room.h"
 
 Room::Room(int id, std::string name, int size)
@@ -21,8 +17,8 @@ Room::Room(int id, std::string name, int size)
 
 Room::~Room()
 {
-    EndGame();
-    KickAllUser();
+    EndGame(); // 发送结束游戏回到房间
+    KickAllUserFromRoom(); // 踢,并发送退出房间
 }
 
 void Room::Resize(int size)
@@ -31,7 +27,7 @@ void Room::Resize(int size)
     {
        for (int i = size + 1; i <= m_size; i++)
        {
-           LeaveRoom(i);
+           Leave(i);
            userpid_pool.erase(i);
        }
     }
@@ -45,64 +41,116 @@ void Room::Resize(int size)
     m_size = size;
 }
 
+void Room::JoinGame(int userid)
+{
+    if (!m_gameStarted || !userid2userpid.count(userid)) return;
+    NotifyUserJoinGame(userid);
+    in_game_id2pid[userid] = userid2userpid[userid];
+}
+
 void Room::JoinRoom(int userid)
 {
     RoomProto::JoinRoom message;
     message.set_type(RoomProto::JoinRoom_Type_RESPONSE);
     message.set_ret(false);
     message.set_roomid(-1);
-    if (IsFull())
+    if (m_gameStarted == true)
+    {
+        message.set_result("游戏已经开始，加入失败");
+        LOGICSERVER.SendToClient(BODYTYPE::JoinRoom, &message, userid);
+    }
+    else if (IsFull())
     {
         message.set_result("房间已满");
+        LOGICSERVER.SendToClient(BODYTYPE::JoinRoom, &message, userid);
     }
     else if (userid2userpid.count(userid))
     {
         message.set_result("你已在此房间");
+        LOGICSERVER.SendToClient(BODYTYPE::JoinRoom, &message, userid);
     }
     else
     {
+        if (userpid_pool.empty())
+        {
+            Resize(m_size + 1);
+        }
         int pid = *userpid_pool.begin();
         userpid_pool.erase(pid);
-        userid2userpid[userid] = pid;
 
-        message.set_roomid(m_id);
+        userid2userpid[userid] = pid;
+        id2name[userid] = LOGICSERVER.GetUserName(userid);
+
         message.set_ret(true);
+        message.set_roomid(m_id);
         message.set_result("加入成功");
+        auto infos = GetRoomUserInfos();
+        message.mutable_users()->Add(infos.begin(), infos.end());
 
         if (host_userid == -1) ChangeRoomHost(userid);
-        if (m_gameStarted) NotifyUserJoinGame(userid);
-    }
 
-    LOGICSERVER.SendToClient(BODYTYPE::JoinRoom, &message, userid);
+        BroadCastToRoom(BODYTYPE::JoinRoom, &message);
+    }
 }
 
 void Room::Reconnect(int userid)
 {
-    // todo 发送追帧信息
-    // 1. 先发start game通知
-    // 2. 把all_frames的东西发出去
+    if (!userid2userpid.count(userid)) return;
+    SetUserOnline(userid);
+
+    FrameProto::Reconnect reconnect;
+    
+    reconnect.set_ret(true);
+    reconnect.set_msg("重连成功，已回到房间");
+    reconnect.set_userpid(userid2userpid[userid]);
+    reconnect.set_roomid(m_id);
+    reconnect.set_is_roomhost(host_userid == userid);
+    reconnect.set_seed(m_seed);
+    
+    LOGICSERVER.SendToClient(BODYTYPE::Reconnect, &reconnect, userid);
+
+    NotifyGameStartToUser(userid);
+    FrameProto::GameReplay chaseFrame;
+    chaseFrame.mutable_frames()->Add(all_frames.begin(), all_frames.end());
+
+    LOGICSERVER.SendToClient(BODYTYPE::ChaseFrame, &chaseFrame, userid);
+    JoinGame(userid);
 }
 
-void Room::LeaveRoom(int userid)
+void Room::Leave(int userid)
 {
+    // 把user从所有相关的地方Delete
+    LeaveFromGame(userid);
+    LeaveFromRoom(userid);
+}
+
+void Room::LeaveFromRoom(int userid)
+{
+    LeaveFromGame(userid);
     RoomProto::LeaveRoom message;
     message.set_type(RoomProto::LeaveRoom_Type_RESPONSE);
     message.set_ret(false);
     message.set_roomid(0);
+    message.set_userid(0);
+    message.set_userpid(0);
     if (!userid2userpid.count(userid))
     {
         message.set_result("你不在该房间");
+        LOGICSERVER.SendToClient(BODYTYPE::LeaveRoom, &message, userid); // 失败了P2P send
     }
     else
     {
         message.set_roomid(m_id);
         message.set_ret(true);
-        message.set_result("退出成功");
+        message.set_userid(userid);
+        message.set_userpid(userid2userpid[userid]);
+        message.set_result("已退出房间");
+
+        BroadCastToRoom(BODYTYPE::LeaveRoom, &message); // 先广播再删除
 
         userpid_pool.insert(userid2userpid[userid]);
-        userid2userpid.erase(userid);
-
-        if (m_gameStarted) NotifyUserQuitGame(userid);
+        userid2userpid.erase(userid); 
+        id2name.erase(userid);
 
         if (host_userid == userid)
         {
@@ -110,15 +158,35 @@ void Room::LeaveRoom(int userid)
             else ChangeRoomHost(userid2userpid.begin()->first);
         }
     }
-
-    LOGICSERVER.SendToClient(BODYTYPE::LeaveRoom, &message, userid);
 }
 
-void Room::KickAllUser()
+void Room::LeaveFromGame(int userid)
 {
-    for(auto p : userid2userpid)
+    if (!in_game_id2pid.count(userid)) return;
+
+    NotifyUserQuitGame(userid);
+    in_game_id2pid.erase(userid);
+
+    if (in_game_id2pid.empty()) EndGame();
+}
+
+void Room::KickAllUserFromGame()
+{
+    auto tmp = in_game_id2pid;
+
+    for (auto p : tmp)
     {
-        LeaveRoom(p.first);
+        LeaveFromGame(p.first);
+    }
+}
+
+void Room::KickAllUserFromRoom()
+{
+    auto tmp = userid2userpid;
+
+    for(auto p : tmp)
+    {
+        LeaveFromRoom(p.first);
     }
 }
 
@@ -157,6 +225,11 @@ void Room::StartGame(int userid)
     all_frames.clear();
 
     NotifyGameStart();
+    
+    for (auto p : userid2userpid)
+    {
+        JoinGame(p.first);
+    }
 }
 
 void Room::EndGame()
@@ -166,6 +239,8 @@ void Room::EndGame()
     m_gameStarted = false;
 
     NotifyGameEnd();
+
+    KickAllUserFromGame();
 }
 
 void Room::Tick()
@@ -173,12 +248,12 @@ void Room::Tick()
     if (!m_gameStarted) return;
     frame_id++;
     frame.set_frame_id(frame_id);
-    BroadCastToAllClients(BODYTYPE::Frame, &frame);
+    BroadCastToGame(BODYTYPE::Frame, &frame);
     all_frames.push_back(frame);
     frame.clear_operates();
 }
 
-void Room::BroadCastToAllClients(BODYTYPE type, google::protobuf::MessageLite *message)
+void Room::BroadCastToRoom(BODYTYPE type, google::protobuf::MessageLite *message)
 {
     for(auto p : userid2userpid)
     {
@@ -186,24 +261,36 @@ void Room::BroadCastToAllClients(BODYTYPE type, google::protobuf::MessageLite *m
     }
 }
 
-void Room::NotifyGameStart()
+void Room::BroadCastToGame(BODYTYPE type, google::protobuf::MessageLite *message)
+{
+    for(auto p : in_game_id2pid)
+    {
+        LOGICSERVER.SendToClient(type, message, p.first);
+    }
+}
+
+void Room::NotifyGameStartToUser(int userid)
 {
     FrameProto::StartGame startGame;
     startGame.set_roomid(m_id);
     startGame.set_seed(m_seed);
+    startGame.set_userpid(userid2userpid[userid]);
+    LOGICSERVER.SendToClient(BODYTYPE::StartGame, &startGame, userid);
+}
+
+void Room::NotifyGameStart()
+{
     for(auto p : userid2userpid)
     {
-        startGame.set_userpid(p.second);
-        LOGICSERVER.SendToClient(BODYTYPE::StartGame, &startGame, p.first);
-        NotifyUserJoinGame(p.first);
+        NotifyGameStartToUser(p.first);
     }
 }
 
 void Room::NotifyGameEnd()
 {
-    FrameProto::CloseGame closeGame;
-    closeGame.set_roomid(m_id);
-    BroadCastToAllClients(BODYTYPE::CloseGame, &closeGame);
+    FrameProto::EndGame endGame;
+    endGame.set_roomid(m_id);
+    BroadCastToGame(BODYTYPE::EndGame, &endGame);
 }
 
 void Room::NotifyUserJoinGame(int userid)
@@ -213,15 +300,52 @@ void Room::NotifyUserJoinGame(int userid)
     FrameProto::UserOperate joinGame;
     joinGame.set_userpid(userid2userpid[userid]);
     joinGame.set_opt(FrameProto::OperateType::JoinGame);
+
     frame.add_operates()->CopyFrom(joinGame);
 }
 
 void Room::NotifyUserQuitGame(int userid)
 {
-    if (!m_gameStarted || !userid2userpid.count(userid)) return;
+    if (!m_gameStarted || !in_game_id2pid.count(userid)) return;
 
     FrameProto::UserOperate quitGame;
-    quitGame.set_userpid(userid2userpid[userid]);
+    quitGame.set_userpid(in_game_id2pid[userid]);
     quitGame.set_opt(FrameProto::OperateType::LeaveGame);
+
     frame.add_operates()->CopyFrom(quitGame);
+}
+
+std::vector<RoomProto::UserInfo> Room::GetRoomUserInfos()
+{
+    std::vector<RoomProto::UserInfo> userInfo(userid2userpid.size());
+    int x = 0;
+    for (const auto & p : id2name)
+    {
+        userInfo[x].set_userid(p.first);
+        userInfo[x].set_username(p.second);
+        x++;
+    }
+    return userInfo;
+}
+
+bool Room::CheckRoomDead()
+{
+    if (offline_userid.size() == userid2userpid.size())
+    {
+        return true;
+    }
+    return false;
+}
+
+void Room::SetUserOffline(int userid)
+{
+    if (!userid2userpid.count(userid) || offline_userid.count(userid)) return;
+    offline_userid.insert(userid);
+    LeaveFromGame(userid);
+}
+
+void Room::SetUserOnline(int userid)
+{
+    if (!userid2userpid.count(userid) || !offline_userid.count(userid)) return;
+    offline_userid.erase(userid);
 }
