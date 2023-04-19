@@ -103,7 +103,7 @@ void DBServer::HandleUserLogin(Message *msg, int fd)
         userid = GetUserid(body->username());
     }
 
-    Message *message = NewLoginResponseMessage(ret, resp_msg, token, userid, msg->head->m_userid);
+    Message *message = NewLoginResponseMessage(ret, resp_msg, token, userid, msg->head->m_userid, body->username());
 
     if (message != nullptr)
     {

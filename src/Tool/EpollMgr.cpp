@@ -55,7 +55,7 @@ public:
     int AddEventToEpoll(int fd)
     {
         struct epoll_event event;
-        event.events = EPOLLIN;
+        event.events = EPOLLIN | EPOLLERR | EPOLLHUP;
         event.data.fd = fd;
 
         if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, fd, &event) == -1)

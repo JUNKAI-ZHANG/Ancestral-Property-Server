@@ -134,6 +134,9 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
         {
             user_fd_record[body->userid()] = msg->head->m_userid;
             fd_user_record[msg->head->m_userid] = body->userid();
+
+            /* 如果成功了，那么让logicServer添加userid-username到内存 */
+            SendMsg(msg, logic_server_client);
         }
 
         SendMsg(msg, msg->head->m_userid);
@@ -254,9 +257,15 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
         SendMsg(msg, user_fd_record[msg->head->m_userid]);
         break;
     }
-    case BODYTYPE::EnterGame:
+    case BODYTYPE::Reconnect:
     {
         SendMsg(msg, user_fd_record[msg->head->m_userid]);
+        break;
+    }
+    case BODYTYPE::ChaseFrame:
+    {
+        SendMsg(msg, user_fd_record[msg->head->m_userid]);
+        break;
     }
     default:
     {
