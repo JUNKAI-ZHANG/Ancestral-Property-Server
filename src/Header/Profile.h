@@ -3,7 +3,7 @@
 #define _PROFILE_H
 
 #define HEAD_SIZE       12
-#define MAX_CLIENTS     128
+#define MAX_CLIENTS     64
 #define TMP_BUFFER_SIZE 1024
 #define MAX_BUFFER_SIZE 1045876
 
@@ -67,6 +67,13 @@ enum BODYTYPE
 
     /* 客户端token出问题 */
     ErrorToken = 400, // 用户的Token过期通知
+};
+
+enum CallbackType
+{
+    LogicServer_Update = 1,
+    FuncServer_TryToConnectAvailabeServer = 2,
+    FuncServer_SendSelfInfoToCenter = 3,
 };
 
 #endif
