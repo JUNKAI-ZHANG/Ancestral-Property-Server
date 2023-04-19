@@ -59,7 +59,6 @@ protected:
 protected:
     bool ConnectToOtherServer(std::string ip, int port, int &fd);
 
-
     /*
      * @brief 服务端成功开启监听后进行的初始化操作
      */

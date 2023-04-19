@@ -118,7 +118,7 @@ void ServerBase::HandleConnEvent(std::map<int, RingBuffer *> &conn, int conn_fd)
     {
         if (errno == EAGAIN || errno == EWOULDBLOCK)
         {
-            // std::cout << "data read over" << std::endl;
+            // 数据读取完毕
             HandleReceivedMsg(conn[conn_fd], conn_fd);
         }
         else
@@ -165,12 +165,14 @@ void ServerBase::HandleReceivedMsg(RingBuffer *buffer, int fd)
         // 判断反序列化是否正常
         if (CheckHeaderIsValid(message->head))
         {
-            OnMsgBodyAnalysised(message, recv + HEAD_SIZE, message->head->m_packageSize - HEAD_SIZE, fd);
+            int pkgSize = message->head->m_packageSize;
 
-            buffer_size -= message->head->m_packageSize;
+            OnMsgBodyAnalysised(message, recv + HEAD_SIZE, pkgSize - HEAD_SIZE, fd);
+
+            buffer_size -= pkgSize;
 
             // 指针向后偏移
-            recv += message->head->m_packageSize;
+            recv += pkgSize;
         }
         else
         {
@@ -193,7 +195,7 @@ bool ServerBase::SendMsg(Message *msg, int fd)
         int _size = msg->head->m_packageSize;
         if (_size > MAX_BUFFER_SIZE)
         {
-            std::cerr << "send size too big: " << _size << std::endl; 
+            std::cerr << "Send size too big: " << _size << std::endl; 
         }
         uint8_t resp[_size];
         if (!msg->SerializeToArray(resp, _size))
@@ -220,7 +222,7 @@ bool ServerBase::SendMsg(Message *msg, int fd)
 
 bool ServerBase::OnListenerStart()
 {
-    // 默认为true
+    // 默认为true,virtual需要子类重载
     return true;
 }
 
@@ -245,7 +247,7 @@ void ServerBase::CloseServer()
 
 void ServerBase::Update()
 {
-    
+    // 子类重写
 }
 
 void ServerBase::BootServer(int port)
@@ -281,7 +283,7 @@ void ServerBase::BootServer(int port)
         while (true)
         {
             // 阻塞11ms监听
-            int nfds = epoll_wait(listen_epoll->epoll_fd, events, MAX_CLIENTS, 11);
+            int nfds = epoll_wait(listen_epoll->epoll_fd, events, MAX_CLIENTS, EPOLL_WAIT_TIME);
             if (nfds == -1)
             {
                 std::cerr << "Failed to wait for events" << std::endl;
@@ -312,15 +314,6 @@ void ServerBase::BootServer(int port)
             {
                 _event->Tick();
             }
-/*
-            time_t nowTime = getCurrentTime();
-
-            if (nowTime - STime >= 33)
-            {
-                STime = nowTime;
-                Update();
-            }
-*/
         }
 
         // 关闭 epoll 实例

@@ -6,10 +6,10 @@ LogicServer::LogicServer()
     server_type = SERVER_TYPE::LOGIC;
 
     // 初始化RoomidPool
-    for (int i = 1; i <= 32; i++) roomid_pool.insert(i); 
+    for (int i = 1; i <= ROOM_POOL_SIZE; i++) roomid_pool.insert(i); 
 
     // 注册广播事件
-    Timer *timer = new Timer(33, CallbackType::LogicServer_Update, std::bind(&LogicServer::Update, this));
+    Timer *timer = new Timer(ONE_FRAME_MS, CallbackType::LogicServer_Update, std::bind(&LogicServer::Update, this));
     timer->Start();
 
     m_callfuncList.push_back(timer);
@@ -323,7 +323,7 @@ void LogicServer::RemoveRoom(int roomid)
     }
     delete rooms[roomid];
     rooms.erase(roomid);
-    if (roomid <= DefaultRoomCount) roomid_pool.insert(roomid);
+    if (roomid <= DEFAULT_ROOM_COUNT) roomid_pool.insert(roomid);
 }
 
 void LogicServer::HandleStartGame(Message *msg)
@@ -382,7 +382,7 @@ int main(int argc, char **argv)
     }
 
     // int port = std::atoi(argv[1]);
-    int port = 10809;
+    int port = LOGIC_SERVER_PORT_1;
 
     std::cout << "Start Logic Center Server ing..." << std::endl;
     LOGICSERVER.BootServer(port);

@@ -1,7 +1,3 @@
-//
-// Created by jiubei on 4/14/23.
-//
-
 #ifndef ROOM_H
 #define ROOM_H
 

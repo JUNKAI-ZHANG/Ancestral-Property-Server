@@ -6,12 +6,6 @@
 // 功能服务器,提供业务支持
 class FuncServer : public ServerBase
 {
-private:
-    // center server config
-    std::string center_ip = "127.0.0.1";
-    /* 中心服务器端口 */
-    int center_port = 8088;
-
 protected:
     /* 用于和中心服务器连接 */
     int center_server_client = -1;
@@ -28,30 +22,28 @@ protected:
     /* 记录fd和userid的映射 */
     std::map<int, int> fd_user_record;
 
-    virtual void Update();
-
 private:
     void HandleServerInfo(Message *msg, int fd);
 
     void HandleUserInfo(Message *msg, int fd);
 
 protected:
-    /* 尝试连接其他类型功能服务器 */
-    virtual void TryToConnectAvailabeServer() = 0;
+    void SendSelfInfoToCenter();
 
     /* 申请一个服务器 */
     void ApplyServerByType(SERVER_TYPE);
 
+    /* 尝试连接其他类型功能服务器 */
+    virtual void TryToConnectAvailabeServer() = 0;
+
     virtual void OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t length, int fd);
 
-    /*
-     * @brief 连接到center server后进行的初始化操作
-     */
+    /* 连接到center server后进行的初始化操作 */
     virtual void OnConnectToCenterServer();
 
-    void SendSelfInfoToCenter();
-
     virtual bool OnListenerStart();
+
+    virtual void Update();
 
 public:
     explicit FuncServer();

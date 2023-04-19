@@ -317,18 +317,6 @@ bool DBServer::InsertUser(const std::string username, const std::string password
         std::cerr << "Connection with mysql was closed" << std::endl;
         return false;
     }
-/*
-* 手机号注册 Exception
-    try
-    {
-        int num = std::stoi(username);
-    }
-    catch (const std::invalid_argument &e)
-    {
-        std::cerr << "username format error" << std::endl;
-        return false;
-    }
-*/
 
     // 执行 SQL 插入用户信息
     std::string sql = "insert into user (username, passwd, userid) VALUES (\'" + username + "\', \'" + password + "\', \'" + userid + "\')";
@@ -401,7 +389,7 @@ int main(int argc, char **argv)
     }
 
     // int port = std::atoi(argv[1]);
-    int port = 10811;
+    const int port = DATABASE_SERVER_PORT;
 
     DBServer dbServer;
 

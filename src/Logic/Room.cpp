@@ -89,10 +89,8 @@ void Room::JoinRoom(int userid)
 
         if (host_userid == -1) ChangeRoomHost(userid);
 
-        BroadCastToRoom(BODYTYPE::JoinRoom, &message); // zjk
+        BroadCastToRoom(BODYTYPE::JoinRoom, &message);
     }
-
-    // LOGICSERVER.SendToClient(BODYTYPE::JoinRoom, &message, userid);
 }
 
 void Room::Reconnect(int userid)
@@ -148,7 +146,7 @@ void Room::LeaveFromRoom(int userid)
         message.set_userpid(userid2userpid[userid]);
         message.set_result("已退出房间");
 
-        BroadCastToRoom(BODYTYPE::LeaveRoom, &message); // zjk : 先广播再删除
+        BroadCastToRoom(BODYTYPE::LeaveRoom, &message); // 先广播再删除
 
         userpid_pool.insert(userid2userpid[userid]);
         userid2userpid.erase(userid); 
@@ -214,7 +212,7 @@ void Room::OnUserOperate(Message *message)
     int userid = message->head->m_userid;
     if (!userid2userpid.count(userid)) return;
     op->set_userpid(userid2userpid[userid]);
-    frame.add_operates()->CopyFrom(*op); // Even Seg
+    frame.add_operates()->CopyFrom(*op);
 }
 
 void Room::StartGame(int userid)
