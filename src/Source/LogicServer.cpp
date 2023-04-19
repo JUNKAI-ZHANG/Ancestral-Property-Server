@@ -76,6 +76,21 @@ void LogicServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_
 
     switch (msg->head->m_packageType)
     {
+    case BODYTYPE::LoginResponse:
+    {
+        LoginProto::LoginResponse *body = dynamic_cast<LoginProto::LoginResponse *>(msg->body->message);
+        if (body == nullptr) return;
+
+        // 添加username 到内存
+        userid2username[body->userid()] = body->username();
+
+        // 如果玩家还在房间，那么需要发送重连响应回去
+        if (userid2roomid.count(body->userid()))
+        {
+            HandleReconnect(body->userid());
+        }
+        break;
+    }
     case BODYTYPE::JoinRoom:
     {
         HandleJoinRoom(msg);
@@ -101,9 +116,10 @@ void LogicServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_
         HandleStartGame(msg);
         break;
     }
-    case BODYTYPE::CloseGame:
+    case BODYTYPE::EndGame:
     {
-        HandleCloseGame(msg);
+        HandleEndGame(msg);
+        break;
     }
     case BODYTYPE::UserOperate:
     {
@@ -114,10 +130,21 @@ void LogicServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_
     {
         ServerProto::UserInfo *body = dynamic_cast<ServerProto::UserInfo *>(msg->body->message);
 
+        int userid = body->userid();
         if (body->opt() == ServerProto::UserInfo_Operation::UserInfo_Operation_Logout)
         {
             // rooms[userid2roomid[body->userid()]]->RemovePlayer(body->userid());
-            RemovePlayerFromRoom(body->userid()); // zjk
+            // RemovePlayerFromRoom(body->userid()); // zjk
+            // if (rooms.count(userid2roomid))
+            if (userid2roomid.count(userid))
+            {
+                int roomid = userid2roomid[userid];
+                rooms[roomid]->SetUserOffline(userid);
+                if (rooms[roomid]->CheckRoomDead())
+                {
+                    RemoveRoom(roomid);
+                }
+            }
         }
         else if (body->opt() == ServerProto::UserInfo_Operation::UserInfo_Operation_Register)
         {
@@ -157,6 +184,7 @@ void LogicServer::HandleJoinRoom(Message *msg)
         joinRoom.set_result("找不到该房间");
         joinRoom.set_type(RoomProto::JoinRoom_Type_RESPONSE);
         joinRoom.set_ret(false);
+
         SendToClient(BODYTYPE::JoinRoom, &joinRoom, msg->head->m_userid);
         return;
     }
@@ -177,6 +205,8 @@ void LogicServer::HandleLeaveRoom(Message *msg)
         leaveRoom.set_ret(false);
         leaveRoom.set_result("你不在该房间");
         leaveRoom.set_type(RoomProto::LeaveRoom_Type_RESPONSE);
+        leaveRoom.set_userid(-1);
+        leaveRoom.set_userpid(-1);
 
         SendToClient(BODYTYPE::LeaveRoom, &leaveRoom, msg->head->m_userid); // zjk
 
@@ -201,6 +231,7 @@ void LogicServer::HandleCreateRoom(Message *msg)
         createRoom.set_roomname("Error");
         createRoom.set_type(RoomProto::CreateRoom_Type_RESPONSE);
         createRoom.set_is_roomhost(false);
+        SendToClient(BODYTYPE::CreateRoom, &createRoom, msg->head->m_userid); // zjk
     }
     else
     {
@@ -211,10 +242,9 @@ void LogicServer::HandleCreateRoom(Message *msg)
         createRoom.set_roomname(rooms[roomid]->Name());
         createRoom.set_type(RoomProto::CreateRoom_Type_RESPONSE);
         createRoom.set_is_roomhost(true);
+        SendToClient(BODYTYPE::CreateRoom, &createRoom, msg->head->m_userid); // zjk
         MovePlayerToRoom(msg->head->m_userid, roomid);
     }
-
-    SendToClient(BODYTYPE::CreateRoom, &createRoom, msg->head->m_userid); // zjk
 }
 
 void LogicServer::HandleGetRoomList(Message *msg)
@@ -247,9 +277,9 @@ void LogicServer::RemovePlayerFromRoom(int userid)
     userid2roomid.erase(userid);
 
     // rooms[roomid]->LeaveRoom(roomid); // zjk
-    rooms[roomid]->LeaveRoom(userid);    // zjk
+    rooms[roomid]->LeaveFromRoom(userid);    // zjk
 
-    if (rooms[roomid]->PlayerCount() == 0) RemoveRoom(roomid);
+    if (rooms[roomid]->PlayerCount() == 0) RemoveRoom(roomid); // zjk
 }
 
 void LogicServer::AddPlayerToRoom(int userid, int roomid)
@@ -280,42 +310,64 @@ void LogicServer::RemoveRoom(int roomid)
 {
     if (!roomid_using.count(roomid)) return;
     roomid_using.erase(roomid);
+    auto itt = userid2roomid;
+    for (const auto & p : itt)
+    {
+        if (p.second == roomid)
+        {
+            userid2roomid.erase(p.first);
+        }
+    }
     delete rooms[roomid];
     rooms.erase(roomid);
     if (roomid <= DefaultRoomCount) roomid_pool.insert(roomid);
 }
 
-
 void LogicServer::HandleStartGame(Message *msg)
 {
-    if (!rooms.count(userid2roomid[msg->head->m_userid])) return;
-    // if (!rooms.count(msg->head->m_userid)) return;
+    if (!CheckUserInRoom(msg->head->m_userid)) return;
     rooms[userid2roomid[msg->head->m_userid]]->StartGame(msg->head->m_userid);
 }
 
-void LogicServer::HandleCloseGame(Message *msg)
+void LogicServer::HandleEndGame(Message *msg)
 {
-    if (!rooms.count(msg->head->m_userid)) return;
-    int roomid = userid2roomid[msg->head->m_userid];
-    rooms[roomid]->EndGame();
-    rooms.erase(roomid);
-    std::vector<int> del_user;
-    for (const auto & it : userid2roomid)
-    {
-        if (it.second == roomid)
-        {
-            del_user.push_back(it.first);
-        }
-    }
-    for (const int & it : del_user)
-    {
-        userid2roomid.erase(it);
-    }
+    if (!CheckUserInRoom(msg->head->m_userid)) return;
+    rooms[userid2roomid[msg->head->m_userid]]->EndGame();
 }
 
 void LogicServer::HandleUserOperate(Message *msg)
 {
+    if (!CheckUserInRoom(msg->head->m_userid)) return;
     rooms[userid2roomid[msg->head->m_userid]]->OnUserOperate(msg);
+}
+
+void LogicServer::HandleReconnect(int userid)
+{
+    FrameProto::Reconnect reconnect;
+    if (!userid2roomid.count(userid)) return;
+    int roomid = userid2roomid[userid];
+    if (!rooms.count(roomid)) return;
+    rooms[roomid]->Reconnect(userid);
+}
+
+std::string LogicServer::GetUserName(int userid)
+{ 
+    return userid2username[userid]; 
+}
+
+void LogicServer::RemoveUser(int userid)
+{
+    if (userid2roomid.count(userid))
+    {
+        userid2roomid.erase(userid);
+    }
+}
+
+bool LogicServer::CheckUserInRoom(int userid)
+{
+    if (!userid2roomid.count(userid)) return false;
+    if (!rooms.count(userid2roomid[userid])) return false;
+    return true;
 }
 
 int main(int argc, char **argv)

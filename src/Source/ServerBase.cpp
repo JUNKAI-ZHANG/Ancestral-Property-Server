@@ -5,17 +5,13 @@
 ServerBase::ServerBase()
 {
     listen_epoll = new EpollMgr();
-    conn_epoll = new EpollMgr();
 
     STime = getCurrentTime();
-    
-    CreateConnEpoll();
 }
 
 ServerBase::~ServerBase()
 {
     delete listen_epoll;
-    delete conn_epoll;
 
     CloseServer();
 }
@@ -84,23 +80,15 @@ void ServerBase::HandleListenerEvent(std::map<int, RingBuffer *> &conns, int fd)
         event.events = EPOLLIN;
         event.data.fd = conn_fd;
 
-        if (conn_epoll->AddEventToEpoll(conn_fd) == -1)
+        if (listen_epoll->AddEventToEpoll(conn_fd) == -1)
         {
             CloseClientSocket(conn_fd);
         }
         else
         {
-            // create a buffer for every client
-            connections_mutex.lock();
             conns[conn_fd] = new RingBuffer();
-            connections_mutex.unlock();
         }
     }
-}
-
-void ServerBase::BroadCastMsg()
-{
-    
 }
 
 time_t ServerBase::getCurrentTime() // 直接调用这个函数就行了，返回值最好是int64_t，long long应该也可以
@@ -129,6 +117,8 @@ void ServerBase::HandleConnEvent(std::map<int, RingBuffer *> &conn, int conn_fd)
         if (!conn[conn_fd]->AddBuffer(tmp, tmp_received))
         {
             std::cerr << "ServerBase : Client Read Buffer is Full" << std::endl;
+            tmp_received = -1;
+            break;
         }
     }
 
@@ -136,7 +126,6 @@ void ServerBase::HandleConnEvent(std::map<int, RingBuffer *> &conn, int conn_fd)
     {
         if (errno == EAGAIN || errno == EWOULDBLOCK)
         {
-
             // std::cout << "data read over" << std::endl;
             HandleReceivedMsg(conn[conn_fd], conn_fd);
         }
@@ -209,14 +198,19 @@ bool ServerBase::SendMsg(Message *msg, int fd)
 {
     if (connections.count(fd))
     {
-        uint8_t resp[msg->head->m_packageSize];
-        if (!msg->SerializeToArray(resp, msg->head->m_packageSize))
+        int _size = msg->head->m_packageSize;
+        if (_size > MAX_BUFFER_SIZE)
+        {
+            std::cerr << "send size too big: " << _size << std::endl; 
+        }
+        uint8_t resp[_size];
+        if (!msg->SerializeToArray(resp, _size))
         {
             std::cerr << "ServerBase : Parse Msg Error (SendMsg)" << std::endl;
             return false;
         }
 
-        if (send(fd, resp, msg->head->m_packageSize, 0) < 0)
+        if (send(fd, resp, _size, 0) < 0)
         {
             std::cerr << "ServerBase : Could not send msg to client (SendMsg)" << std::endl;
             CloseClientSocket(fd);
@@ -242,10 +236,8 @@ void ServerBase::CloseClientSocket(int fd)
 {
     if (connections.count(fd))
     {
-        connections_mutex.lock();
         delete connections[fd];
         connections.erase(fd);
-        connections_mutex.unlock();
 
         close(fd);
     }
@@ -266,12 +258,6 @@ void ServerBase::Update()
 
 void ServerBase::BootServer(int port)
 {
-    // 如果conn epoll启动失败直接return 
-    if (!isConnEpollStart)
-    {
-        return;
-    }
-
     if (StartListener(port) == 1)
     {
         std::cout << "Server start at port : " << port << std::endl;
@@ -305,7 +291,7 @@ void ServerBase::BootServer(int port)
         while (true)
         {
             // 阻塞等待
-            int nfds = epoll_wait(listen_epoll->epoll_fd, events, 10, 11);
+            int nfds = epoll_wait(listen_epoll->epoll_fd, events, MAX_CLIENTS, 11);
             if (nfds == -1)
             {
                 std::cerr << "Failed to wait for events" << std::endl;
@@ -317,7 +303,19 @@ void ServerBase::BootServer(int port)
                 // address client socket data
                 int conn_fd = events[i].data.fd;
 
-                ServerBase::HandleListenerEvent(connections, conn_fd);
+                if (events[i].events & EPOLLIN)
+                {
+                    if (conn_fd == listen_fd) ServerBase::HandleListenerEvent(connections, conn_fd);
+                    else ServerBase::HandleConnEvent(connections, conn_fd);
+                }
+                if (events[i].events & EPOLLERR)
+                {
+                    CloseClientSocket(conn_fd);
+                }
+                if (events[i].events & EPOLLHUP)
+                {
+                    CloseClientSocket(conn_fd);
+                }
             }
 
             time_t nowTime = getCurrentTime();
@@ -338,20 +336,6 @@ void ServerBase::BootServer(int port)
     {
         close(listen_fd);
     }
-}
-
-void ServerBase::CreateConnEpoll()
-{
-    if (conn_epoll->CreateEpoll() == -1)
-    {
-        return;
-    }
-
-    std::thread t([&]()
-                  { conn_epoll->WaitEpollEvent(&ServerBase::HandleConnEvent, this, ref(connections)); });
-    t.detach();
-
-    isConnEpollStart = true;
 }
 
 bool ServerBase::ConnectToOtherServer(std::string ip, int port, int &fd)

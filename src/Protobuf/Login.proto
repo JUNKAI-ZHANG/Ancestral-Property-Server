@@ -14,6 +14,7 @@ message LoginResponse
     string msg = 2;
     int32 userid = 3;
     uint32 token = 4;
+    string username = 5;
 }
 
 message RegistRequest

@@ -371,6 +371,7 @@ class LoginResponse final :
 
   enum : int {
     kMsgFieldNumber = 2,
+    kUsernameFieldNumber = 5,
     kResultFieldNumber = 1,
     kUseridFieldNumber = 3,
     kTokenFieldNumber = 4,
@@ -387,6 +388,20 @@ class LoginResponse final :
   const std::string& _internal_msg() const;
   inline PROTOBUF_ALWAYS_INLINE void _internal_set_msg(const std::string& value);
   std::string* _internal_mutable_msg();
+  public:
+
+  // string username = 5;
+  void clear_username();
+  const std::string& username() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_username(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_username();
+  PROTOBUF_NODISCARD std::string* release_username();
+  void set_allocated_username(std::string* username);
+  private:
+  const std::string& _internal_username() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_username(const std::string& value);
+  std::string* _internal_mutable_username();
   public:
 
   // bool result = 1;
@@ -424,6 +439,7 @@ class LoginResponse final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr msg_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr username_;
   bool result_;
   int32_t userid_;
   uint32_t token_;
@@ -1147,6 +1163,57 @@ inline void LoginResponse::_internal_set_token(uint32_t value) {
 inline void LoginResponse::set_token(uint32_t value) {
   _internal_set_token(value);
   // @@protoc_insertion_point(field_set:LoginProto.LoginResponse.token)
+}
+
+// string username = 5;
+inline void LoginResponse::clear_username() {
+  username_.ClearToEmpty();
+}
+inline const std::string& LoginResponse::username() const {
+  // @@protoc_insertion_point(field_get:LoginProto.LoginResponse.username)
+  return _internal_username();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void LoginResponse::set_username(ArgT0&& arg0, ArgT... args) {
+ 
+ username_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:LoginProto.LoginResponse.username)
+}
+inline std::string* LoginResponse::mutable_username() {
+  std::string* _s = _internal_mutable_username();
+  // @@protoc_insertion_point(field_mutable:LoginProto.LoginResponse.username)
+  return _s;
+}
+inline const std::string& LoginResponse::_internal_username() const {
+  return username_.Get();
+}
+inline void LoginResponse::_internal_set_username(const std::string& value) {
+  
+  username_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* LoginResponse::_internal_mutable_username() {
+  
+  return username_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* LoginResponse::release_username() {
+  // @@protoc_insertion_point(field_release:LoginProto.LoginResponse.username)
+  return username_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void LoginResponse::set_allocated_username(std::string* username) {
+  if (username != nullptr) {
+    
+  } else {
+    
+  }
+  username_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), username,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (username_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    username_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:LoginProto.LoginResponse.username)
 }
 
 // -------------------------------------------------------------------
