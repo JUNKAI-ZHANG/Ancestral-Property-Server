@@ -5,8 +5,6 @@
 ServerBase::ServerBase()
 {
     listen_epoll = new EpollMgr();
-
-    STime = getCurrentTime();
 }
 
 ServerBase::~ServerBase()
@@ -91,12 +89,6 @@ void ServerBase::HandleListenerEvent(std::map<int, RingBuffer *> &conns, int fd)
     }
 }
 
-time_t ServerBase::getCurrentTime() // 直接调用这个函数就行了，返回值最好是int64_t，long long应该也可以
-{
-    auto now = std::chrono::system_clock::now();
-    auto now_ms = std::chrono::time_point_cast<std::chrono::milliseconds>(now);
-    return now_ms.time_since_epoch().count();
-}
 
 void ServerBase::HandleConnEvent(std::map<int, RingBuffer *> &conn, int conn_fd)
 {
@@ -282,15 +274,13 @@ void ServerBase::BootServer(int port)
             close(listen_fd);
             return;
         }
-        // 主线程处理监听epoll
-        // listen_epoll->WaitEpollEvent(&ServerBase::HandleListenerEvent, this, ref(connections));
 
         // 等待连接和数据
         struct epoll_event events[MAX_CLIENTS];
 
         while (true)
         {
-            // 阻塞等待
+            // 阻塞11ms监听
             int nfds = epoll_wait(listen_epoll->epoll_fd, events, MAX_CLIENTS, 11);
             if (nfds == -1)
             {
@@ -318,6 +308,11 @@ void ServerBase::BootServer(int port)
                 }
             }
 
+            for (Timer * const _event : m_callfuncList)
+            {
+                _event->Tick();
+            }
+/*
             time_t nowTime = getCurrentTime();
 
             if (nowTime - STime >= 33)
@@ -325,7 +320,7 @@ void ServerBase::BootServer(int port)
                 STime = nowTime;
                 Update();
             }
-
+*/
         }
 
         // 关闭 epoll 实例
