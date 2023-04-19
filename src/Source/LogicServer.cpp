@@ -5,7 +5,14 @@ LogicServer::LogicServer()
 {
     server_type = SERVER_TYPE::LOGIC;
 
-    for (int i = 1; i <= 32; i++) roomid_pool.insert(i); // zjk 
+    // 初始化RoomidPool
+    for (int i = 1; i <= ROOM_POOL_SIZE; i++) roomid_pool.insert(i); 
+
+    // 注册广播事件
+    Timer *timer = new Timer(ONE_FRAME_MS, CallbackType::LogicServer_Update, std::bind(&LogicServer::Update, this));
+    timer->Start();
+
+    m_callfuncList.push_back(timer);
 }
 
 LogicServer::~LogicServer()
@@ -133,9 +140,6 @@ void LogicServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_
         int userid = body->userid();
         if (body->opt() == ServerProto::UserInfo_Operation::UserInfo_Operation_Logout)
         {
-            // rooms[userid2roomid[body->userid()]]->RemovePlayer(body->userid());
-            // RemovePlayerFromRoom(body->userid()); // zjk
-            // if (rooms.count(userid2roomid))
             if (userid2roomid.count(userid))
             {
                 int roomid = userid2roomid[userid];
@@ -208,7 +212,7 @@ void LogicServer::HandleLeaveRoom(Message *msg)
         leaveRoom.set_userid(-1);
         leaveRoom.set_userpid(-1);
 
-        SendToClient(BODYTYPE::LeaveRoom, &leaveRoom, msg->head->m_userid); // zjk
+        SendToClient(BODYTYPE::LeaveRoom, &leaveRoom, msg->head->m_userid);
 
         return;
     }
@@ -231,7 +235,7 @@ void LogicServer::HandleCreateRoom(Message *msg)
         createRoom.set_roomname("Error");
         createRoom.set_type(RoomProto::CreateRoom_Type_RESPONSE);
         createRoom.set_is_roomhost(false);
-        SendToClient(BODYTYPE::CreateRoom, &createRoom, msg->head->m_userid); // zjk
+        SendToClient(BODYTYPE::CreateRoom, &createRoom, msg->head->m_userid);
     }
     else
     {
@@ -242,7 +246,7 @@ void LogicServer::HandleCreateRoom(Message *msg)
         createRoom.set_roomname(rooms[roomid]->Name());
         createRoom.set_type(RoomProto::CreateRoom_Type_RESPONSE);
         createRoom.set_is_roomhost(true);
-        SendToClient(BODYTYPE::CreateRoom, &createRoom, msg->head->m_userid); // zjk
+        SendToClient(BODYTYPE::CreateRoom, &createRoom, msg->head->m_userid); 
         MovePlayerToRoom(msg->head->m_userid, roomid);
     }
 }
@@ -276,10 +280,9 @@ void LogicServer::RemovePlayerFromRoom(int userid)
     int roomid = userid2roomid[userid];
     userid2roomid.erase(userid);
 
-    // rooms[roomid]->LeaveRoom(roomid); // zjk
-    rooms[roomid]->LeaveFromRoom(userid);    // zjk
+    rooms[roomid]->LeaveFromRoom(userid);
 
-    if (rooms[roomid]->PlayerCount() == 0) RemoveRoom(roomid); // zjk
+    if (rooms[roomid]->PlayerCount() == 0) RemoveRoom(roomid);
 }
 
 void LogicServer::AddPlayerToRoom(int userid, int roomid)
@@ -320,7 +323,7 @@ void LogicServer::RemoveRoom(int roomid)
     }
     delete rooms[roomid];
     rooms.erase(roomid);
-    if (roomid <= DefaultRoomCount) roomid_pool.insert(roomid);
+    if (roomid <= DEFAULT_ROOM_COUNT) roomid_pool.insert(roomid);
 }
 
 void LogicServer::HandleStartGame(Message *msg)
@@ -379,7 +382,7 @@ int main(int argc, char **argv)
     }
 
     // int port = std::atoi(argv[1]);
-    int port = 10809;
+    int port = LOGIC_SERVER_PORT_1;
 
     std::cout << "Start Logic Center Server ing..." << std::endl;
     LOGICSERVER.BootServer(port);

@@ -27,8 +27,6 @@ class ServerBase
 protected:
     int listen_fd = -1;
 
-    bool isConnEpollStart = false;
-
     /* 临时接收缓冲区内容 */
     uint8_t tmp[TMP_BUFFER_SIZE];
 
@@ -47,8 +45,6 @@ protected:
      */
     void HandleReceivedMsg(RingBuffer *, int);
 
-    int64_t getCurrentTime();
-
 protected:
     int listen_port = -1;
 
@@ -62,7 +58,6 @@ protected:
 
 protected:
     bool ConnectToOtherServer(std::string ip, int port, int &fd);
-
 
     /*
      * @brief 服务端成功开启监听后进行的初始化操作
@@ -90,8 +85,8 @@ public:
     bool SendMsg(Message *msg, int fd);
 
 protected:
-    
-    time_t STime = 0;
+    std::vector<Timer *> m_callfuncList;
+
 };
 
 #endif

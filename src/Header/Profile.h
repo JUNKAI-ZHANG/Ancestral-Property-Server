@@ -1,11 +1,28 @@
 #ifndef _PROFILE_H
-
 #define _PROFILE_H
 
-#define HEAD_SIZE       12
-#define MAX_CLIENTS     128
-#define TMP_BUFFER_SIZE 1024
-#define MAX_BUFFER_SIZE 1045876
+#define HEAD_SIZE               12
+
+#define EPOLL_WAIT_TIME         11              // epoll_wait 阻塞时间
+#define MAX_CLIENTS             64              // epoll 最大连接数量
+#define TMP_BUFFER_SIZE         1024            // 自定义临时缓冲区大小
+#define MAX_BUFFER_SIZE         1045876         // 自定义最大缓冲区大小
+
+#define DEFAULT_ROOM_COUNT      32
+#define ROOM_POOL_SIZE          32
+
+#define ONE_FRAME_MS            33              // 一帧的毫秒数
+
+#define TRY_CONNECT_SERVER_TIME 1000            // 服务器失去与某服务器连接，申请CenterServer重新分配的时间
+#define SEND_CENTERSERVER_TIME  5000            // 成功连接到CenterServer后，每秒向CenterServer发包的时间
+
+#define GATE_SERVER_PORT_1      10808           // 目前接收所有客户端连接的端口，后续将CenterServer部署到此端口
+#define GATE_SERVER_PORT_2      18080
+#define LOGIC_SERVER_PORT_1     10809
+#define LOGIC_SERVER_PORT_2     18090
+#define DATABASE_SERVER_PORT    10811
+#define CENTER_SERVER_PORT      8088
+#define LOCAL_IP                "127.0.0.1"     // 本地IP
 
 /*
  * @brief 服务器类型
@@ -67,6 +84,16 @@ enum BODYTYPE
 
     /* 客户端token出问题 */
     ErrorToken = 400, // 用户的Token过期通知
+};
+
+/*
+ * @brief 回调函数类型
+ */
+enum CallbackType
+{
+    LogicServer_Update = 1,
+    FuncServer_TryToConnectAvailabeServer = 2,
+    FuncServer_SendSelfInfoToCenter = 3,
 };
 
 #endif

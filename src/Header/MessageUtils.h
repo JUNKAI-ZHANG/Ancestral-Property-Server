@@ -79,7 +79,7 @@ static MessageBody *CreateMessageBody(int type)
         message = new FrameProto::UserOperate;
         break;
     }
-    case BODYTYPE::ChaseFrame:
+    case BODYTYPE::ChaseFrame: // 注意类型
     {
         message = new FrameProto::GameReplay;
         break;
@@ -126,7 +126,6 @@ static bool CheckHeaderIsValid(MessageHead *header)
         return false;
     }
 
-    // 规定 : 单包大小不会超过1024
     if (header->m_packageSize > MAX_BUFFER_SIZE)
     {
         return false;

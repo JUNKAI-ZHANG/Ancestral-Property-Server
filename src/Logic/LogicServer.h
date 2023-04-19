@@ -16,9 +16,7 @@ private:
 protected:
     virtual void OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t length, int fd);
 
-    /*
-     * @brief 成功连接到center server后触发
-     */
+    /* 成功连接到center server后触发 */
     virtual void OnConnectToCenterServer();
 
     virtual void Update();
@@ -64,7 +62,7 @@ public:// 业务逻辑
     std::string GetUserName(int userid);
 
     bool CheckUserInRoom(int userid);
-public:
+
     void RemoveUser(int userid);
 
 private:
@@ -81,8 +79,6 @@ private:
 
     /* 正在使用的房间池 */
     std::set<int> roomid_using;
-
-    const int DefaultRoomCount = 10;
 
     /* 保存每个user对应的roomid */
     std::map<int, int> userid2roomid; 

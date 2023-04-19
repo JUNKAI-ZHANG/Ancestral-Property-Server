@@ -296,7 +296,7 @@ int main(int argc, char **argv)
     }
 
     // int port = std::atoi(argv[1]);
-    int port = 10808;
+    int port = GATE_SERVER_PORT_1;
 
     GateServer gateServer;
 

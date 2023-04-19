@@ -4,11 +4,15 @@ FuncServer::FuncServer()
 {
     // 无属性服务器
     server_type = SERVER_TYPE::NONE;
+
+    Timer *timer = new Timer(TRY_CONNECT_SERVER_TIME, CallbackType::FuncServer_TryToConnectAvailabeServer, std::bind(&FuncServer::TryToConnectAvailabeServer, this));
+    timer->SetOnce();
+
+    m_callfuncList.push_back(timer);
 }
 
 FuncServer::~FuncServer()
 {
-    center_connect_timer.stop();
 }
 
 void FuncServer::CloseServer()
@@ -46,7 +50,7 @@ void FuncServer::OnConnectToCenterServer()
 
 void FuncServer::SendSelfInfoToCenter()
 {
-    Message *msg = NewServerInfoMessage("127.0.0.1", this->listen_port, server_type, ServerProto::ServerInfo_Operation_Register, SERVER_FREE_LEVEL::FREE);
+    Message *msg = NewServerInfoMessage(LOCAL_IP, this->listen_port, server_type, ServerProto::ServerInfo_Operation_Register, SERVER_FREE_LEVEL::FREE);
 
     if (msg == nullptr)
     {
@@ -57,7 +61,7 @@ void FuncServer::SendSelfInfoToCenter()
     if (!SendMsg(msg, center_server_client))
     {
         // 连接中心服务器
-        if (!ConnectToOtherServer(center_ip, center_port, center_server_client))
+        if (!ConnectToOtherServer(LOCAL_IP, CENTER_SERVER_PORT, center_server_client))
         {
             std::cerr << "Failed to connect center server, boot it first" << std::endl;
             return;
@@ -81,19 +85,9 @@ void FuncServer::SendSelfInfoToCenter()
     delete msg;
 }
 
-bool FuncServer::OnListenerStart()
-{
-    // 定时发送自身信息给center server
-    this->SendSelfInfoToCenter();
-
-    center_connect_timer.start(5000, &FuncServer::SendSelfInfoToCenter, this);
-
-    return true;
-}
-
 void FuncServer::Update()
 {
-
+    // 这里应该也没什么功能需要实现，所以继续递归子类实现
 }
 
 void FuncServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t length, int fd)
@@ -174,10 +168,28 @@ void FuncServer::HandleServerInfo(Message *msg, int fd)
             std::cout << "Connect to database server success!" << std::endl;
         }
 
-        Timer timer;
-        // 1s 后再次尝试重连
-        timer.startOnce(1000, &FuncServer::TryToConnectAvailabeServer, this);
+        // 1s 后再次尝试重连一次
+        for (Timer *const timer : m_callfuncList)
+        {
+            if (timer->GetType() == CallbackType::FuncServer_TryToConnectAvailabeServer)
+            {
+                timer->Start();
+            }
+        }
     }
+}
+
+bool FuncServer::OnListenerStart()
+{
+    // 定时发送自身信息给CenterServer
+    this->SendSelfInfoToCenter();
+
+    Timer *timer = new Timer(SEND_CENTERSERVER_TIME, CallbackType::FuncServer_SendSelfInfoToCenter, std::bind(&FuncServer::SendSelfInfoToCenter, this));
+    timer->Start();
+
+    m_callfuncList.push_back(timer);
+
+    return true;
 }
 
 void FuncServer::HandleUserInfo(Message *msg, int fd)
