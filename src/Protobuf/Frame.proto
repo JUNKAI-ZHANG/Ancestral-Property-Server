@@ -7,6 +7,7 @@ enum OperateType
     FrameInfo = 0;
     JoinGame = 1;
     LeaveGame = 2;
+    SwitchWeapon = 3;
 }
 
 message StartGame
@@ -25,16 +26,31 @@ message QuitGame
     int32 userpid = 1;
 }
 
-message CloseGame
+message EndGame
 {
     int32 roomid = 1;
 }
 
 message UserOperate
 {
-    repeated int64 data = 1;   // 某帧下，玩家的按键列表
+    // 扩展列表
+    // opt == FrameInfo : 某帧下，玩家的按键列表
+    // opt == JoinGame  : 加入游戏的结果
+    // opt == LeaveInfo : 离开游戏的结果
+    repeated int64 data = 1;   
     OperateType opt = 2;
     int32 userpid = 3;
+}
+
+message Reconnect
+{
+    int32 roomid = 1;
+    int32 userpid = 2;
+    bool is_roomhost = 3;
+    uint32 seed = 4;
+    int32 token = 5;
+    bool ret = 6;//重连结果
+    string msg = 7;//来自服务器的重连结果
 }
 
 message Frame

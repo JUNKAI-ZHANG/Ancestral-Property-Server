@@ -51,11 +51,21 @@ public:// 业务逻辑
 
     void HandleGetRoomList(Message *msg);
 
+    void HandleReconnect(int userid);
+
+    /* 从房间到游戏*/
     void HandleStartGame(Message *msg);
 
-    void HandleCloseGame(Message *msg);
+    /* 从游戏到房间 */
+    void HandleEndGame(Message *msg);
 
     void HandleUserOperate(Message *msg);
+
+    std::string GetUserName(int userid);
+
+    bool CheckUserInRoom(int userid);
+public:
+    void RemoveUser(int userid);
 
 private:
     int AddRoom(std::string roomname);
@@ -79,6 +89,9 @@ private:
 
     /* 保存user和gate的映射 */
     std::map<int, int> user_gate;
+
+    /* 保存userid对应的username */
+    std::map<int, std::string> userid2username;
 
 };
 

@@ -29,6 +29,8 @@ protected:
     /* 记录fd和userid的映射 */
     std::map<int, int> fd_user_record;
 
+    virtual void Update();
+
 private:
     void HandleServerInfo(Message *msg, int fd);
 
