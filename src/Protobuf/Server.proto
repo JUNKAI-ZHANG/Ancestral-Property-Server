@@ -33,3 +33,25 @@ message UserInfo
     Operation opt = 3;
 }
 
+message RegionInfo
+{
+    int32 id = 1;
+    int32 people_count = 2;
+}
+
+message GetRegionInfo
+{
+    repeated RegionInfo infos = 1;
+}
+
+message JoinRegionRequest
+{
+    int32 id = 1;
+}
+
+message JoinRegionResponse
+{
+    bool ret = 1;
+    string ip = 2;
+    int32 port = 3;
+}

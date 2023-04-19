@@ -1,7 +1,3 @@
-//
-// Created by jiubei on 4/14/23.
-//
-
 #include "Room.h"
 
 Room::Room(int id, std::string name, int size)

@@ -211,12 +211,13 @@ const char descriptor_table_protodef_Frame_2eproto[] PROTOBUF_SECTION_VARIABLE(p
   "\n\005Frame\022\020\n\010frame_id\030\001 \001(\005\022)\n\010operates\030\002 "
   "\003(\0132\027.FrameProto.UserOperate\"\014\n\nChaseFra"
   "me\"/\n\nGameReplay\022!\n\006frames\030\001 \003(\0132\021.Frame"
-  "Proto.Frame*9\n\013OperateType\022\r\n\tFrameInfo\020"
-  "\000\022\014\n\010JoinGame\020\001\022\r\n\tLeaveGame\020\002b\006proto3"
+  "Proto.Frame*[\n\013OperateType\022\r\n\tFrameInfo\020"
+  "\000\022\014\n\010JoinGame\020\001\022\r\n\tLeaveGame\020\002\022\022\n\016Shop_G"
+  "etRandom\020\003\022\014\n\010Shop_Buy\020\004b\006proto3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_Frame_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Frame_2eproto = {
-  false, false, 518, descriptor_table_protodef_Frame_2eproto, "Frame.proto", 
+  false, false, 552, descriptor_table_protodef_Frame_2eproto, "Frame.proto", 
   &descriptor_table_Frame_2eproto_once, nullptr, 0, 7,
   schemas, file_default_instances, TableStruct_Frame_2eproto::offsets,
   file_level_metadata_Frame_2eproto, file_level_enum_descriptors_Frame_2eproto, file_level_service_descriptors_Frame_2eproto,
@@ -237,6 +238,8 @@ bool OperateType_IsValid(int value) {
     case 0:
     case 1:
     case 2:
+    case 3:
+    case 4:
       return true;
     default:
       return false;

@@ -7,7 +7,9 @@ enum OperateType
     FrameInfo = 0;
     JoinGame = 1;
     LeaveGame = 2;
-    SwitchWeapon = 3;
+
+    Shop_GetRandom = 3;
+    Shop_Buy = 4;
 }
 
 message StartGame

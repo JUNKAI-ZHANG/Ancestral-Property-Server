@@ -67,44 +67,6 @@ public:
         return 1;
     }
 
-    /*
-     * @param 需传入处理epoll事件的函数(废弃了)
-     *
-     * param1 function address
-     *
-     * param2 params
-     *
-     */
-    template <typename _Callable, typename... _Args>
-    void WaitEpollEvent(_Callable &&__f, _Args &&...__args)
-    {
-        // 等待连接和数据
-        struct epoll_event events[MAX_CLIENTS];
-
-        while (true)
-        {
-            // 阻塞等待
-            int nfds = epoll_wait(epoll_fd, events, 10, 11);
-            if (nfds == -1)
-            {
-                std::cerr << "Failed to wait for events" << std::endl;
-                break;
-            }
-
-            for (int i = 0; i < nfds; i++)
-            {
-                // address client socket data
-                int conn_fd = events[i].data.fd;
-
-                std::bind(std::forward<_Callable>(__f),
-                          std::forward<_Args>(__args)..., conn_fd)();
-
-            }
-        }
-
-        // 关闭 epoll 实例
-        close(epoll_fd);
-    }
 };
 
 #endif

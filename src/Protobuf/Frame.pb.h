@@ -93,12 +93,14 @@ enum OperateType : int {
   FrameInfo = 0,
   JoinGame = 1,
   LeaveGame = 2,
+  Shop_GetRandom = 3,
+  Shop_Buy = 4,
   OperateType_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
   OperateType_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
 };
 bool OperateType_IsValid(int value);
 constexpr OperateType OperateType_MIN = FrameInfo;
-constexpr OperateType OperateType_MAX = LeaveGame;
+constexpr OperateType OperateType_MAX = Shop_Buy;
 constexpr int OperateType_ARRAYSIZE = OperateType_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* OperateType_descriptor();
