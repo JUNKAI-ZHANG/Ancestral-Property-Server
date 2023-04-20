@@ -14,9 +14,18 @@ ServerBase::~ServerBase()
     CloseServer();
 }
 
+ServerProto::SERVER_TYPE ServerBase::TransformType(SERVER_TYPE server_type)
+{
+    if (server_type == SERVER_TYPE::GATE) return ServerProto::SERVER_TYPE::GATE;
+    if (server_type == SERVER_TYPE::LOGIC) return ServerProto::SERVER_TYPE::LOGIC;
+    if (server_type == SERVER_TYPE::DATABASE) return ServerProto::SERVER_TYPE::DATABASE;
+    if (server_type == SERVER_TYPE::CENTER) return ServerProto::SERVER_TYPE::CENTER;
+    if (server_type == SERVER_TYPE::NONE) return ServerProto::SERVER_TYPE::NONE;
+    if (server_type == SERVER_TYPE::MATCH) return ServerProto::SERVER_TYPE::MATCH;
+}
+
 int ServerBase::StartListener(int port)
 {
-
     // 创建 非阻塞监听socket
     listen_fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
     if (listen_fd == -1)
@@ -73,6 +82,9 @@ void ServerBase::HandleListenerEvent(std::map<int, RingBuffer *> &conns, int fd)
 
         std::cout << "Accepted connection from " << inet_ntoa(addr.sin_addr) << ":" << ntohs(addr.sin_port) << std::endl;
 
+        conns_count++;
+        if (server_type != SERVER_TYPE::CENTER) SendToCenterServerConnChange(TransformType(server_type), listen_ip, listen_port, conns_count);
+
         // 将 conn_fd 注册到 conn_epoll 实例中
         struct epoll_event event;
         event.events = EPOLLIN;
@@ -89,6 +101,23 @@ void ServerBase::HandleListenerEvent(std::map<int, RingBuffer *> &conns, int fd)
     }
 }
 
+void ServerBase::SendToCenterServerConnChange(ServerProto::SERVER_TYPE server_type, std::string ip, int port, int change)
+{
+    Message *message = new Message;
+
+    ServerProto::ServerConnChange *body = new ServerProto::ServerConnChange;
+    message->body = new MessageBody;
+    body->set_ip(ip);
+    body->set_port(port);
+    body->set_change(change);
+    body->set_type(server_type);
+    message->body->message = body;
+
+    message->head = new MessageHead(message->length(), BODYTYPE::ServerConnChange, 0);
+
+    SendMsg(message, center_server_client);
+    delete message;
+}
 
 void ServerBase::HandleConnEvent(std::map<int, RingBuffer *> &conn, int conn_fd)
 {
@@ -234,6 +263,8 @@ void ServerBase::CloseClientSocket(int fd)
         connections.erase(fd);
 
         close(fd);
+        conns_count--;
+        SendToCenterServerConnChange(ServerBase::TransformType(server_type), listen_ip, listen_port, conns_count);
     }
 }
 
@@ -355,4 +386,12 @@ bool ServerBase::ConnectToOtherServer(std::string ip, int port, int &fd)
     }
 
     return true;
+}
+
+/* 返回当前时间戳的毫秒值 */
+time_t ServerBase::getCurrentTime()
+{
+    auto now = std::chrono::system_clock::now();
+    auto now_ms = std::chrono::time_point_cast<std::chrono::milliseconds>(now);
+    return now_ms.time_since_epoch().count();
 }

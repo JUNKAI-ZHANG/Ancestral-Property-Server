@@ -84,10 +84,10 @@ void Room::JoinRoom(int userid)
         message.set_ret(true);
         message.set_roomid(m_id);
         message.set_result("加入成功");
+        if (host_userid == -1) ChangeRoomHost(userid);
         auto infos = GetRoomUserInfos();
         message.mutable_users()->Add(infos.begin(), infos.end());
 
-        if (host_userid == -1) ChangeRoomHost(userid);
 
         BroadCastToRoom(BODYTYPE::JoinRoom, &message);
     }
@@ -146,7 +146,6 @@ void Room::LeaveFromRoom(int userid)
         message.set_userpid(userid2userpid[userid]);
         message.set_result("已退出房间");
 
-        BroadCastToRoom(BODYTYPE::LeaveRoom, &message); // 先广播再删除
 
         userpid_pool.insert(userid2userpid[userid]);
         userid2userpid.erase(userid); 
@@ -157,6 +156,9 @@ void Room::LeaveFromRoom(int userid)
             if (userid2userpid.size() == 0) ChangeRoomHost(-1);
             else ChangeRoomHost(userid2userpid.begin()->first);
         }
+        auto infos = GetRoomUserInfos();
+        message.mutable_users()->Add(infos.begin(), infos.end());
+        BroadCastToRoom(BODYTYPE::LeaveRoom, &message); // 删除再广播也无所谓
     }
 }
 
@@ -323,6 +325,7 @@ std::vector<RoomProto::UserInfo> Room::GetRoomUserInfos()
     {
         userInfo[x].set_userid(p.first);
         userInfo[x].set_username(p.second);
+        userInfo[x].set_is_roomhost(host_userid == p.first);
         x++;
     }
     return userInfo;

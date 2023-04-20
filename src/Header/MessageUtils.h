@@ -94,6 +94,36 @@ static MessageBody *CreateMessageBody(int type)
         message = new FrameProto::Reconnect;
         break;
     }
+    case BODYTYPE::UserHeart:
+    {
+        message = new FrameProto::UserHeart;
+        break;
+    }
+    case BODYTYPE::GetRegionInfoRequest:
+    {
+        message = new ServerProto::GetRegionInfoRequest;
+        break;
+    }
+    case BODYTYPE::GetRegionInfoResponse:
+    {
+        message = new ServerProto::GetRegionInfoResponse;
+        break;
+    }
+    case BODYTYPE::JoinRegionRequest:
+    {
+        message = new ServerProto::JoinRegionRequest;
+        break;
+    }
+    case BODYTYPE::JoinRegionResponse:
+    {
+        message = new ServerProto::JoinRegionResponse;
+        break;
+    }
+    case BODYTYPE::ServerConnChange:
+    {
+        message = new ServerProto::ServerConnChange;
+        break;
+    }
     default:
     {
         message = nullptr;

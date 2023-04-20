@@ -34,6 +34,22 @@ struct ServerInfoDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT ServerInfoDefaultTypeInternal _ServerInfo_default_instance_;
+constexpr ServerConnChange::ServerConnChange(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : ip_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , port_(0)
+  , change_(0)
+  , type_(0)
+{}
+struct ServerConnChangeDefaultTypeInternal {
+  constexpr ServerConnChangeDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~ServerConnChangeDefaultTypeInternal() {}
+  union {
+    ServerConnChange _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT ServerConnChangeDefaultTypeInternal _ServerConnChange_default_instance_;
 constexpr UserInfo::UserInfo(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : userid_(0)
@@ -49,9 +65,73 @@ struct UserInfoDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT UserInfoDefaultTypeInternal _UserInfo_default_instance_;
+constexpr RegionInfo::RegionInfo(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : id_(0)
+  , people_count_(0)
+  , level_(0)
+{}
+struct RegionInfoDefaultTypeInternal {
+  constexpr RegionInfoDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~RegionInfoDefaultTypeInternal() {}
+  union {
+    RegionInfo _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT RegionInfoDefaultTypeInternal _RegionInfo_default_instance_;
+constexpr GetRegionInfoRequest::GetRegionInfoRequest(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized){}
+struct GetRegionInfoRequestDefaultTypeInternal {
+  constexpr GetRegionInfoRequestDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~GetRegionInfoRequestDefaultTypeInternal() {}
+  union {
+    GetRegionInfoRequest _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT GetRegionInfoRequestDefaultTypeInternal _GetRegionInfoRequest_default_instance_;
+constexpr GetRegionInfoResponse::GetRegionInfoResponse(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : infos_(){}
+struct GetRegionInfoResponseDefaultTypeInternal {
+  constexpr GetRegionInfoResponseDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~GetRegionInfoResponseDefaultTypeInternal() {}
+  union {
+    GetRegionInfoResponse _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT GetRegionInfoResponseDefaultTypeInternal _GetRegionInfoResponse_default_instance_;
+constexpr JoinRegionRequest::JoinRegionRequest(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : id_(0){}
+struct JoinRegionRequestDefaultTypeInternal {
+  constexpr JoinRegionRequestDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~JoinRegionRequestDefaultTypeInternal() {}
+  union {
+    JoinRegionRequest _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT JoinRegionRequestDefaultTypeInternal _JoinRegionRequest_default_instance_;
+constexpr JoinRegionResponse::JoinRegionResponse(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : ip_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , ret_(false)
+  , port_(0){}
+struct JoinRegionResponseDefaultTypeInternal {
+  constexpr JoinRegionResponseDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~JoinRegionResponseDefaultTypeInternal() {}
+  union {
+    JoinRegionResponse _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT JoinRegionResponseDefaultTypeInternal _JoinRegionResponse_default_instance_;
 }  // namespace ServerProto
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_Server_2eproto[2];
-static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_Server_2eproto[2];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_Server_2eproto[8];
+static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_Server_2eproto[4];
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_Server_2eproto = nullptr;
 
 const uint32_t TableStruct_Server_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
@@ -67,6 +147,16 @@ const uint32_t TableStruct_Server_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(p
   PROTOBUF_FIELD_OFFSET(::ServerProto::ServerInfo, server_type_),
   PROTOBUF_FIELD_OFFSET(::ServerProto::ServerInfo, opt_),
   ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::ServerProto::ServerConnChange, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::ServerProto::ServerConnChange, ip_),
+  PROTOBUF_FIELD_OFFSET(::ServerProto::ServerConnChange, port_),
+  PROTOBUF_FIELD_OFFSET(::ServerProto::ServerConnChange, change_),
+  PROTOBUF_FIELD_OFFSET(::ServerProto::ServerConnChange, type_),
+  ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::ServerProto::UserInfo, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
@@ -75,15 +165,65 @@ const uint32_t TableStruct_Server_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(p
   PROTOBUF_FIELD_OFFSET(::ServerProto::UserInfo, userid_),
   PROTOBUF_FIELD_OFFSET(::ServerProto::UserInfo, fd_),
   PROTOBUF_FIELD_OFFSET(::ServerProto::UserInfo, opt_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::ServerProto::RegionInfo, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::ServerProto::RegionInfo, id_),
+  PROTOBUF_FIELD_OFFSET(::ServerProto::RegionInfo, people_count_),
+  PROTOBUF_FIELD_OFFSET(::ServerProto::RegionInfo, level_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::ServerProto::GetRegionInfoRequest, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::ServerProto::GetRegionInfoResponse, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::ServerProto::GetRegionInfoResponse, infos_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::ServerProto::JoinRegionRequest, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::ServerProto::JoinRegionRequest, id_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::ServerProto::JoinRegionResponse, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::ServerProto::JoinRegionResponse, ret_),
+  PROTOBUF_FIELD_OFFSET(::ServerProto::JoinRegionResponse, ip_),
+  PROTOBUF_FIELD_OFFSET(::ServerProto::JoinRegionResponse, port_),
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::ServerProto::ServerInfo)},
-  { 11, -1, -1, sizeof(::ServerProto::UserInfo)},
+  { 11, -1, -1, sizeof(::ServerProto::ServerConnChange)},
+  { 21, -1, -1, sizeof(::ServerProto::UserInfo)},
+  { 30, -1, -1, sizeof(::ServerProto::RegionInfo)},
+  { 39, -1, -1, sizeof(::ServerProto::GetRegionInfoRequest)},
+  { 45, -1, -1, sizeof(::ServerProto::GetRegionInfoResponse)},
+  { 52, -1, -1, sizeof(::ServerProto::JoinRegionRequest)},
+  { 59, -1, -1, sizeof(::ServerProto::JoinRegionResponse)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::ServerProto::_ServerInfo_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::ServerProto::_ServerConnChange_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::ServerProto::_UserInfo_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::ServerProto::_RegionInfo_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::ServerProto::_GetRegionInfoRequest_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::ServerProto::_GetRegionInfoResponse_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::ServerProto::_JoinRegionRequest_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::ServerProto::_JoinRegionResponse_default_instance_),
 };
 
 const char descriptor_table_protodef_Server_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
@@ -92,15 +232,29 @@ const char descriptor_table_protodef_Server_2eproto[] PROTOBUF_SECTION_VARIABLE(
   "ree_level\030\003 \001(\005\022\023\n\013server_type\030\004 \001(\005\022.\n\003"
   "opt\030\005 \001(\0162!.ServerProto.ServerInfo.Opera"
   "tion\"8\n\tOperation\022\014\n\010Register\020\000\022\020\n\014Requs"
-  "tAssgin\020\001\022\013\n\007Connect\020\002\"{\n\010UserInfo\022\016\n\006us"
-  "erid\030\001 \001(\005\022\n\n\002fd\030\002 \001(\005\022,\n\003opt\030\003 \001(\0162\037.Se"
-  "rverProto.UserInfo.Operation\"%\n\tOperatio"
-  "n\022\014\n\010Register\020\000\022\n\n\006Logout\020\001b\006proto3"
+  "tAssgin\020\001\022\013\n\007Connect\020\002\"d\n\020ServerConnChan"
+  "ge\022\n\n\002ip\030\001 \001(\t\022\014\n\004port\030\002 \001(\005\022\016\n\006change\030\003"
+  " \001(\005\022&\n\004type\030\004 \001(\0162\030.ServerProto.SERVER_"
+  "TYPE\"{\n\010UserInfo\022\016\n\006userid\030\001 \001(\005\022\n\n\002fd\030\002"
+  " \001(\005\022,\n\003opt\030\003 \001(\0162\037.ServerProto.UserInfo"
+  ".Operation\"%\n\tOperation\022\014\n\010Register\020\000\022\n\n"
+  "\006Logout\020\001\"]\n\nRegionInfo\022\n\n\002id\030\001 \001(\005\022\024\n\014p"
+  "eople_count\030\002 \001(\005\022-\n\005level\030\003 \001(\0162\036.Serve"
+  "rProto.SERVER_FREE_LEVEL\"\026\n\024GetRegionInf"
+  "oRequest\"\?\n\025GetRegionInfoResponse\022&\n\005inf"
+  "os\030\001 \003(\0132\027.ServerProto.RegionInfo\"\037\n\021Joi"
+  "nRegionRequest\022\n\n\002id\030\001 \001(\005\";\n\022JoinRegion"
+  "Response\022\013\n\003ret\030\001 \001(\010\022\n\n\002ip\030\002 \001(\t\022\014\n\004por"
+  "t\030\003 \001(\005*Q\n\013SERVER_TYPE\022\010\n\004NONE\020\000\022\n\n\006CENT"
+  "ER\020\001\022\010\n\004GATE\020\002\022\t\n\005LOGIC\020\003\022\014\n\010DATABASE\020\004\022"
+  "\t\n\005MATCH\020\005*=\n\021SERVER_FREE_LEVEL\022\010\n\004FREE\020"
+  "\000\022\n\n\006COMMON\020\001\022\010\n\004BUSY\020\002\022\010\n\004DOWN\020\003b\006proto"
+  "3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_Server_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Server_2eproto = {
-  false, false, 355, descriptor_table_protodef_Server_2eproto, "Server.proto", 
-  &descriptor_table_Server_2eproto_once, nullptr, 0, 2,
+  false, false, 881, descriptor_table_protodef_Server_2eproto, "Server.proto", 
+  &descriptor_table_Server_2eproto_once, nullptr, 0, 8,
   schemas, file_default_instances, TableStruct_Server_2eproto::offsets,
   file_level_metadata_Server_2eproto, file_level_enum_descriptors_Server_2eproto, file_level_service_descriptors_Server_2eproto,
 };
@@ -155,6 +309,40 @@ constexpr UserInfo_Operation UserInfo::Operation_MIN;
 constexpr UserInfo_Operation UserInfo::Operation_MAX;
 constexpr int UserInfo::Operation_ARRAYSIZE;
 #endif  // (__cplusplus < 201703) && (!defined(_MSC_VER) || (_MSC_VER >= 1900 && _MSC_VER < 1912))
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* SERVER_TYPE_descriptor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_Server_2eproto);
+  return file_level_enum_descriptors_Server_2eproto[2];
+}
+bool SERVER_TYPE_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+      return true;
+    default:
+      return false;
+  }
+}
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* SERVER_FREE_LEVEL_descriptor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_Server_2eproto);
+  return file_level_enum_descriptors_Server_2eproto[3];
+}
+bool SERVER_FREE_LEVEL_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+      return true;
+    default:
+      return false;
+  }
+}
+
 
 // ===================================================================
 
@@ -468,6 +656,294 @@ void ServerInfo::InternalSwap(ServerInfo* other) {
 
 // ===================================================================
 
+class ServerConnChange::_Internal {
+ public:
+};
+
+ServerConnChange::ServerConnChange(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:ServerProto.ServerConnChange)
+}
+ServerConnChange::ServerConnChange(const ServerConnChange& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ip_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    ip_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_ip().empty()) {
+    ip_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_ip(), 
+      GetArenaForAllocation());
+  }
+  ::memcpy(&port_, &from.port_,
+    static_cast<size_t>(reinterpret_cast<char*>(&type_) -
+    reinterpret_cast<char*>(&port_)) + sizeof(type_));
+  // @@protoc_insertion_point(copy_constructor:ServerProto.ServerConnChange)
+}
+
+inline void ServerConnChange::SharedCtor() {
+ip_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  ip_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+    reinterpret_cast<char*>(&port_) - reinterpret_cast<char*>(this)),
+    0, static_cast<size_t>(reinterpret_cast<char*>(&type_) -
+    reinterpret_cast<char*>(&port_)) + sizeof(type_));
+}
+
+ServerConnChange::~ServerConnChange() {
+  // @@protoc_insertion_point(destructor:ServerProto.ServerConnChange)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void ServerConnChange::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  ip_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void ServerConnChange::ArenaDtor(void* object) {
+  ServerConnChange* _this = reinterpret_cast< ServerConnChange* >(object);
+  (void)_this;
+}
+void ServerConnChange::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void ServerConnChange::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void ServerConnChange::Clear() {
+// @@protoc_insertion_point(message_clear_start:ServerProto.ServerConnChange)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  ip_.ClearToEmpty();
+  ::memset(&port_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&type_) -
+      reinterpret_cast<char*>(&port_)) + sizeof(type_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* ServerConnChange::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string ip = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_ip();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "ServerProto.ServerConnChange.ip"));
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 port = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          port_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 change = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          change_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .ServerProto.SERVER_TYPE type = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
+          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+          _internal_set_type(static_cast<::ServerProto::SERVER_TYPE>(val));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* ServerConnChange::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:ServerProto.ServerConnChange)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string ip = 1;
+  if (!this->_internal_ip().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_ip().data(), static_cast<int>(this->_internal_ip().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "ServerProto.ServerConnChange.ip");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_ip(), target);
+  }
+
+  // int32 port = 2;
+  if (this->_internal_port() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_port(), target);
+  }
+
+  // int32 change = 3;
+  if (this->_internal_change() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(3, this->_internal_change(), target);
+  }
+
+  // .ServerProto.SERVER_TYPE type = 4;
+  if (this->_internal_type() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnumToArray(
+      4, this->_internal_type(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:ServerProto.ServerConnChange)
+  return target;
+}
+
+size_t ServerConnChange::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:ServerProto.ServerConnChange)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string ip = 1;
+  if (!this->_internal_ip().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_ip());
+  }
+
+  // int32 port = 2;
+  if (this->_internal_port() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_port());
+  }
+
+  // int32 change = 3;
+  if (this->_internal_change() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_change());
+  }
+
+  // .ServerProto.SERVER_TYPE type = 4;
+  if (this->_internal_type() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->_internal_type());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ServerConnChange::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    ServerConnChange::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ServerConnChange::GetClassData() const { return &_class_data_; }
+
+void ServerConnChange::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+  static_cast<ServerConnChange *>(to)->MergeFrom(
+      static_cast<const ServerConnChange &>(from));
+}
+
+
+void ServerConnChange::MergeFrom(const ServerConnChange& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:ServerProto.ServerConnChange)
+  GOOGLE_DCHECK_NE(&from, this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_ip().empty()) {
+    _internal_set_ip(from._internal_ip());
+  }
+  if (from._internal_port() != 0) {
+    _internal_set_port(from._internal_port());
+  }
+  if (from._internal_change() != 0) {
+    _internal_set_change(from._internal_change());
+  }
+  if (from._internal_type() != 0) {
+    _internal_set_type(from._internal_type());
+  }
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void ServerConnChange::CopyFrom(const ServerConnChange& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:ServerProto.ServerConnChange)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ServerConnChange::IsInitialized() const {
+  return true;
+}
+
+void ServerConnChange::InternalSwap(ServerConnChange* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &ip_, lhs_arena,
+      &other->ip_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(ServerConnChange, type_)
+      + sizeof(ServerConnChange::type_)
+      - PROTOBUF_FIELD_OFFSET(ServerConnChange, port_)>(
+          reinterpret_cast<char*>(&port_),
+          reinterpret_cast<char*>(&other->port_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata ServerConnChange::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_Server_2eproto_getter, &descriptor_table_Server_2eproto_once,
+      file_level_metadata_Server_2eproto[1]);
+}
+
+// ===================================================================
+
 class UserInfo::_Internal {
  public:
 };
@@ -700,7 +1176,909 @@ void UserInfo::InternalSwap(UserInfo* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata UserInfo::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_Server_2eproto_getter, &descriptor_table_Server_2eproto_once,
-      file_level_metadata_Server_2eproto[1]);
+      file_level_metadata_Server_2eproto[2]);
+}
+
+// ===================================================================
+
+class RegionInfo::_Internal {
+ public:
+};
+
+RegionInfo::RegionInfo(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:ServerProto.RegionInfo)
+}
+RegionInfo::RegionInfo(const RegionInfo& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::memcpy(&id_, &from.id_,
+    static_cast<size_t>(reinterpret_cast<char*>(&level_) -
+    reinterpret_cast<char*>(&id_)) + sizeof(level_));
+  // @@protoc_insertion_point(copy_constructor:ServerProto.RegionInfo)
+}
+
+inline void RegionInfo::SharedCtor() {
+::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+    reinterpret_cast<char*>(&id_) - reinterpret_cast<char*>(this)),
+    0, static_cast<size_t>(reinterpret_cast<char*>(&level_) -
+    reinterpret_cast<char*>(&id_)) + sizeof(level_));
+}
+
+RegionInfo::~RegionInfo() {
+  // @@protoc_insertion_point(destructor:ServerProto.RegionInfo)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void RegionInfo::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+}
+
+void RegionInfo::ArenaDtor(void* object) {
+  RegionInfo* _this = reinterpret_cast< RegionInfo* >(object);
+  (void)_this;
+}
+void RegionInfo::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void RegionInfo::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void RegionInfo::Clear() {
+// @@protoc_insertion_point(message_clear_start:ServerProto.RegionInfo)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  ::memset(&id_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&level_) -
+      reinterpret_cast<char*>(&id_)) + sizeof(level_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* RegionInfo::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // int32 id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 people_count = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          people_count_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .ServerProto.SERVER_FREE_LEVEL level = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+          _internal_set_level(static_cast<::ServerProto::SERVER_FREE_LEVEL>(val));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* RegionInfo::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:ServerProto.RegionInfo)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 id = 1;
+  if (this->_internal_id() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_id(), target);
+  }
+
+  // int32 people_count = 2;
+  if (this->_internal_people_count() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_people_count(), target);
+  }
+
+  // .ServerProto.SERVER_FREE_LEVEL level = 3;
+  if (this->_internal_level() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnumToArray(
+      3, this->_internal_level(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:ServerProto.RegionInfo)
+  return target;
+}
+
+size_t RegionInfo::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:ServerProto.RegionInfo)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // int32 id = 1;
+  if (this->_internal_id() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_id());
+  }
+
+  // int32 people_count = 2;
+  if (this->_internal_people_count() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_people_count());
+  }
+
+  // .ServerProto.SERVER_FREE_LEVEL level = 3;
+  if (this->_internal_level() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->_internal_level());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData RegionInfo::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    RegionInfo::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*RegionInfo::GetClassData() const { return &_class_data_; }
+
+void RegionInfo::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+  static_cast<RegionInfo *>(to)->MergeFrom(
+      static_cast<const RegionInfo &>(from));
+}
+
+
+void RegionInfo::MergeFrom(const RegionInfo& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:ServerProto.RegionInfo)
+  GOOGLE_DCHECK_NE(&from, this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_id() != 0) {
+    _internal_set_id(from._internal_id());
+  }
+  if (from._internal_people_count() != 0) {
+    _internal_set_people_count(from._internal_people_count());
+  }
+  if (from._internal_level() != 0) {
+    _internal_set_level(from._internal_level());
+  }
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void RegionInfo::CopyFrom(const RegionInfo& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:ServerProto.RegionInfo)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool RegionInfo::IsInitialized() const {
+  return true;
+}
+
+void RegionInfo::InternalSwap(RegionInfo* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(RegionInfo, level_)
+      + sizeof(RegionInfo::level_)
+      - PROTOBUF_FIELD_OFFSET(RegionInfo, id_)>(
+          reinterpret_cast<char*>(&id_),
+          reinterpret_cast<char*>(&other->id_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata RegionInfo::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_Server_2eproto_getter, &descriptor_table_Server_2eproto_once,
+      file_level_metadata_Server_2eproto[3]);
+}
+
+// ===================================================================
+
+class GetRegionInfoRequest::_Internal {
+ public:
+};
+
+GetRegionInfoRequest::GetRegionInfoRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase(arena, is_message_owned) {
+  // @@protoc_insertion_point(arena_constructor:ServerProto.GetRegionInfoRequest)
+}
+GetRegionInfoRequest::GetRegionInfoRequest(const GetRegionInfoRequest& from)
+  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:ServerProto.GetRegionInfoRequest)
+}
+
+
+
+
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData GetRegionInfoRequest::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyImpl,
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeImpl,
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetRegionInfoRequest::GetClassData() const { return &_class_data_; }
+
+
+
+
+
+
+
+::PROTOBUF_NAMESPACE_ID::Metadata GetRegionInfoRequest::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_Server_2eproto_getter, &descriptor_table_Server_2eproto_once,
+      file_level_metadata_Server_2eproto[4]);
+}
+
+// ===================================================================
+
+class GetRegionInfoResponse::_Internal {
+ public:
+};
+
+GetRegionInfoResponse::GetRegionInfoResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned),
+  infos_(arena) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:ServerProto.GetRegionInfoResponse)
+}
+GetRegionInfoResponse::GetRegionInfoResponse(const GetRegionInfoResponse& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      infos_(from.infos_) {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:ServerProto.GetRegionInfoResponse)
+}
+
+inline void GetRegionInfoResponse::SharedCtor() {
+}
+
+GetRegionInfoResponse::~GetRegionInfoResponse() {
+  // @@protoc_insertion_point(destructor:ServerProto.GetRegionInfoResponse)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void GetRegionInfoResponse::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+}
+
+void GetRegionInfoResponse::ArenaDtor(void* object) {
+  GetRegionInfoResponse* _this = reinterpret_cast< GetRegionInfoResponse* >(object);
+  (void)_this;
+}
+void GetRegionInfoResponse::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void GetRegionInfoResponse::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void GetRegionInfoResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:ServerProto.GetRegionInfoResponse)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  infos_.Clear();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* GetRegionInfoResponse::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // repeated .ServerProto.RegionInfo infos = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(_internal_add_infos(), ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* GetRegionInfoResponse::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:ServerProto.GetRegionInfoResponse)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // repeated .ServerProto.RegionInfo infos = 1;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->_internal_infos_size()); i < n; i++) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(1, this->_internal_infos(i), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:ServerProto.GetRegionInfoResponse)
+  return target;
+}
+
+size_t GetRegionInfoResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:ServerProto.GetRegionInfoResponse)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated .ServerProto.RegionInfo infos = 1;
+  total_size += 1UL * this->_internal_infos_size();
+  for (const auto& msg : this->infos_) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData GetRegionInfoResponse::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    GetRegionInfoResponse::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetRegionInfoResponse::GetClassData() const { return &_class_data_; }
+
+void GetRegionInfoResponse::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+  static_cast<GetRegionInfoResponse *>(to)->MergeFrom(
+      static_cast<const GetRegionInfoResponse &>(from));
+}
+
+
+void GetRegionInfoResponse::MergeFrom(const GetRegionInfoResponse& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:ServerProto.GetRegionInfoResponse)
+  GOOGLE_DCHECK_NE(&from, this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  infos_.MergeFrom(from.infos_);
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void GetRegionInfoResponse::CopyFrom(const GetRegionInfoResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:ServerProto.GetRegionInfoResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool GetRegionInfoResponse::IsInitialized() const {
+  return true;
+}
+
+void GetRegionInfoResponse::InternalSwap(GetRegionInfoResponse* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  infos_.InternalSwap(&other->infos_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata GetRegionInfoResponse::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_Server_2eproto_getter, &descriptor_table_Server_2eproto_once,
+      file_level_metadata_Server_2eproto[5]);
+}
+
+// ===================================================================
+
+class JoinRegionRequest::_Internal {
+ public:
+};
+
+JoinRegionRequest::JoinRegionRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:ServerProto.JoinRegionRequest)
+}
+JoinRegionRequest::JoinRegionRequest(const JoinRegionRequest& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  id_ = from.id_;
+  // @@protoc_insertion_point(copy_constructor:ServerProto.JoinRegionRequest)
+}
+
+inline void JoinRegionRequest::SharedCtor() {
+id_ = 0;
+}
+
+JoinRegionRequest::~JoinRegionRequest() {
+  // @@protoc_insertion_point(destructor:ServerProto.JoinRegionRequest)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void JoinRegionRequest::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+}
+
+void JoinRegionRequest::ArenaDtor(void* object) {
+  JoinRegionRequest* _this = reinterpret_cast< JoinRegionRequest* >(object);
+  (void)_this;
+}
+void JoinRegionRequest::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void JoinRegionRequest::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void JoinRegionRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:ServerProto.JoinRegionRequest)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  id_ = 0;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* JoinRegionRequest::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // int32 id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* JoinRegionRequest::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:ServerProto.JoinRegionRequest)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 id = 1;
+  if (this->_internal_id() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_id(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:ServerProto.JoinRegionRequest)
+  return target;
+}
+
+size_t JoinRegionRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:ServerProto.JoinRegionRequest)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // int32 id = 1;
+  if (this->_internal_id() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_id());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData JoinRegionRequest::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    JoinRegionRequest::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*JoinRegionRequest::GetClassData() const { return &_class_data_; }
+
+void JoinRegionRequest::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+  static_cast<JoinRegionRequest *>(to)->MergeFrom(
+      static_cast<const JoinRegionRequest &>(from));
+}
+
+
+void JoinRegionRequest::MergeFrom(const JoinRegionRequest& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:ServerProto.JoinRegionRequest)
+  GOOGLE_DCHECK_NE(&from, this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_id() != 0) {
+    _internal_set_id(from._internal_id());
+  }
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void JoinRegionRequest::CopyFrom(const JoinRegionRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:ServerProto.JoinRegionRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool JoinRegionRequest::IsInitialized() const {
+  return true;
+}
+
+void JoinRegionRequest::InternalSwap(JoinRegionRequest* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(id_, other->id_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata JoinRegionRequest::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_Server_2eproto_getter, &descriptor_table_Server_2eproto_once,
+      file_level_metadata_Server_2eproto[6]);
+}
+
+// ===================================================================
+
+class JoinRegionResponse::_Internal {
+ public:
+};
+
+JoinRegionResponse::JoinRegionResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:ServerProto.JoinRegionResponse)
+}
+JoinRegionResponse::JoinRegionResponse(const JoinRegionResponse& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ip_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    ip_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_ip().empty()) {
+    ip_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_ip(), 
+      GetArenaForAllocation());
+  }
+  ::memcpy(&ret_, &from.ret_,
+    static_cast<size_t>(reinterpret_cast<char*>(&port_) -
+    reinterpret_cast<char*>(&ret_)) + sizeof(port_));
+  // @@protoc_insertion_point(copy_constructor:ServerProto.JoinRegionResponse)
+}
+
+inline void JoinRegionResponse::SharedCtor() {
+ip_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  ip_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+    reinterpret_cast<char*>(&ret_) - reinterpret_cast<char*>(this)),
+    0, static_cast<size_t>(reinterpret_cast<char*>(&port_) -
+    reinterpret_cast<char*>(&ret_)) + sizeof(port_));
+}
+
+JoinRegionResponse::~JoinRegionResponse() {
+  // @@protoc_insertion_point(destructor:ServerProto.JoinRegionResponse)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void JoinRegionResponse::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  ip_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void JoinRegionResponse::ArenaDtor(void* object) {
+  JoinRegionResponse* _this = reinterpret_cast< JoinRegionResponse* >(object);
+  (void)_this;
+}
+void JoinRegionResponse::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void JoinRegionResponse::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void JoinRegionResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:ServerProto.JoinRegionResponse)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  ip_.ClearToEmpty();
+  ::memset(&ret_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&port_) -
+      reinterpret_cast<char*>(&ret_)) + sizeof(port_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* JoinRegionResponse::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // bool ret = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          ret_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // string ip = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_ip();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "ServerProto.JoinRegionResponse.ip"));
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 port = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          port_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* JoinRegionResponse::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:ServerProto.JoinRegionResponse)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // bool ret = 1;
+  if (this->_internal_ret() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(1, this->_internal_ret(), target);
+  }
+
+  // string ip = 2;
+  if (!this->_internal_ip().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_ip().data(), static_cast<int>(this->_internal_ip().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "ServerProto.JoinRegionResponse.ip");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_ip(), target);
+  }
+
+  // int32 port = 3;
+  if (this->_internal_port() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(3, this->_internal_port(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:ServerProto.JoinRegionResponse)
+  return target;
+}
+
+size_t JoinRegionResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:ServerProto.JoinRegionResponse)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string ip = 2;
+  if (!this->_internal_ip().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_ip());
+  }
+
+  // bool ret = 1;
+  if (this->_internal_ret() != 0) {
+    total_size += 1 + 1;
+  }
+
+  // int32 port = 3;
+  if (this->_internal_port() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_port());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData JoinRegionResponse::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    JoinRegionResponse::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*JoinRegionResponse::GetClassData() const { return &_class_data_; }
+
+void JoinRegionResponse::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+  static_cast<JoinRegionResponse *>(to)->MergeFrom(
+      static_cast<const JoinRegionResponse &>(from));
+}
+
+
+void JoinRegionResponse::MergeFrom(const JoinRegionResponse& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:ServerProto.JoinRegionResponse)
+  GOOGLE_DCHECK_NE(&from, this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_ip().empty()) {
+    _internal_set_ip(from._internal_ip());
+  }
+  if (from._internal_ret() != 0) {
+    _internal_set_ret(from._internal_ret());
+  }
+  if (from._internal_port() != 0) {
+    _internal_set_port(from._internal_port());
+  }
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void JoinRegionResponse::CopyFrom(const JoinRegionResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:ServerProto.JoinRegionResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool JoinRegionResponse::IsInitialized() const {
+  return true;
+}
+
+void JoinRegionResponse::InternalSwap(JoinRegionResponse* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &ip_, lhs_arena,
+      &other->ip_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(JoinRegionResponse, port_)
+      + sizeof(JoinRegionResponse::port_)
+      - PROTOBUF_FIELD_OFFSET(JoinRegionResponse, ret_)>(
+          reinterpret_cast<char*>(&ret_),
+          reinterpret_cast<char*>(&other->ret_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata JoinRegionResponse::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_Server_2eproto_getter, &descriptor_table_Server_2eproto_once,
+      file_level_metadata_Server_2eproto[7]);
 }
 
 // @@protoc_insertion_point(namespace_scope)
@@ -709,8 +2087,26 @@ PROTOBUF_NAMESPACE_OPEN
 template<> PROTOBUF_NOINLINE ::ServerProto::ServerInfo* Arena::CreateMaybeMessage< ::ServerProto::ServerInfo >(Arena* arena) {
   return Arena::CreateMessageInternal< ::ServerProto::ServerInfo >(arena);
 }
+template<> PROTOBUF_NOINLINE ::ServerProto::ServerConnChange* Arena::CreateMaybeMessage< ::ServerProto::ServerConnChange >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::ServerProto::ServerConnChange >(arena);
+}
 template<> PROTOBUF_NOINLINE ::ServerProto::UserInfo* Arena::CreateMaybeMessage< ::ServerProto::UserInfo >(Arena* arena) {
   return Arena::CreateMessageInternal< ::ServerProto::UserInfo >(arena);
+}
+template<> PROTOBUF_NOINLINE ::ServerProto::RegionInfo* Arena::CreateMaybeMessage< ::ServerProto::RegionInfo >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::ServerProto::RegionInfo >(arena);
+}
+template<> PROTOBUF_NOINLINE ::ServerProto::GetRegionInfoRequest* Arena::CreateMaybeMessage< ::ServerProto::GetRegionInfoRequest >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::ServerProto::GetRegionInfoRequest >(arena);
+}
+template<> PROTOBUF_NOINLINE ::ServerProto::GetRegionInfoResponse* Arena::CreateMaybeMessage< ::ServerProto::GetRegionInfoResponse >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::ServerProto::GetRegionInfoResponse >(arena);
+}
+template<> PROTOBUF_NOINLINE ::ServerProto::JoinRegionRequest* Arena::CreateMaybeMessage< ::ServerProto::JoinRegionRequest >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::ServerProto::JoinRegionRequest >(arena);
+}
+template<> PROTOBUF_NOINLINE ::ServerProto::JoinRegionResponse* Arena::CreateMaybeMessage< ::ServerProto::JoinRegionResponse >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::ServerProto::JoinRegionResponse >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 

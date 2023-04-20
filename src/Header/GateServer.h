@@ -3,6 +3,20 @@
 
 #include "FuncServer.h"
 
+struct ClientInfo
+{
+    int m_userid;
+    int m_fd;
+    /* 上一次接收到心跳包的时间 */
+    time_t m_lstMs;
+    ClientInfo(int userid, int fd, time_t lstMs)
+    {
+        m_userid = userid;
+        m_fd = fd;
+        m_lstMs = lstMs;
+    }
+};
+
 class GateServer : public FuncServer
 {
 private:
@@ -27,6 +41,11 @@ public:
     virtual ~GateServer();
 
     virtual void CloseClientSocket(int fd);
+
+    void CheckAllClientConn();
+
+private:
+    std::map<int, ClientInfo *> m_user_connections;
 };
 
 #endif
