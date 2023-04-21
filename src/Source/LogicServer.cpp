@@ -382,10 +382,15 @@ int main(int argc, char **argv)
     }
 
     // int port = std::atoi(argv[1]);
-    int port = LOGIC_SERVER_PORT_1;
+    // int port = LOGIC_SERVER_PORT_1;
 
-    std::cout << "Start Logic Center Server ing..." << std::endl;
-    LOGICSERVER.BootServer(port);
+    const int ports[] = {LOGIC_SERVER_PORT_1, LOGIC_SERVER_PORT_2, LOGIC_SERVER_PORT_3, LOGIC_SERVER_PORT_4, LOGIC_SERVER_PORT_5, LOGIC_SERVER_PORT_6};
+
+    for (int i = 0; i < 6; i++) 
+    {
+        // std::cout << "Start Logic Center Server ing..." << std::endl;
+        LOGICSERVER.BootServer(ports[i]);
+    }
 
     return 0;
 }

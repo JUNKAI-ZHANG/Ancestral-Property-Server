@@ -106,7 +106,7 @@ private:
     bool m_gameStarted; // 标记是否开始了游戏
 
     /* 房主userid，-1表示没有房主 */
-    int host_userid;
+    int host_userid = -1;
 
     /* 空闲的玩家pid列表 */
     std::set<int> userpid_pool;

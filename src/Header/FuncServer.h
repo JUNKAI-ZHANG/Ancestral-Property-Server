@@ -7,9 +7,6 @@
 class FuncServer : public ServerBase
 {
 protected:
-    /* 用于和中心服务器连接 */
-    int center_server_client = -1;
-
     /* 用于和游戏逻辑服务器连接 */
     int logic_server_client = -1;
 
@@ -26,6 +23,8 @@ private:
     void HandleServerInfo(Message *msg, int fd);
 
     void HandleUserInfo(Message *msg, int fd);
+
+    SERVER_FREE_LEVEL DynamicCalcServerFreeLevel(int conns);
 
 protected:
     void SendSelfInfoToCenter();

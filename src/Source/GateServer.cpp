@@ -3,6 +3,12 @@
 GateServer::GateServer()
 {
     server_type = SERVER_TYPE::GATE;
+
+    // 注册检查心跳事件
+    Timer *timer = new Timer(CHECK_ALL_CLIENT_CONN, CallbackType::GateServer_CheckAllClientConn, std::bind(&GateServer::CheckAllClientConn, this));
+    timer->Start();
+
+    m_callfuncList.push_back(timer);
 }
 
 GateServer::~GateServer()
@@ -33,9 +39,15 @@ void GateServer::CloseClientSocket(int fd)
     }
     else 
     {
-        Message *msg = NewUserInfoMessage(fd_user_record[fd], fd, ServerProto::UserInfo_Operation::UserInfo_Operation_Logout);
-        SendMsg(msg, logic_server_client);
-        delete msg;
+        if (fd_user_record.count(fd))
+        {
+            Message *msg = NewUserInfoMessage(fd_user_record[fd], fd, ServerProto::UserInfo_Operation::UserInfo_Operation_Logout);
+            SendMsg(msg, logic_server_client);
+            int _fd = fd, _userid = fd_user_record[fd];
+            user_fd_record.erase(_userid);
+            fd_user_record.erase(_fd);
+            delete msg;
+        }
     }
 }
 
@@ -78,6 +90,20 @@ void GateServer::DisconnectAllClients()
             auto cur = it;
             ++it;
             CloseClientSocket(cur->first);
+        }
+    }
+}
+
+void GateServer::CheckAllClientConn()
+{
+    time_t nowMs = getCurrentTime();
+    for (auto conn = m_user_connections.begin(); conn != m_user_connections.end(); )
+    {
+        auto now = conn++;
+        if (nowMs - now->second->m_lstMs > MAX_HEARTBEAT_DIFF)
+        {
+            CloseClientSocket(now->second->m_fd);
+            m_user_connections.erase(now);
         }
     }
 }
@@ -267,6 +293,23 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
         SendMsg(msg, user_fd_record[msg->head->m_userid]);
         break;
     }
+    case BODYTYPE::UserHeart:
+    {
+        if (fd == center_server_client || fd == logic_server_client || fd == db_server_client)
+        {
+            break;
+        }
+        int userid = msg->head->m_userid;
+        if (m_user_connections.count(userid))
+        {
+            m_user_connections[userid]->m_lstMs = getCurrentTime();
+        }
+        else 
+        {
+            m_user_connections[userid] = new ClientInfo(userid, user_fd_record[userid], getCurrentTime());
+        }
+        break;
+    }
     default:
     {
         break;
@@ -285,12 +328,17 @@ int main(int argc, char **argv)
     }
 
     // int port = std::atoi(argv[1]);
-    int port = GATE_SERVER_PORT_1;
+    // int port = GATE_SERVER_PORT_1;
+
+    const int ports[] = {GATE_SERVER_PORT_1, GATE_SERVER_PORT_2, GATE_SERVER_PORT_3, GATE_SERVER_PORT_4, GATE_SERVER_PORT_5, GATE_SERVER_PORT_6};
 
     GateServer gateServer;
 
-    std::cout << "Start Gate Center Server ing..." << std::endl;
-    gateServer.BootServer(port);
+    for (int i = 0; i < 6; i++)
+    {
+        // std::cout << "Start Gate Center Server ing..." << std::endl;
+        gateServer.BootServer(ports[i]);
+    }
 
     return 0;
 }

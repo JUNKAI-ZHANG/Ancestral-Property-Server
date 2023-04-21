@@ -113,8 +113,19 @@ struct GameReplayDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT GameReplayDefaultTypeInternal _GameReplay_default_instance_;
+constexpr UserHeart::UserHeart(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized){}
+struct UserHeartDefaultTypeInternal {
+  constexpr UserHeartDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~UserHeartDefaultTypeInternal() {}
+  union {
+    UserHeart _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT UserHeartDefaultTypeInternal _UserHeart_default_instance_;
 }  // namespace FrameProto
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_Frame_2eproto[7];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_Frame_2eproto[8];
 static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_Frame_2eproto[1];
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_Frame_2eproto = nullptr;
 
@@ -178,6 +189,12 @@ const uint32_t TableStruct_Frame_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(pr
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::FrameProto::GameReplay, frames_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::FrameProto::UserHeart, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::FrameProto::StartGame)},
@@ -187,6 +204,7 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 38, -1, -1, sizeof(::FrameProto::Frame)},
   { 46, -1, -1, sizeof(::FrameProto::ChaseFrame)},
   { 52, -1, -1, sizeof(::FrameProto::GameReplay)},
+  { 59, -1, -1, sizeof(::FrameProto::UserHeart)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -197,6 +215,7 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::FrameProto::_Frame_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::FrameProto::_ChaseFrame_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::FrameProto::_GameReplay_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::FrameProto::_UserHeart_default_instance_),
 };
 
 const char descriptor_table_protodef_Frame_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
@@ -211,14 +230,15 @@ const char descriptor_table_protodef_Frame_2eproto[] PROTOBUF_SECTION_VARIABLE(p
   "\n\005Frame\022\020\n\010frame_id\030\001 \001(\005\022)\n\010operates\030\002 "
   "\003(\0132\027.FrameProto.UserOperate\"\014\n\nChaseFra"
   "me\"/\n\nGameReplay\022!\n\006frames\030\001 \003(\0132\021.Frame"
-  "Proto.Frame*[\n\013OperateType\022\r\n\tFrameInfo\020"
-  "\000\022\014\n\010JoinGame\020\001\022\r\n\tLeaveGame\020\002\022\022\n\016Shop_G"
-  "etRandom\020\003\022\014\n\010Shop_Buy\020\004b\006proto3"
+  "Proto.Frame\"\013\n\tUserHeart*[\n\013OperateType\022"
+  "\r\n\tFrameInfo\020\000\022\014\n\010JoinGame\020\001\022\r\n\tLeaveGam"
+  "e\020\002\022\022\n\016Shop_GetRandom\020\003\022\014\n\010Shop_Buy\020\004b\006p"
+  "roto3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_Frame_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Frame_2eproto = {
-  false, false, 552, descriptor_table_protodef_Frame_2eproto, "Frame.proto", 
-  &descriptor_table_Frame_2eproto_once, nullptr, 0, 7,
+  false, false, 565, descriptor_table_protodef_Frame_2eproto, "Frame.proto", 
+  &descriptor_table_Frame_2eproto_once, nullptr, 0, 8,
   schemas, file_default_instances, TableStruct_Frame_2eproto::offsets,
   file_level_metadata_Frame_2eproto, file_level_enum_descriptors_Frame_2eproto, file_level_service_descriptors_Frame_2eproto,
 };
@@ -1700,6 +1720,45 @@ void GameReplay::InternalSwap(GameReplay* other) {
       file_level_metadata_Frame_2eproto[6]);
 }
 
+// ===================================================================
+
+class UserHeart::_Internal {
+ public:
+};
+
+UserHeart::UserHeart(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase(arena, is_message_owned) {
+  // @@protoc_insertion_point(arena_constructor:FrameProto.UserHeart)
+}
+UserHeart::UserHeart(const UserHeart& from)
+  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:FrameProto.UserHeart)
+}
+
+
+
+
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData UserHeart::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyImpl,
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeImpl,
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*UserHeart::GetClassData() const { return &_class_data_; }
+
+
+
+
+
+
+
+::PROTOBUF_NAMESPACE_ID::Metadata UserHeart::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_Frame_2eproto_getter, &descriptor_table_Frame_2eproto_once,
+      file_level_metadata_Frame_2eproto[7]);
+}
+
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace FrameProto
 PROTOBUF_NAMESPACE_OPEN
@@ -1723,6 +1782,9 @@ template<> PROTOBUF_NOINLINE ::FrameProto::ChaseFrame* Arena::CreateMaybeMessage
 }
 template<> PROTOBUF_NOINLINE ::FrameProto::GameReplay* Arena::CreateMaybeMessage< ::FrameProto::GameReplay >(Arena* arena) {
   return Arena::CreateMessageInternal< ::FrameProto::GameReplay >(arena);
+}
+template<> PROTOBUF_NOINLINE ::FrameProto::UserHeart* Arena::CreateMaybeMessage< ::FrameProto::UserHeart >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::FrameProto::UserHeart >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 

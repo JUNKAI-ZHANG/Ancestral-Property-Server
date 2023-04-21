@@ -6,6 +6,7 @@ message UserInfo
 {
     string username = 1;
     int32 userid = 2;
+    bool is_roomHost = 3;
 }
 
 message JoinRoom
@@ -39,6 +40,7 @@ message LeaveRoom
     Type type = 4;
     int32 userid = 5;
     int32 userpid = 6;
+    repeated UserInfo users = 7;
 }
 
 message CreateRoom
@@ -78,4 +80,14 @@ message GetRoomList
     }
 
     Type type = 4;
+}
+
+message JoinGame           // 用户退出应主动发送的消息
+{
+    int32 userid = 1;
+}
+
+message QuitGame           // 用户退出应主动发送的消息
+{
+    int32 userid = 1;
 }
