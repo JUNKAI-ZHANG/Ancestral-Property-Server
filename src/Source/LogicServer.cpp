@@ -1,4 +1,4 @@
-#include "../Logic/LogicServer.h"
+#include "../Header/Server/LogicServer.h"
 #include "../Logic/Room.h"
 
 LogicServer::LogicServer() 
@@ -70,8 +70,12 @@ void LogicServer::Update()
 {
     for (auto room : rooms)
     {
-        room.second->Tick();
+        if (room.second->Tick())
+        {
+            inGames.insert(room.first);
+        }
     }
+    if (DEBUG) if (inGames.size()) std::cout << "inGames = " << inGames.size() << std::endl;
 }
 
 void LogicServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t length, int fd)
@@ -91,10 +95,10 @@ void LogicServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_
         // 添加username 到内存
         userid2username[body->userid()] = body->username();
 
-        // 如果玩家还在房间，那么需要发送重连响应回去
-        if (userid2roomid.count(body->userid()))
+        // 如果玩家还在房间，并且游戏没有处于开始状态，那么需要发送重连响应回去
+        if (userid2roomid.count(body->userid()) && rooms.count(userid2roomid[body->userid()]))
         {
-            HandleReconnect(body->userid());
+            if (rooms[userid2roomid[body->userid()]]->InGame()) HandleReconnect(body->userid());
         }
         break;
     }
@@ -116,6 +120,21 @@ void LogicServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_
     case BODYTYPE::GetRoomList:
     {
         HandleGetRoomList(msg);
+        break;
+    }
+    case BODYTYPE::JoinGame:
+    {
+        HandleJoinGame(msg);
+        break;
+    }
+    case BODYTYPE::QuitGame:
+    {
+        HandleQuitGame(msg);
+        break;
+    }
+    case BODYTYPE::RoomStatusChangeRequest:
+    {
+        HandleRoomStatusChange(msg);
         break;
     }
     case BODYTYPE::StartGame:
@@ -268,6 +287,33 @@ void LogicServer::HandleGetRoomList(Message *msg)
     SendToClient(BODYTYPE::GetRoomList, &getRoomList, msg->head->m_userid);
 }
 
+void LogicServer::HandleJoinGame(Message *msg)
+{
+    int userid = msg->head->m_userid;
+    if (!userid2roomid.count(userid)) return;
+    int roomid = userid2roomid[userid];
+    if (!rooms.count(roomid)) return;
+    rooms[roomid]->NotifyUserJoinGame(userid);
+}
+
+void LogicServer::HandleQuitGame(Message *msg)
+{
+    int userid = msg->head->m_userid;
+    if (!userid2roomid.count(userid)) return;
+    int roomid = userid2roomid[userid];
+    if (!rooms.count(roomid)) return;
+    rooms[roomid]->NotifyUserQuitGame(userid);
+}
+
+void LogicServer::HandleRoomStatusChange(Message *msg)
+{
+    int userid = msg->head->m_userid;
+    if (!userid2roomid.count(userid)) return;
+    int roomid = userid2roomid[userid];
+    if (!rooms.count(roomid)) return;
+    rooms[roomid]->UserInfoChange(msg);
+}
+
 void LogicServer::MovePlayerToRoom(int userid, int roomid)
 {
     RemovePlayerFromRoom(userid);
@@ -382,10 +428,15 @@ int main(int argc, char **argv)
     }
 
     // int port = std::atoi(argv[1]);
-    int port = LOGIC_SERVER_PORT_1;
+    // int port = LOGIC_SERVER_PORT_1;
 
-    std::cout << "Start Logic Center Server ing..." << std::endl;
-    LOGICSERVER.BootServer(port);
+    const int ports[] = {LOGIC_SERVER_PORT_1, LOGIC_SERVER_PORT_2, LOGIC_SERVER_PORT_3, LOGIC_SERVER_PORT_4, LOGIC_SERVER_PORT_5, LOGIC_SERVER_PORT_6};
+
+    for (int i = 0; i < 6; i++) 
+    {
+        // std::cout << "Start Logic Center Server ing..." << std::endl;
+        LOGICSERVER.BootServer(ports[i]);
+    }
 
     return 0;
 }

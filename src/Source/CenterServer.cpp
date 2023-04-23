@@ -1,4 +1,4 @@
-#include "../Header/CenterServer.h"
+#include "../Header/Server/CenterServer.h"
 
 CenterServer::CenterServer()
 {
@@ -30,14 +30,17 @@ void CenterServer::RegisterServer(Server_Info *machine)
 
     if (type == SERVER_TYPE::LOGIC)
     {
+        machine->id = logicServerGroup.size();
         logicServerGroup.push_back(machine);
     }
     else if (type == SERVER_TYPE::GATE)
     {
+        machine->id = gateServerGroup.size();
         gateServerGroup.push_back(machine);
     }
     else if (type == SERVER_TYPE::DATABASE)
     {
+        machine->id = dbServerGroup.size();
         dbServerGroup.push_back(machine);
     }
 }
@@ -127,8 +130,26 @@ void CenterServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32
     case BODYTYPE::ServerInfo:
     {
         HandleServerInfo(msg, fd);
-
         break;
+    }
+    case BODYTYPE::UserInfo:
+    {
+        HandleUserInfo(msg, fd);
+        break;
+    }
+    case BODYTYPE::GetRegionInfoRequest:
+    {
+        HandleGetRegionInfoRequest(msg, fd);
+        break;
+    }
+    case BODYTYPE::JoinRegionRequest:
+    {
+        HandleJoinRegionRequest(msg, fd);
+        break;
+    }
+    case BODYTYPE::ServerConnChange:
+    {
+        HandleServerConnChange(msg, fd);
     }
     default:
     {
@@ -136,6 +157,14 @@ void CenterServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32
         break;
     }
     }
+}
+
+ServerProto::SERVER_FREE_LEVEL CheckFreeLevel(Server_Info *info)
+{
+    int count = info->people_count;
+    if (count < SERVER_FREE_COUNT)   return ServerProto::SERVER_FREE_LEVEL::FREE;
+    if (count < SERVER_COMMON_COUNT) return ServerProto::SERVER_FREE_LEVEL::COMMON;
+    return ServerProto::SERVER_FREE_LEVEL::BUSY;
 }
 
 void CenterServer::HandleServerInfo(Message *msg, int fd)
@@ -176,7 +205,7 @@ void CenterServer::HandleServerInfo(Message *msg, int fd)
         }
         else
         {
-            std::cout << "Assgin server success!" << std::endl;
+            std::cout << "Assgin server success! " + machine.ip + ":" + to_string(machine.port) << std::endl;
         }
         Message *message = NewServerInfoMessage(machine.ip, machine.port, machine.type, ServerProto::ServerInfo_Operation_Connect, machine.level);
         if (message != nullptr)
@@ -192,6 +221,72 @@ void CenterServer::HandleServerInfo(Message *msg, int fd)
         break;
     }
     }
+}
+
+void CenterServer::HandleUserInfo(Message *msg, int fd)
+{
+    // 暂时没有功能需要实现
+}
+
+void CenterServer::HandleGetRegionInfoRequest(Message *msg, int fd)
+{
+    Message *message = new Message();
+    message->body = new MessageBody();
+    ServerProto::GetRegionInfoResponse *body = new ServerProto::GetRegionInfoResponse();
+    ServerProto::RegionInfo *info_back = new ServerProto::RegionInfo();
+    for (Server_Info * const info : gateServerGroup)
+    {
+        info_back = body->add_infos();
+        info_back->set_id(info->id);
+        info_back->set_level(CheckFreeLevel(info));
+        info_back->set_people_count(info->people_count);
+    }
+    message->body->message = body;
+
+    message->head = new MessageHead(message->length(), (int)BODYTYPE::GetRegionInfoResponse, 0);
+    SendMsg(message, fd);
+    delete message;
+}
+
+void CenterServer::HandleJoinRegionRequest(Message *msg, int fd)
+{
+    ServerProto::JoinRegionRequest *request = dynamic_cast<ServerProto::JoinRegionRequest *>(msg->body->message);
+
+    Message *message = new Message();
+    message->body = new MessageBody();
+    ServerProto::JoinRegionResponse *body = new ServerProto::JoinRegionResponse();
+
+    body->set_ret(false);
+    body->set_ip("");
+    body->set_port(0);
+
+    int id = request->id();
+    
+    if (0 <= id && id < gateServerGroup.size())
+    {
+        body->set_ret(true);
+        body->set_ip("124.223.73.248");
+        body->set_port(gateServerGroup[id]->port);
+    }
+
+    message->body->message = body;
+
+    message->head = new MessageHead(message->length(), (int)BODYTYPE::JoinRegionResponse, 0);
+    SendMsg(message, fd);
+    delete message;
+}
+
+void CenterServer::HandleServerConnChange(Message *msg, int fd)
+{
+    ServerProto::ServerConnChange *request = dynamic_cast<ServerProto::ServerConnChange *>(msg->body->message);
+
+    ServerProto::SERVER_TYPE type = request->type();
+    std::string ip = request->ip();
+    int port = request->port();
+    int count = request->change();
+    if (type == ServerProto::SERVER_TYPE::GATE)  for (auto & server : gateServerGroup)  if (ip == server->ip && port == server->port) server->people_count = count;
+    if (type == ServerProto::SERVER_TYPE::LOGIC) for (auto & server : logicServerGroup) if (ip == server->ip && port == server->port) server->people_count = count;
+    if (type == ServerProto::SERVER_TYPE::DATABASE) for (auto & server : dbServerGroup) if (ip == server->ip && port == server->port) server->people_count = count;
 }
 
 int main(int argc, char **argv)

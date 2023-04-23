@@ -1,5 +1,5 @@
-#include "../Header/Message.h"
-#include "../Header/MessageUtils.h"
+#include "../Header/Message/Message.h"
+#include "../Header/Message/MessageUtils.h"
 
 MessageHead::MessageHead(const uint8_t *buffer, int len)
 {

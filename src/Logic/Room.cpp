@@ -1,4 +1,4 @@
-#include "Room.h"
+#include "./Room.h"
 
 Room::Room(int id, std::string name, int size)
 {
@@ -84,10 +84,10 @@ void Room::JoinRoom(int userid)
         message.set_ret(true);
         message.set_roomid(m_id);
         message.set_result("加入成功");
+        if (host_userid == -1) ChangeRoomHost(userid);
         auto infos = GetRoomUserInfos();
         message.mutable_users()->Add(infos.begin(), infos.end());
 
-        if (host_userid == -1) ChangeRoomHost(userid);
 
         BroadCastToRoom(BODYTYPE::JoinRoom, &message);
     }
@@ -106,7 +106,6 @@ void Room::Reconnect(int userid)
     reconnect.set_roomid(m_id);
     reconnect.set_is_roomhost(host_userid == userid);
     reconnect.set_seed(m_seed);
-    
     LOGICSERVER.SendToClient(BODYTYPE::Reconnect, &reconnect, userid);
 
     NotifyGameStartToUser(userid);
@@ -146,8 +145,6 @@ void Room::LeaveFromRoom(int userid)
         message.set_userpid(userid2userpid[userid]);
         message.set_result("已退出房间");
 
-        BroadCastToRoom(BODYTYPE::LeaveRoom, &message); // 先广播再删除
-
         userpid_pool.insert(userid2userpid[userid]);
         userid2userpid.erase(userid); 
         id2name.erase(userid);
@@ -157,6 +154,9 @@ void Room::LeaveFromRoom(int userid)
             if (userid2userpid.size() == 0) ChangeRoomHost(-1);
             else ChangeRoomHost(userid2userpid.begin()->first);
         }
+        auto infos = GetRoomUserInfos();
+        message.mutable_users()->Add(infos.begin(), infos.end());
+        BroadCastToRoom(BODYTYPE::LeaveRoom, &message); // 删除再广播也无所谓
     }
 }
 
@@ -208,7 +208,7 @@ void Room::OnUserOperate(Message *message)
 
     auto op = dynamic_cast<FrameProto::UserOperate *>(message->body->message);
     if (op == nullptr) return;
-
+    
     int userid = message->head->m_userid;
     if (!userid2userpid.count(userid)) return;
     op->set_userpid(userid2userpid[userid]);
@@ -243,14 +243,15 @@ void Room::EndGame()
     KickAllUserFromGame();
 }
 
-void Room::Tick()
+bool Room::Tick()
 {
-    if (!m_gameStarted) return;
+    if (!m_gameStarted) return false;
     frame_id++;
     frame.set_frame_id(frame_id);
     BroadCastToGame(BODYTYPE::Frame, &frame);
-    all_frames.push_back(frame);
+    if (IS_CHASE_FRAME) all_frames.push_back(frame);
     frame.clear_operates();
+    return true;
 }
 
 void Room::BroadCastToRoom(BODYTYPE type, google::protobuf::MessageLite *message)
@@ -323,6 +324,7 @@ std::vector<RoomProto::UserInfo> Room::GetRoomUserInfos()
     {
         userInfo[x].set_userid(p.first);
         userInfo[x].set_username(p.second);
+        userInfo[x].set_is_roomhost(host_userid == p.first);
         x++;
     }
     return userInfo;
@@ -348,4 +350,15 @@ void Room::SetUserOnline(int userid)
 {
     if (!userid2userpid.count(userid) || !offline_userid.count(userid)) return;
     offline_userid.erase(userid);
+}
+
+void Room::UserInfoChange(Message *message)
+{
+    int userid = message->head->m_userid;
+    if (!userid2userpid.count(userid)) return;
+    RoomProto::RoomStatusChangeRequest *request = dynamic_cast<RoomProto::RoomStatusChangeRequest *>(message->body->message);
+    RoomProto::RoomStatusChangeResponse response;
+    response.set_userid(userid);
+    response.set_role_id(request->role_id());
+    BroadCastToRoom(BODYTYPE::RoomStatusChangeResponse, &response);
 }

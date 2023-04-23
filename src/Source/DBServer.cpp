@@ -1,5 +1,5 @@
-#include "../Header/DBServer.h"
-#include "../Header/Encryption.hpp"
+#include "../Header/Server/DBServer.h"
+#include "../Header/Tool/Encryption.hpp"
 
 DBServer::DBServer()
 {
