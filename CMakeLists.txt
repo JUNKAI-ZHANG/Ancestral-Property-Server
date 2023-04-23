@@ -26,6 +26,13 @@ add_library(CommonUtilLib STATIC
     src/Tool/Event.cpp
     src/Tool/RingBuffer.cpp
     src/Tool/Timer.cpp
+    src/Tool/WIP.cpp
+)
+
+add_library(Json STATIC
+    src/Tool/lib_json/json_reader.cpp
+    src/Tool/lib_json/json_value.cpp
+    src/Tool/lib_json/json_writer.cpp
 )
 
 add_library(BaseObj OBJECT
@@ -38,40 +45,35 @@ set(libraries_to_link
     pthread
     mysqlclient
     hiredis
+    Json
     CommonUtilLib
     ProtoUtilLib
 )
 
-# include_directories(./Header)
-
-add_executable(CenterServer
+add_executable(CenterServer_jk
     $<TARGET_OBJECTS:BaseObj>
     src/Source/CenterServer.cpp
 )
-add_compile_options(CenterServer -g)
-target_link_libraries(CenterServer  ${libraries_to_link})
+target_link_libraries(CenterServer_jk  ${libraries_to_link})
 
-add_executable(DBServer
+add_executable(DBServer_jk
     $<TARGET_OBJECTS:BaseObj>
     src/Source/DBServer.cpp
 )
-add_compile_options(DBServer -g)
-target_link_libraries(DBServer  ${libraries_to_link})
+target_link_libraries(DBServer_jk  ${libraries_to_link})
 
-add_executable(GateServer
+add_executable(GateServer_jk
     $<TARGET_OBJECTS:BaseObj>
     src/Source/GateServer.cpp
 )
-add_compile_options(GateServer -g)
-target_link_libraries(GateServer  ${libraries_to_link})
+target_link_libraries(GateServer_jk  ${libraries_to_link})
 
-add_executable(LogicServer
+add_executable(LogicServer_jk
     $<TARGET_OBJECTS:BaseObj>
     src/Source/LogicServer.cpp
     src/Logic/Room.cpp
     src/Logic/Room.h
 )
-add_compile_options(LogicServer -g)
-target_link_libraries(LogicServer  ${libraries_to_link})
+target_link_libraries(LogicServer_jk  ${libraries_to_link})
 
 
