@@ -43,6 +43,10 @@ bool ConstPool::ReadINI()
         SEND_CENTERSERVER_TIME = root["Try_Send_CenterServer_Time"].asInt();
 
         LOCAL_IP = root["LOCAL_IP"].asString();
+
+        SERVER_FREE_COUNT = root["Server_Free_Count"].asInt();
+        SERVER_COMMON_COUNT = root["Server_Common_Count"].asInt();
+        SERVER_BUSY_COUNT = root["Server_Busy_Count"].asInt();
     }
 
     in.close();
@@ -116,35 +120,55 @@ bool ConstPool::ReadServer()
         GATE_SERVER_NAME_4 =  root["GATE_SERVER"]["ID_4"]["NAME"].asString();
         GATE_SERVER_NAME_5 =  root["GATE_SERVER"]["ID_5"]["NAME"].asString();
         GATE_SERVER_NAME_6 =  root["GATE_SERVER"]["ID_6"]["NAME"].asString();
-        GATE_SERVER_IP_1 =  root["GATE_SERVER"]["ID_1"]["IP"].asString();
-        GATE_SERVER_IP_2 =  root["GATE_SERVER"]["ID_2"]["IP"].asString();
-        GATE_SERVER_IP_3 =  root["GATE_SERVER"]["ID_3"]["IP"].asString();
-        GATE_SERVER_IP_4 =  root["GATE_SERVER"]["ID_4"]["IP"].asString();
-        GATE_SERVER_IP_5 =  root["GATE_SERVER"]["ID_5"]["IP"].asString();
-        GATE_SERVER_IP_6 =  root["GATE_SERVER"]["ID_6"]["IP"].asString();
+        GATE_SERVER_NAME_7 =  root["GATE_SERVER"]["ID_7"]["NAME"].asString();
+        GATE_SERVER_NAME_8 =  root["GATE_SERVER"]["ID_8"]["NAME"].asString();
+        GATE_SERVER_IP_1 =    root["GATE_SERVER"]["ID_1"]["IP"].asString();
+        GATE_SERVER_IP_2 =    root["GATE_SERVER"]["ID_2"]["IP"].asString();
+        GATE_SERVER_IP_3 =    root["GATE_SERVER"]["ID_3"]["IP"].asString();
+        GATE_SERVER_IP_4 =    root["GATE_SERVER"]["ID_4"]["IP"].asString();
+        GATE_SERVER_IP_5 =    root["GATE_SERVER"]["ID_5"]["IP"].asString();
+        GATE_SERVER_IP_6 =    root["GATE_SERVER"]["ID_6"]["IP"].asString();
+        GATE_SERVER_IP_7 =    root["GATE_SERVER"]["ID_7"]["IP"].asString();
+        GATE_SERVER_IP_8 =    root["GATE_SERVER"]["ID_8"]["IP"].asString();
         GATE_SERVER_PORT_1 =  root["GATE_SERVER"]["ID_1"]["PORT"].asInt();
         GATE_SERVER_PORT_2 =  root["GATE_SERVER"]["ID_2"]["PORT"].asInt();
         GATE_SERVER_PORT_3 =  root["GATE_SERVER"]["ID_3"]["PORT"].asInt();
         GATE_SERVER_PORT_4 =  root["GATE_SERVER"]["ID_4"]["PORT"].asInt();
         GATE_SERVER_PORT_5 =  root["GATE_SERVER"]["ID_5"]["PORT"].asInt();
         GATE_SERVER_PORT_6 =  root["GATE_SERVER"]["ID_6"]["PORT"].asInt();
+        GATE_SERVER_PORT_7 =  root["GATE_SERVER"]["ID_7"]["PORT"].asInt();
+        GATE_SERVER_PORT_8 =  root["GATE_SERVER"]["ID_8"]["PORT"].asInt();
 
+        LOGIC_SERVER_NAME_1 =  root["LOGIC_SERVER"]["ID_1"]["NAME"].asString();
+        LOGIC_SERVER_NAME_2 =  root["LOGIC_SERVER"]["ID_2"]["NAME"].asString();
+        LOGIC_SERVER_NAME_3 =  root["LOGIC_SERVER"]["ID_3"]["NAME"].asString();
+        LOGIC_SERVER_NAME_4 =  root["LOGIC_SERVER"]["ID_4"]["NAME"].asString();
+        LOGIC_SERVER_NAME_5 =  root["LOGIC_SERVER"]["ID_5"]["NAME"].asString();
+        LOGIC_SERVER_NAME_6 =  root["LOGIC_SERVER"]["ID_6"]["NAME"].asString();
+        LOGIC_SERVER_NAME_7 =  root["LOGIC_SERVER"]["ID_7"]["NAME"].asString();
+        LOGIC_SERVER_NAME_8 =  root["LOGIC_SERVER"]["ID_8"]["NAME"].asString();
         LOGIC_SERVER_IP_1 =  root["LOGIC_SERVER"]["ID_1"]["IP"].asString();
         LOGIC_SERVER_IP_2 =  root["LOGIC_SERVER"]["ID_2"]["IP"].asString();
         LOGIC_SERVER_IP_3 =  root["LOGIC_SERVER"]["ID_3"]["IP"].asString();
         LOGIC_SERVER_IP_4 =  root["LOGIC_SERVER"]["ID_4"]["IP"].asString();
         LOGIC_SERVER_IP_5 =  root["LOGIC_SERVER"]["ID_5"]["IP"].asString();
         LOGIC_SERVER_IP_6 =  root["LOGIC_SERVER"]["ID_6"]["IP"].asString();
+        LOGIC_SERVER_IP_7 =  root["LOGIC_SERVER"]["ID_7"]["IP"].asString();
+        LOGIC_SERVER_IP_8 =  root["LOGIC_SERVER"]["ID_8"]["IP"].asString();
         LOGIC_SERVER_PORT_1 =  root["LOGIC_SERVER"]["ID_1"]["PORT"].asInt();
         LOGIC_SERVER_PORT_2 =  root["LOGIC_SERVER"]["ID_2"]["PORT"].asInt();
         LOGIC_SERVER_PORT_3 =  root["LOGIC_SERVER"]["ID_3"]["PORT"].asInt();
         LOGIC_SERVER_PORT_4 =  root["LOGIC_SERVER"]["ID_4"]["PORT"].asInt();
         LOGIC_SERVER_PORT_5 =  root["LOGIC_SERVER"]["ID_5"]["PORT"].asInt();
         LOGIC_SERVER_PORT_6 =  root["LOGIC_SERVER"]["ID_6"]["PORT"].asInt();
+        LOGIC_SERVER_PORT_7 =  root["LOGIC_SERVER"]["ID_7"]["PORT"].asInt();
+        LOGIC_SERVER_PORT_8 =  root["LOGIC_SERVER"]["ID_8"]["PORT"].asInt();
 
+        DATABASE_SERVER_NAME = root["DB_SERVER"]["NAME"].asString();
         DATABASE_SERVER_IP = root["DB_SERVER"]["IP"].asString();
         DATABASE_SERVER_PORT = root["DB_SERVER"]["PORT"].asInt();
 
+        CENTER_SERVER_NAME = root["CENTER_SERVER"]["NAME"].asString();
         CENTER_SERVER_IP = root["CENTER_SERVER"]["IP"].asString();
         CENTER_SERVER_PORT = root["CENTER_SERVER"]["PORT"].asInt();
     }
