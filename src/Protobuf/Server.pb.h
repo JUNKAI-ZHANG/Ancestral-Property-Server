@@ -357,6 +357,7 @@ class ServerInfo final :
 
   enum : int {
     kIpFieldNumber = 1,
+    kServerNameFieldNumber = 6,
     kPortFieldNumber = 2,
     kServerFreeLevelFieldNumber = 3,
     kServerTypeFieldNumber = 4,
@@ -374,6 +375,20 @@ class ServerInfo final :
   const std::string& _internal_ip() const;
   inline PROTOBUF_ALWAYS_INLINE void _internal_set_ip(const std::string& value);
   std::string* _internal_mutable_ip();
+  public:
+
+  // string server_name = 6;
+  void clear_server_name();
+  const std::string& server_name() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_server_name(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_server_name();
+  PROTOBUF_NODISCARD std::string* release_server_name();
+  void set_allocated_server_name(std::string* server_name);
+  private:
+  const std::string& _internal_server_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_server_name(const std::string& value);
+  std::string* _internal_mutable_server_name();
   public:
 
   // int32 port = 2;
@@ -420,6 +435,7 @@ class ServerInfo final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr ip_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr server_name_;
   int32_t port_;
   int32_t server_free_level_;
   int32_t server_type_;
@@ -933,10 +949,25 @@ class RegionInfo final :
   // accessors -------------------------------------------------------
 
   enum : int {
+    kServerNameFieldNumber = 3,
     kIdFieldNumber = 1,
     kPeopleCountFieldNumber = 2,
-    kLevelFieldNumber = 3,
+    kLevelFieldNumber = 4,
   };
+  // string server_name = 3;
+  void clear_server_name();
+  const std::string& server_name() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_server_name(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_server_name();
+  PROTOBUF_NODISCARD std::string* release_server_name();
+  void set_allocated_server_name(std::string* server_name);
+  private:
+  const std::string& _internal_server_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_server_name(const std::string& value);
+  std::string* _internal_mutable_server_name();
+  public:
+
   // int32 id = 1;
   void clear_id();
   int32_t id() const;
@@ -955,7 +986,7 @@ class RegionInfo final :
   void _internal_set_people_count(int32_t value);
   public:
 
-  // .ServerProto.SERVER_FREE_LEVEL level = 3;
+  // .ServerProto.SERVER_FREE_LEVEL level = 4;
   void clear_level();
   ::ServerProto::SERVER_FREE_LEVEL level() const;
   void set_level(::ServerProto::SERVER_FREE_LEVEL value);
@@ -971,6 +1002,7 @@ class RegionInfo final :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr server_name_;
   int32_t id_;
   int32_t people_count_;
   int level_;
@@ -1711,6 +1743,57 @@ inline void ServerInfo::set_opt(::ServerProto::ServerInfo_Operation value) {
   // @@protoc_insertion_point(field_set:ServerProto.ServerInfo.opt)
 }
 
+// string server_name = 6;
+inline void ServerInfo::clear_server_name() {
+  server_name_.ClearToEmpty();
+}
+inline const std::string& ServerInfo::server_name() const {
+  // @@protoc_insertion_point(field_get:ServerProto.ServerInfo.server_name)
+  return _internal_server_name();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void ServerInfo::set_server_name(ArgT0&& arg0, ArgT... args) {
+ 
+ server_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:ServerProto.ServerInfo.server_name)
+}
+inline std::string* ServerInfo::mutable_server_name() {
+  std::string* _s = _internal_mutable_server_name();
+  // @@protoc_insertion_point(field_mutable:ServerProto.ServerInfo.server_name)
+  return _s;
+}
+inline const std::string& ServerInfo::_internal_server_name() const {
+  return server_name_.Get();
+}
+inline void ServerInfo::_internal_set_server_name(const std::string& value) {
+  
+  server_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* ServerInfo::_internal_mutable_server_name() {
+  
+  return server_name_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* ServerInfo::release_server_name() {
+  // @@protoc_insertion_point(field_release:ServerProto.ServerInfo.server_name)
+  return server_name_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void ServerInfo::set_allocated_server_name(std::string* server_name) {
+  if (server_name != nullptr) {
+    
+  } else {
+    
+  }
+  server_name_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), server_name,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (server_name_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    server_name_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:ServerProto.ServerInfo.server_name)
+}
+
 // -------------------------------------------------------------------
 
 // ServerConnChange
@@ -1934,7 +2017,58 @@ inline void RegionInfo::set_people_count(int32_t value) {
   // @@protoc_insertion_point(field_set:ServerProto.RegionInfo.people_count)
 }
 
-// .ServerProto.SERVER_FREE_LEVEL level = 3;
+// string server_name = 3;
+inline void RegionInfo::clear_server_name() {
+  server_name_.ClearToEmpty();
+}
+inline const std::string& RegionInfo::server_name() const {
+  // @@protoc_insertion_point(field_get:ServerProto.RegionInfo.server_name)
+  return _internal_server_name();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void RegionInfo::set_server_name(ArgT0&& arg0, ArgT... args) {
+ 
+ server_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:ServerProto.RegionInfo.server_name)
+}
+inline std::string* RegionInfo::mutable_server_name() {
+  std::string* _s = _internal_mutable_server_name();
+  // @@protoc_insertion_point(field_mutable:ServerProto.RegionInfo.server_name)
+  return _s;
+}
+inline const std::string& RegionInfo::_internal_server_name() const {
+  return server_name_.Get();
+}
+inline void RegionInfo::_internal_set_server_name(const std::string& value) {
+  
+  server_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* RegionInfo::_internal_mutable_server_name() {
+  
+  return server_name_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* RegionInfo::release_server_name() {
+  // @@protoc_insertion_point(field_release:ServerProto.RegionInfo.server_name)
+  return server_name_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void RegionInfo::set_allocated_server_name(std::string* server_name) {
+  if (server_name != nullptr) {
+    
+  } else {
+    
+  }
+  server_name_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), server_name,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (server_name_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    server_name_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:ServerProto.RegionInfo.server_name)
+}
+
+// .ServerProto.SERVER_FREE_LEVEL level = 4;
 inline void RegionInfo::clear_level() {
   level_ = 0;
 }
