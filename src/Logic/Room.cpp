@@ -249,7 +249,7 @@ bool Room::Tick()
     frame_id++;
     frame.set_frame_id(frame_id);
     BroadCastToGame(BODYTYPE::Frame, &frame);
-    if (IS_CHASE_FRAME) all_frames.push_back(frame);
+    if (JSON.IS_CHASE_FRAME) all_frames.push_back(frame);
     frame.clear_operates();
     return true;
 }
