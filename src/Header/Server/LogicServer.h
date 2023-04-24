@@ -28,7 +28,7 @@ public:
 
     virtual void CloseClientSocket(int fd);
 
-    void BootServer(int port);
+    void BootServer(std::string ip, int port, std::string name);
 
     bool SendMsg(Message *msg, int fd);
 
@@ -53,7 +53,7 @@ public:// 业务逻辑
 
     void HandleQuitGame(Message *msg);
 
-    void HandleRoomStatusChange(Message *msg);
+    void HandleRoomChangeRole(Message *msg);
 
     void HandleReconnect(int userid);
 
