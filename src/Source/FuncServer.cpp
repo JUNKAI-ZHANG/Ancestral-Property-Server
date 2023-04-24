@@ -40,7 +40,7 @@ void FuncServer::CloseServer()
 
 void FuncServer::ApplyServerByType(SERVER_TYPE InType)
 {
-    Message *msg = NewServerInfoMessage("", 0, InType, ServerProto::ServerInfo_Operation_RequstAssgin, SERVER_FREE_LEVEL::FREE);
+    Message *msg = NewServerInfoMessage(listen_ip, listen_port, listen_name, InType, ServerProto::ServerInfo_Operation_RequstAssgin, SERVER_FREE_LEVEL::FREE);
 
     SendMsg(msg, center_server_client);
 
@@ -63,7 +63,7 @@ SERVER_FREE_LEVEL FuncServer::DynamicCalcServerFreeLevel(int conns)
 
 void FuncServer::SendSelfInfoToCenter()
 {
-    Message *msg = NewServerInfoMessage(JSON.LOCAL_IP, this->listen_port, server_type, ServerProto::ServerInfo_Operation_Register, FuncServer::DynamicCalcServerFreeLevel(conns_count));
+    Message *msg = NewServerInfoMessage(listen_ip, listen_port, listen_name, server_type, ServerProto::ServerInfo_Operation_Register, FuncServer::DynamicCalcServerFreeLevel(conns_count));
 
     if (msg == nullptr)
     {
@@ -74,7 +74,7 @@ void FuncServer::SendSelfInfoToCenter()
     if (!SendMsg(msg, center_server_client))
     {
         // 连接中心服务器
-        if (!ConnectToOtherServer(JSON.LOCAL_IP, JSON.CENTER_SERVER_PORT, center_server_client))
+        if (!ConnectToOtherServer(JSON.CENTER_SERVER_IP, JSON.CENTER_SERVER_PORT, center_server_client))
         {
             std::cerr << "Failed to connect center server, boot it first" << std::endl;
             return;
@@ -87,7 +87,7 @@ void FuncServer::SendSelfInfoToCenter()
         }
 
         this->connections[center_server_client] = new RingBuffer();
-        std::cout << "Connect to center server success! " + (std::string)JSON.LOCAL_IP + ":" + to_string(JSON.CENTER_SERVER_PORT) << std::endl;
+        std::cout << "Connect to center server success! " + (std::string)JSON.CENTER_SERVER_IP + ":" + to_string(JSON.CENTER_SERVER_PORT) << std::endl;
 
         // 连接成功后立即发送一次自身状态
         this->SendSelfInfoToCenter();
@@ -155,7 +155,7 @@ void FuncServer::HandleServerInfo(Message *msg, int fd)
 
             this->connections[logic_server_client] = new RingBuffer();
             if (server_type != SERVER_TYPE::GATE) SendConnsChange(TransformType(server_type), listen_ip, listen_port, 1);
-            std::cout << "Connect to logic server success! " + body->ip() + ":" + to_string(body->port()) << std::endl;;
+            std::cout << "Connect to " + body->server_name() + " success! " + body->ip() + ":" + to_string(body->port()) << std::endl;;
         }
 
         else if (static_cast<SERVER_TYPE>(body->server_type()) == SERVER_TYPE::DATABASE)
@@ -180,7 +180,7 @@ void FuncServer::HandleServerInfo(Message *msg, int fd)
 
             this->connections[db_server_client] = new RingBuffer();
             if (server_type != SERVER_TYPE::GATE) SendConnsChange(TransformType(server_type), listen_ip, listen_port, 1);
-            std::cout << "Connect to database server success! " + body->ip() + ":" + to_string(body->port()) << std::endl;
+            std::cout << "Connect to " + body->server_name() + " success! " + body->ip() + ":" + to_string(body->port()) << std::endl;
         }
 
         // 1s 后再次尝试重连一次
@@ -199,8 +199,7 @@ bool FuncServer::OnListenerStart()
     // 定时发送自身信息给CenterServer
     this->SendSelfInfoToCenter();
 
-    Timer *timer = new Timer(JSON.SEND_CENTERSERVER_TIME, CallbackType::FuncServer_SendSelfInfoToCenter, std::bind(&FuncServer::SendSelfInfoToCenter, this));
-    timer->Start();
+    Timer *timer = new Timer(JSON.SEND_CENTERSERVER_TIME, CallbackType::FuncServer_SendSelfInfoToCenter, std::bind(&FuncServer::SendSelfInfoToCenter, this)); timer->Start();
 
     m_callfuncList.push_back(timer);
 

@@ -64,7 +64,6 @@ int ServerBase::StartListener(int port)
         return -1;
     }
 
-    listen_port = port;
     return 1;
 }
 
@@ -353,11 +352,18 @@ void ServerBase::Update()
     // 子类重写
 }
 
-void ServerBase::BootServer(int port)
+void ServerBase::BootServer(std::string ip, int port, std::string name)
 {
+    if (ipHelper.GetNIP() != ip && ipHelper.GetWIP() != ip)
+    {
+        return;
+    }
     if (StartListener(port) == 1)
     {
         std::cout << "Server start at port : " << port << std::endl;
+        listen_ip = ip;
+        listen_port = port;
+        listen_name = name;
 
         if (listen_epoll->CreateEpoll() == -1)
         {

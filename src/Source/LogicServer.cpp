@@ -61,9 +61,9 @@ void LogicServer::OnConnectToCenterServer()
     TryToConnectAvailabeServer();
 }
 
-void LogicServer::BootServer(int port)
+void LogicServer::BootServer(std::string ip, int port, std::string name)
 {
-    ServerBase::BootServer(port);
+    ServerBase::BootServer(ip, port, name);
 }
 
 void LogicServer::Update()
@@ -132,9 +132,9 @@ void LogicServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_
         HandleQuitGame(msg);
         break;
     }
-    case BODYTYPE::RoomStatusChangeRequest:
+    case BODYTYPE::ChangeRole:
     {
-        HandleRoomStatusChange(msg);
+        HandleRoomChangeRole(msg);
         break;
     }
     case BODYTYPE::StartGame:
@@ -228,8 +228,6 @@ void LogicServer::HandleLeaveRoom(Message *msg)
         leaveRoom.set_ret(false);
         leaveRoom.set_result("你不在该房间");
         leaveRoom.set_type(RoomProto::LeaveRoom_Type_RESPONSE);
-        leaveRoom.set_userid(-1);
-        leaveRoom.set_userpid(-1);
 
         SendToClient(BODYTYPE::LeaveRoom, &leaveRoom, msg->head->m_userid);
 
@@ -302,10 +300,10 @@ void LogicServer::HandleQuitGame(Message *msg)
     if (!userid2roomid.count(userid)) return;
     int roomid = userid2roomid[userid];
     if (!rooms.count(roomid)) return;
-    rooms[roomid]->NotifyUserQuitGame(userid);
+    rooms[roomid]->LeaveFromGame(userid);
 }
 
-void LogicServer::HandleRoomStatusChange(Message *msg)
+void LogicServer::HandleRoomChangeRole(Message *msg)
 {
     int userid = msg->head->m_userid;
     if (!userid2roomid.count(userid)) return;
@@ -333,8 +331,10 @@ void LogicServer::RemovePlayerFromRoom(int userid)
 
 void LogicServer::AddPlayerToRoom(int userid, int roomid)
 {
-    userid2roomid[userid] = roomid;
-    rooms[roomid]->JoinRoom(userid);
+    if (rooms[roomid]->JoinRoom(userid))
+    {
+        userid2roomid[userid] = roomid;
+    }
 }
 
 int LogicServer::AddRoom(std::string roomname)
@@ -421,27 +421,45 @@ bool LogicServer::CheckUserInRoom(int userid)
 
 int main(int argc, char **argv)
 {
-    if (argc != 2)
+    const std::string ips[] = 
     {
-        // printf("Usage: %s port\n", argv[0]);
-        //  return 1;
-    }
+        JSON.LOGIC_SERVER_IP_1, 
+        JSON.LOGIC_SERVER_IP_2, 
+        JSON.LOGIC_SERVER_IP_3, 
+        JSON.LOGIC_SERVER_IP_4, 
+        JSON.LOGIC_SERVER_IP_5, 
+        JSON.LOGIC_SERVER_IP_6,
+        JSON.LOGIC_SERVER_IP_7,
+        JSON.LOGIC_SERVER_IP_8,
+    };
 
-    // int port = std::atoi(argv[1]);
-
-    const int ports[] = {
+    const int ports[] = 
+    {
         JSON.LOGIC_SERVER_PORT_1, 
         JSON.LOGIC_SERVER_PORT_2, 
         JSON.LOGIC_SERVER_PORT_3, 
         JSON.LOGIC_SERVER_PORT_4, 
         JSON.LOGIC_SERVER_PORT_5, 
-        JSON.LOGIC_SERVER_PORT_6
+        JSON.LOGIC_SERVER_PORT_6,
+        JSON.LOGIC_SERVER_PORT_7,
+        JSON.LOGIC_SERVER_PORT_8,
     };
 
-    for (int i = 0; i < 6; i++) 
+    const std::string names[] = 
     {
-        // std::cout << "Start Logic Center Server ing..." << std::endl;
-        LOGICSERVER.BootServer(ports[i]);
+        JSON.LOGIC_SERVER_NAME_1,
+        JSON.LOGIC_SERVER_NAME_2,
+        JSON.LOGIC_SERVER_NAME_3,
+        JSON.LOGIC_SERVER_NAME_4,
+        JSON.LOGIC_SERVER_NAME_5,
+        JSON.LOGIC_SERVER_NAME_6,
+        JSON.LOGIC_SERVER_NAME_7,
+        JSON.LOGIC_SERVER_NAME_8,
+    };
+
+    for (int i = 0; i < 8; i++) 
+    {
+        LOGICSERVER.BootServer(ips[i], ports[i], names[i]);
     }
 
     return 0;

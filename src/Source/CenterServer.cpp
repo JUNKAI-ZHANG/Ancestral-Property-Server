@@ -184,6 +184,7 @@ void CenterServer::HandleServerInfo(Message *msg, int fd)
             MachineRecord[fd] = new Server_Info();
             MachineRecord[fd]->ip = body->ip();
             MachineRecord[fd]->port = body->port();
+            MachineRecord[fd]->name = body->server_name();
             MachineRecord[fd]->type = static_cast<SERVER_TYPE>(body->server_type());
 
             RegisterServer(MachineRecord[fd]);
@@ -207,7 +208,7 @@ void CenterServer::HandleServerInfo(Message *msg, int fd)
         {
             std::cout << "Assgin server success! " + machine.ip + ":" + to_string(machine.port) << std::endl;
         }
-        Message *message = NewServerInfoMessage(machine.ip, machine.port, machine.type, ServerProto::ServerInfo_Operation_Connect, machine.level);
+        Message *message = NewServerInfoMessage(machine.ip, machine.port, machine.name, machine.type, ServerProto::ServerInfo_Operation_Connect, machine.level);
         if (message != nullptr)
         {
             SendMsg(message, fd);
@@ -233,13 +234,14 @@ void CenterServer::HandleGetRegionInfoRequest(Message *msg, int fd)
     Message *message = new Message();
     message->body = new MessageBody();
     ServerProto::GetRegionInfoResponse *body = new ServerProto::GetRegionInfoResponse();
-    ServerProto::RegionInfo *info_back = new ServerProto::RegionInfo();
+    ServerProto::RegionInfo *info_back;
     for (Server_Info * const info : gateServerGroup)
     {
         info_back = body->add_infos();
         info_back->set_id(info->id);
         info_back->set_level(CheckFreeLevel(info));
-        info_back->set_people_count(info->people_count);
+        info_back->set_people_count(std::max(0, info->people_count));
+        info_back->set_server_name(info->name);
     }
     message->body->message = body;
 
@@ -265,7 +267,7 @@ void CenterServer::HandleJoinRegionRequest(Message *msg, int fd)
     if (0 <= id && id < gateServerGroup.size())
     {
         body->set_ret(true);
-        body->set_ip("124.223.73.248");
+        body->set_ip(gateServerGroup[id]->ip);
         body->set_port(gateServerGroup[id]->port);
     }
 
@@ -291,20 +293,22 @@ void CenterServer::HandleServerConnChange(Message *msg, int fd)
 
 int main(int argc, char **argv)
 {
-    if (argc != 2)
+    const std::string ips[] = 
     {
-        // printf("Usage: %s port\n", argv[0]);
-        // return 1;
-    }
+        JSON.CENTER_SERVER_IP,
+    };
 
-    // int port = std::atoi(argv[1]);
-    int port = JSON.CENTER_SERVER_PORT;
+    const int ports[] = 
+    {
+        JSON.CENTER_SERVER_PORT,
+    };
 
     CenterServer centerServer;
 
-    std::cout << "Start Center Server ing..." << std::endl;
-
-    centerServer.BootServer(port);
+    for (int i = 0; i < 1; i++)
+    {
+        centerServer.BootServer(ips[i], ports[i], "");
+    }
 
     return 0;
 }
