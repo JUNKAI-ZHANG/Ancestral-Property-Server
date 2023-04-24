@@ -1,0 +1,5 @@
+{
+    "Room_Size" : 10,
+    "Default_Room_Count" : 5000,
+    "Room_Pool_Size" : 5000
+}

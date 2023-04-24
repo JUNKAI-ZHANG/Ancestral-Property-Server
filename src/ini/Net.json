@@ -1,0 +1,6 @@
+{
+    "Head_Size" : 12,
+    "Head_Size_S" : 4,
+    "Tmp_Buffer_Size" : 1024,
+    "Max_Buffer_Size" : 1048576
+}
