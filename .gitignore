@@ -1,5 +1,6 @@
 .vscode
 .idea
+build
 cmake-build-debug
 cmake-build-debug-jkRemote
 src/CMakeFiles
@@ -10,5 +11,5 @@ src/CenterServer_jk
 src/DBServer_jk
 src/GateServer_jk
 src/LogicServer_jk
+src/JsonTest
 src/Makefile
-Makefile
