@@ -48,7 +48,7 @@ void Room::JoinGame(int userid)
     in_game_id2pid[userid] = userid2userpid[userid];
 }
 
-void Room::JoinRoom(int userid)
+bool Room::JoinRoom(int userid)
 {
     RoomProto::JoinRoom message;
     message.set_type(RoomProto::JoinRoom_Type_RESPONSE);
@@ -79,18 +79,19 @@ void Room::JoinRoom(int userid)
         userpid_pool.erase(pid);
 
         userid2userpid[userid] = pid;
+        userid2roleid[userid] = 1;
         id2name[userid] = LOGICSERVER.GetUserName(userid);
 
         message.set_ret(true);
         message.set_roomid(m_id);
         message.set_result("加入成功");
         if (host_userid == -1) ChangeRoomHost(userid);
-        auto infos = GetRoomUserInfos();
-        message.mutable_users()->Add(infos.begin(), infos.end());
 
-
-        BroadCastToRoom(BODYTYPE::JoinRoom, &message);
+        LOGICSERVER.SendToClient(BODYTYPE::JoinRoom, &message, userid);
+        SendRoomAllInfoToAll();
+        return true;
     }
+    return false;
 }
 
 void Room::Reconnect(int userid)
@@ -129,9 +130,6 @@ void Room::LeaveFromRoom(int userid)
     RoomProto::LeaveRoom message;
     message.set_type(RoomProto::LeaveRoom_Type_RESPONSE);
     message.set_ret(false);
-    message.set_roomid(0);
-    message.set_userid(0);
-    message.set_userpid(0);
     if (!userid2userpid.count(userid))
     {
         message.set_result("你不在该房间");
@@ -141,12 +139,11 @@ void Room::LeaveFromRoom(int userid)
     {
         message.set_roomid(m_id);
         message.set_ret(true);
-        message.set_userid(userid);
-        message.set_userpid(userid2userpid[userid]);
         message.set_result("已退出房间");
 
         userpid_pool.insert(userid2userpid[userid]);
         userid2userpid.erase(userid); 
+        userid2roleid.erase(userid);
         id2name.erase(userid);
 
         if (host_userid == userid)
@@ -154,9 +151,7 @@ void Room::LeaveFromRoom(int userid)
             if (userid2userpid.size() == 0) ChangeRoomHost(-1);
             else ChangeRoomHost(userid2userpid.begin()->first);
         }
-        auto infos = GetRoomUserInfos();
-        message.mutable_users()->Add(infos.begin(), infos.end());
-        BroadCastToRoom(BODYTYPE::LeaveRoom, &message); // 删除再广播也无所谓
+        SendRoomAllInfoToAll();
     }
 }
 
@@ -164,10 +159,29 @@ void Room::LeaveFromGame(int userid)
 {
     if (!in_game_id2pid.count(userid)) return;
 
-    NotifyUserQuitGame(userid);
     in_game_id2pid.erase(userid);
+    NotifyUserQuitGame(userid);
 
     if (in_game_id2pid.empty()) EndGame();
+    SendRoomAllInfoToAll();
+}
+
+void Room::SendRoomAllInfo(int userid)
+{
+    RoomProto::NotifyRoomInfo notifyRoomInfo;
+    auto it = GetRoomUserInfos();
+    notifyRoomInfo.set_roomid(m_id);
+    notifyRoomInfo.set_m_gamestart(m_gameStarted);
+    notifyRoomInfo.mutable_users()->Add(it.begin(), it.end());
+    LOGICSERVER.SendToClient(BODYTYPE::NotifyRoomInfo, &notifyRoomInfo, userid);
+}
+
+void Room::SendRoomAllInfoToAll()
+{
+    for (auto it : userid2roleid)
+    {
+        SendRoomAllInfo(it.first);
+    }
 }
 
 void Room::KickAllUserFromGame()
@@ -230,6 +244,7 @@ void Room::StartGame(int userid)
     {
         JoinGame(p.first);
     }
+    SendRoomAllInfoToAll();
 }
 
 void Room::EndGame()
@@ -241,6 +256,8 @@ void Room::EndGame()
     NotifyGameEnd();
 
     KickAllUserFromGame();
+    
+    SendRoomAllInfoToAll();
 }
 
 bool Room::Tick()
@@ -301,6 +318,7 @@ void Room::NotifyUserJoinGame(int userid)
     FrameProto::UserOperate joinGame;
     joinGame.set_userpid(userid2userpid[userid]);
     joinGame.set_opt(FrameProto::OperateType::JoinGame);
+    joinGame.add_data(userid2roleid[userid]);
 
     frame.add_operates()->CopyFrom(joinGame);
 }
@@ -325,6 +343,9 @@ std::vector<RoomProto::UserInfo> Room::GetRoomUserInfos()
         userInfo[x].set_userid(p.first);
         userInfo[x].set_username(p.second);
         userInfo[x].set_is_roomhost(host_userid == p.first);
+        userInfo[x].set_role_id(userid2roleid[p.first]);
+        userInfo[x].set_userpid(userid2userpid[p.first]);
+        userInfo[x].set_in_game(in_game_id2pid.count(p.first) > 0);
         x++;
     }
     return userInfo;
@@ -356,9 +377,7 @@ void Room::UserInfoChange(Message *message)
 {
     int userid = message->head->m_userid;
     if (!userid2userpid.count(userid)) return;
-    RoomProto::RoomStatusChangeRequest *request = dynamic_cast<RoomProto::RoomStatusChangeRequest *>(message->body->message);
-    RoomProto::RoomStatusChangeResponse response;
-    response.set_userid(userid);
-    response.set_role_id(request->role_id());
-    BroadCastToRoom(BODYTYPE::RoomStatusChangeResponse, &response);
+    RoomProto::ChangeRole *request = dynamic_cast<RoomProto::ChangeRole *>(message->body->message);
+    userid2roleid[userid] = request->role_id();
+    SendRoomAllInfoToAll();
 }

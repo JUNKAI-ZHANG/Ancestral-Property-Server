@@ -52,6 +52,8 @@ public:
     int GATE_SERVER_PORT_4;
     int GATE_SERVER_PORT_5;
     int GATE_SERVER_PORT_6;
+    int GATE_SERVER_PORT_7;
+    int GATE_SERVER_PORT_8;
 
     std::string GATE_SERVER_IP_1;
     std::string GATE_SERVER_IP_2;
@@ -59,6 +61,8 @@ public:
     std::string GATE_SERVER_IP_4;
     std::string GATE_SERVER_IP_5;
     std::string GATE_SERVER_IP_6;
+    std::string GATE_SERVER_IP_7;
+    std::string GATE_SERVER_IP_8;
 
     std::string GATE_SERVER_NAME_1;
     std::string GATE_SERVER_NAME_2;
@@ -66,6 +70,8 @@ public:
     std::string GATE_SERVER_NAME_4;
     std::string GATE_SERVER_NAME_5;
     std::string GATE_SERVER_NAME_6;
+    std::string GATE_SERVER_NAME_7;
+    std::string GATE_SERVER_NAME_8;
 
     int LOGIC_SERVER_PORT_1;
     int LOGIC_SERVER_PORT_2;
@@ -73,6 +79,8 @@ public:
     int LOGIC_SERVER_PORT_4;
     int LOGIC_SERVER_PORT_5;
     int LOGIC_SERVER_PORT_6;
+    int LOGIC_SERVER_PORT_7;
+    int LOGIC_SERVER_PORT_8;
 
     std::string LOGIC_SERVER_IP_1;
     std::string LOGIC_SERVER_IP_2;
@@ -80,12 +88,25 @@ public:
     std::string LOGIC_SERVER_IP_4;
     std::string LOGIC_SERVER_IP_5;
     std::string LOGIC_SERVER_IP_6;
+    std::string LOGIC_SERVER_IP_7;
+    std::string LOGIC_SERVER_IP_8;
+
+    std::string LOGIC_SERVER_NAME_1;
+    std::string LOGIC_SERVER_NAME_2;
+    std::string LOGIC_SERVER_NAME_3;
+    std::string LOGIC_SERVER_NAME_4;
+    std::string LOGIC_SERVER_NAME_5;
+    std::string LOGIC_SERVER_NAME_6;
+    std::string LOGIC_SERVER_NAME_7;
+    std::string LOGIC_SERVER_NAME_8;
 
     int CENTER_SERVER_PORT;
     std::string CENTER_SERVER_IP;
+    std::string CENTER_SERVER_NAME;
 
     int DATABASE_SERVER_PORT;
     std::string DATABASE_SERVER_IP;
+    std::string DATABASE_SERVER_NAME;
 
     std::string LOCAL_IP;
 

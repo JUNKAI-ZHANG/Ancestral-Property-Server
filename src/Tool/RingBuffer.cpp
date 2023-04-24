@@ -16,7 +16,6 @@ RingBuffer::RingBuffer()
 
 RingBuffer::~RingBuffer()
 {
-    std::cout << "Ring Deconstruct" << std::endl;
     _begin = _end = _capacity = 0;
     _remain = JSON.MAX_BUFFER_SIZE;
     delete _buffer;

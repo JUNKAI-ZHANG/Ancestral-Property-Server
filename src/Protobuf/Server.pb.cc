@@ -20,6 +20,7 @@ namespace ServerProto {
 constexpr ServerInfo::ServerInfo(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : ip_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , server_name_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
   , port_(0)
   , server_free_level_(0)
   , server_type_(0)
@@ -67,7 +68,8 @@ struct UserInfoDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT UserInfoDefaultTypeInternal _UserInfo_default_instance_;
 constexpr RegionInfo::RegionInfo(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : id_(0)
+  : server_name_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , id_(0)
   , people_count_(0)
   , level_(0)
 {}
@@ -146,6 +148,7 @@ const uint32_t TableStruct_Server_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(p
   PROTOBUF_FIELD_OFFSET(::ServerProto::ServerInfo, server_free_level_),
   PROTOBUF_FIELD_OFFSET(::ServerProto::ServerInfo, server_type_),
   PROTOBUF_FIELD_OFFSET(::ServerProto::ServerInfo, opt_),
+  PROTOBUF_FIELD_OFFSET(::ServerProto::ServerInfo, server_name_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::ServerProto::ServerConnChange, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -173,6 +176,7 @@ const uint32_t TableStruct_Server_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(p
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::ServerProto::RegionInfo, id_),
   PROTOBUF_FIELD_OFFSET(::ServerProto::RegionInfo, people_count_),
+  PROTOBUF_FIELD_OFFSET(::ServerProto::RegionInfo, server_name_),
   PROTOBUF_FIELD_OFFSET(::ServerProto::RegionInfo, level_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::ServerProto::GetRegionInfoRequest, _internal_metadata_),
@@ -206,13 +210,13 @@ const uint32_t TableStruct_Server_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(p
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::ServerProto::ServerInfo)},
-  { 11, -1, -1, sizeof(::ServerProto::ServerConnChange)},
-  { 21, -1, -1, sizeof(::ServerProto::UserInfo)},
-  { 30, -1, -1, sizeof(::ServerProto::RegionInfo)},
-  { 39, -1, -1, sizeof(::ServerProto::GetRegionInfoRequest)},
-  { 45, -1, -1, sizeof(::ServerProto::GetRegionInfoResponse)},
-  { 52, -1, -1, sizeof(::ServerProto::JoinRegionRequest)},
-  { 59, -1, -1, sizeof(::ServerProto::JoinRegionResponse)},
+  { 12, -1, -1, sizeof(::ServerProto::ServerConnChange)},
+  { 22, -1, -1, sizeof(::ServerProto::UserInfo)},
+  { 31, -1, -1, sizeof(::ServerProto::RegionInfo)},
+  { 41, -1, -1, sizeof(::ServerProto::GetRegionInfoRequest)},
+  { 47, -1, -1, sizeof(::ServerProto::GetRegionInfoResponse)},
+  { 54, -1, -1, sizeof(::ServerProto::JoinRegionRequest)},
+  { 61, -1, -1, sizeof(::ServerProto::JoinRegionResponse)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -227,33 +231,34 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
 };
 
 const char descriptor_table_protodef_Server_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\014Server.proto\022\013ServerProto\"\300\001\n\nServerIn"
+  "\n\014Server.proto\022\013ServerProto\"\325\001\n\nServerIn"
   "fo\022\n\n\002ip\030\001 \001(\t\022\014\n\004port\030\002 \001(\005\022\031\n\021server_f"
   "ree_level\030\003 \001(\005\022\023\n\013server_type\030\004 \001(\005\022.\n\003"
   "opt\030\005 \001(\0162!.ServerProto.ServerInfo.Opera"
-  "tion\"8\n\tOperation\022\014\n\010Register\020\000\022\020\n\014Requs"
-  "tAssgin\020\001\022\013\n\007Connect\020\002\"d\n\020ServerConnChan"
-  "ge\022\n\n\002ip\030\001 \001(\t\022\014\n\004port\030\002 \001(\005\022\016\n\006change\030\003"
-  " \001(\005\022&\n\004type\030\004 \001(\0162\030.ServerProto.SERVER_"
-  "TYPE\"{\n\010UserInfo\022\016\n\006userid\030\001 \001(\005\022\n\n\002fd\030\002"
-  " \001(\005\022,\n\003opt\030\003 \001(\0162\037.ServerProto.UserInfo"
-  ".Operation\"%\n\tOperation\022\014\n\010Register\020\000\022\n\n"
-  "\006Logout\020\001\"]\n\nRegionInfo\022\n\n\002id\030\001 \001(\005\022\024\n\014p"
-  "eople_count\030\002 \001(\005\022-\n\005level\030\003 \001(\0162\036.Serve"
-  "rProto.SERVER_FREE_LEVEL\"\026\n\024GetRegionInf"
-  "oRequest\"\?\n\025GetRegionInfoResponse\022&\n\005inf"
-  "os\030\001 \003(\0132\027.ServerProto.RegionInfo\"\037\n\021Joi"
-  "nRegionRequest\022\n\n\002id\030\001 \001(\005\";\n\022JoinRegion"
-  "Response\022\013\n\003ret\030\001 \001(\010\022\n\n\002ip\030\002 \001(\t\022\014\n\004por"
-  "t\030\003 \001(\005*Q\n\013SERVER_TYPE\022\010\n\004NONE\020\000\022\n\n\006CENT"
-  "ER\020\001\022\010\n\004GATE\020\002\022\t\n\005LOGIC\020\003\022\014\n\010DATABASE\020\004\022"
-  "\t\n\005MATCH\020\005*=\n\021SERVER_FREE_LEVEL\022\010\n\004FREE\020"
-  "\000\022\n\n\006COMMON\020\001\022\010\n\004BUSY\020\002\022\010\n\004DOWN\020\003b\006proto"
-  "3"
+  "tion\022\023\n\013server_name\030\006 \001(\t\"8\n\tOperation\022\014"
+  "\n\010Register\020\000\022\020\n\014RequstAssgin\020\001\022\013\n\007Connec"
+  "t\020\002\"d\n\020ServerConnChange\022\n\n\002ip\030\001 \001(\t\022\014\n\004p"
+  "ort\030\002 \001(\005\022\016\n\006change\030\003 \001(\005\022&\n\004type\030\004 \001(\0162"
+  "\030.ServerProto.SERVER_TYPE\"{\n\010UserInfo\022\016\n"
+  "\006userid\030\001 \001(\005\022\n\n\002fd\030\002 \001(\005\022,\n\003opt\030\003 \001(\0162\037"
+  ".ServerProto.UserInfo.Operation\"%\n\tOpera"
+  "tion\022\014\n\010Register\020\000\022\n\n\006Logout\020\001\"r\n\nRegion"
+  "Info\022\n\n\002id\030\001 \001(\005\022\024\n\014people_count\030\002 \001(\005\022\023"
+  "\n\013server_name\030\003 \001(\t\022-\n\005level\030\004 \001(\0162\036.Ser"
+  "verProto.SERVER_FREE_LEVEL\"\026\n\024GetRegionI"
+  "nfoRequest\"\?\n\025GetRegionInfoResponse\022&\n\005i"
+  "nfos\030\001 \003(\0132\027.ServerProto.RegionInfo\"\037\n\021J"
+  "oinRegionRequest\022\n\n\002id\030\001 \001(\005\";\n\022JoinRegi"
+  "onResponse\022\013\n\003ret\030\001 \001(\010\022\n\n\002ip\030\002 \001(\t\022\014\n\004p"
+  "ort\030\003 \001(\005*Q\n\013SERVER_TYPE\022\010\n\004NONE\020\000\022\n\n\006CE"
+  "NTER\020\001\022\010\n\004GATE\020\002\022\t\n\005LOGIC\020\003\022\014\n\010DATABASE\020"
+  "\004\022\t\n\005MATCH\020\005*=\n\021SERVER_FREE_LEVEL\022\010\n\004FRE"
+  "E\020\000\022\n\n\006COMMON\020\001\022\010\n\004BUSY\020\002\022\010\n\004DOWN\020\003b\006pro"
+  "to3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_Server_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Server_2eproto = {
-  false, false, 881, descriptor_table_protodef_Server_2eproto, "Server.proto", 
+  false, false, 923, descriptor_table_protodef_Server_2eproto, "Server.proto", 
   &descriptor_table_Server_2eproto_once, nullptr, 0, 8,
   schemas, file_default_instances, TableStruct_Server_2eproto::offsets,
   file_level_metadata_Server_2eproto, file_level_enum_descriptors_Server_2eproto, file_level_service_descriptors_Server_2eproto,
@@ -370,6 +375,14 @@ ServerInfo::ServerInfo(const ServerInfo& from)
     ip_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_ip(), 
       GetArenaForAllocation());
   }
+  server_name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    server_name_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_server_name().empty()) {
+    server_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_server_name(), 
+      GetArenaForAllocation());
+  }
   ::memcpy(&port_, &from.port_,
     static_cast<size_t>(reinterpret_cast<char*>(&opt_) -
     reinterpret_cast<char*>(&port_)) + sizeof(opt_));
@@ -380,6 +393,10 @@ inline void ServerInfo::SharedCtor() {
 ip_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
   ip_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+server_name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  server_name_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
     reinterpret_cast<char*>(&port_) - reinterpret_cast<char*>(this)),
@@ -397,6 +414,7 @@ ServerInfo::~ServerInfo() {
 inline void ServerInfo::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   ip_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  server_name_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 
 void ServerInfo::ArenaDtor(void* object) {
@@ -416,6 +434,7 @@ void ServerInfo::Clear() {
   (void) cached_has_bits;
 
   ip_.ClearToEmpty();
+  server_name_.ClearToEmpty();
   ::memset(&port_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&opt_) -
       reinterpret_cast<char*>(&port_)) + sizeof(opt_));
@@ -468,6 +487,16 @@ const char* ServerInfo::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID:
           uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
           _internal_set_opt(static_cast<::ServerProto::ServerInfo_Operation>(val));
+        } else
+          goto handle_unusual;
+        continue;
+      // string server_name = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 50)) {
+          auto str = _internal_mutable_server_name();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "ServerProto.ServerInfo.server_name"));
+          CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
@@ -535,6 +564,16 @@ uint8_t* ServerInfo::_InternalSerialize(
       5, this->_internal_opt(), target);
   }
 
+  // string server_name = 6;
+  if (!this->_internal_server_name().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_server_name().data(), static_cast<int>(this->_internal_server_name().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "ServerProto.ServerInfo.server_name");
+    target = stream->WriteStringMaybeAliased(
+        6, this->_internal_server_name(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -556,6 +595,13 @@ size_t ServerInfo::ByteSizeLong() const {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_ip());
+  }
+
+  // string server_name = 6;
+  if (!this->_internal_server_name().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_server_name());
   }
 
   // int32 port = 2;
@@ -604,6 +650,9 @@ void ServerInfo::MergeFrom(const ServerInfo& from) {
   if (!from._internal_ip().empty()) {
     _internal_set_ip(from._internal_ip());
   }
+  if (!from._internal_server_name().empty()) {
+    _internal_set_server_name(from._internal_server_name());
+  }
   if (from._internal_port() != 0) {
     _internal_set_port(from._internal_port());
   }
@@ -639,6 +688,11 @@ void ServerInfo::InternalSwap(ServerInfo* other) {
       &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       &ip_, lhs_arena,
       &other->ip_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &server_name_, lhs_arena,
+      &other->server_name_, rhs_arena
   );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
       PROTOBUF_FIELD_OFFSET(ServerInfo, opt_)
@@ -1197,6 +1251,14 @@ RegionInfo::RegionInfo(::PROTOBUF_NAMESPACE_ID::Arena* arena,
 RegionInfo::RegionInfo(const RegionInfo& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  server_name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    server_name_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_server_name().empty()) {
+    server_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_server_name(), 
+      GetArenaForAllocation());
+  }
   ::memcpy(&id_, &from.id_,
     static_cast<size_t>(reinterpret_cast<char*>(&level_) -
     reinterpret_cast<char*>(&id_)) + sizeof(level_));
@@ -1204,6 +1266,10 @@ RegionInfo::RegionInfo(const RegionInfo& from)
 }
 
 inline void RegionInfo::SharedCtor() {
+server_name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  server_name_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
     reinterpret_cast<char*>(&id_) - reinterpret_cast<char*>(this)),
     0, static_cast<size_t>(reinterpret_cast<char*>(&level_) -
@@ -1219,6 +1285,7 @@ RegionInfo::~RegionInfo() {
 
 inline void RegionInfo::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  server_name_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 
 void RegionInfo::ArenaDtor(void* object) {
@@ -1237,6 +1304,7 @@ void RegionInfo::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  server_name_.ClearToEmpty();
   ::memset(&id_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&level_) -
       reinterpret_cast<char*>(&id_)) + sizeof(level_));
@@ -1265,9 +1333,19 @@ const char* RegionInfo::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID:
         } else
           goto handle_unusual;
         continue;
-      // .ServerProto.SERVER_FREE_LEVEL level = 3;
+      // string server_name = 3;
       case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
+          auto str = _internal_mutable_server_name();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "ServerProto.RegionInfo.server_name"));
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .ServerProto.SERVER_FREE_LEVEL level = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
           uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
           _internal_set_level(static_cast<::ServerProto::SERVER_FREE_LEVEL>(val));
@@ -1315,11 +1393,21 @@ uint8_t* RegionInfo::_InternalSerialize(
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_people_count(), target);
   }
 
-  // .ServerProto.SERVER_FREE_LEVEL level = 3;
+  // string server_name = 3;
+  if (!this->_internal_server_name().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_server_name().data(), static_cast<int>(this->_internal_server_name().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "ServerProto.RegionInfo.server_name");
+    target = stream->WriteStringMaybeAliased(
+        3, this->_internal_server_name(), target);
+  }
+
+  // .ServerProto.SERVER_FREE_LEVEL level = 4;
   if (this->_internal_level() != 0) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnumToArray(
-      3, this->_internal_level(), target);
+      4, this->_internal_level(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -1338,6 +1426,13 @@ size_t RegionInfo::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  // string server_name = 3;
+  if (!this->_internal_server_name().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_server_name());
+  }
+
   // int32 id = 1;
   if (this->_internal_id() != 0) {
     total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_id());
@@ -1348,7 +1443,7 @@ size_t RegionInfo::ByteSizeLong() const {
     total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_people_count());
   }
 
-  // .ServerProto.SERVER_FREE_LEVEL level = 3;
+  // .ServerProto.SERVER_FREE_LEVEL level = 4;
   if (this->_internal_level() != 0) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->_internal_level());
@@ -1376,6 +1471,9 @@ void RegionInfo::MergeFrom(const RegionInfo& from) {
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
+  if (!from._internal_server_name().empty()) {
+    _internal_set_server_name(from._internal_server_name());
+  }
   if (from._internal_id() != 0) {
     _internal_set_id(from._internal_id());
   }
@@ -1401,7 +1499,14 @@ bool RegionInfo::IsInitialized() const {
 
 void RegionInfo::InternalSwap(RegionInfo* other) {
   using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &server_name_, lhs_arena,
+      &other->server_name_, rhs_arena
+  );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
       PROTOBUF_FIELD_OFFSET(RegionInfo, level_)
       + sizeof(RegionInfo::level_)

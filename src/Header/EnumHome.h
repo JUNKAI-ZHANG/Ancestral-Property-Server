@@ -38,14 +38,14 @@ enum BODYTYPE
     RegistResponse = 3, // 用户的注册回应
     LoginOut = 4,       // 用户的登出请求
 
-    JoinRoom = 5,    // 用户申请加入房间的请求和回应
-    LeaveRoom = 6,   // 用户申请离开房间的请求和回应
-    CreateRoom = 7,  // 用户申请创建房间的请求和回应
-    GetRoomList = 8, // 用户申请得到房间列表的请求和回应
-    RoomStatusChangeRequest = 9,      // 用户的状态改变请求，包括角色信息等
-    RoomStatusChangeResponse = 10,    // 用户的状态改变相应，包括角色信息等
-    JoinGame = 11,  // 有用户加入游戏的通知
-    QuitGame = 12,  // 有用户退出游戏的通知
+    JoinRoom = 5,                  // 用户申请加入房间的请求和回应
+    LeaveRoom = 6,                 // 用户申请离开房间的请求和回应
+    CreateRoom = 7,                // 用户申请创建房间的请求和回应
+    GetRoomList = 8,               // 用户申请得到房间列表的请求和回应
+    ChangeRole = 9,   // 用户的状态改变请求，包括角色信息等
+    JoinGame = 10,                 // 有用户加入游戏的通知
+    QuitGame = 11,                 // 有用户退出游戏的通知
+    NotifyRoomInfo = 12, // 用户加入房间/退出游戏会收到这个
 
     StartGame = 50, // 用户申请开始游戏，大家从房间进入游戏
     EndGame = 51,   // 用户(房主)申请结束游戏，大家一起返回Room
@@ -58,9 +58,9 @@ enum BODYTYPE
     UserHeart = 75,   // 客户端心跳包
 
     /* server之间通信协议,绝对不会发往客户端 */
-    ServerInfo = 100,         // 服务器之间维持连接的消息
-    UserInfo = 101,           // 服务器之间发送用户状态的信息
-    ServerConnChange = 102,   // 服务器之间连接数量变化协议
+    ServerInfo = 100,       // 服务器之间维持连接的消息
+    UserInfo = 101,         // 服务器之间发送用户状态的信息
+    ServerConnChange = 102, // 服务器之间连接数量变化协议
 
     /* 大区协议 */
     RegionInfo = 200,            // 大区信息

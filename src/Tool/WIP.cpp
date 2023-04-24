@@ -37,29 +37,34 @@ private:
         }
     }
 
+    std::string WIP = "";
+    std::string NIP = "";
+
 public:
     std::string GetWIP()
     {
+        if (WIP != "") return WIP;
         std::string cmd = "curl -s icanhazip.com";
         int ret = 0;
         std::string result;
         ret = _System(cmd, result);
-        if (result.size()) result.pop_back();
+        while (result.size() && (result.back() < '0' || result.back() > '9')) result.pop_back();
         if (ret == 0)
-            return result;
+            return WIP = result;
         else
             return "ERROR";
     }
 
     std::string GetNIP()
     {
+        if (NIP != "") return NIP;
         std::string cmd = "hostname -I";
         int ret = 0;
         std::string result;
         ret = _System(cmd, result);
-        if (result.size()) result.pop_back();
+        while (result.size() && (result.back() < '0' || result.back() > '9')) result.pop_back();
         if (ret == 0)
-            return result;
+            return NIP = result;
         else
             return "ERROR";
     }

@@ -27,6 +27,7 @@ message ServerInfo
     }
 
     Operation opt = 5;
+    string server_name = 6;
 }
 
 message ServerConnChange
@@ -63,7 +64,8 @@ message RegionInfo
 {
     int32 id = 1;
     int32 people_count = 2;
-    SERVER_FREE_LEVEL level = 3;
+    string server_name = 3;
+    SERVER_FREE_LEVEL level = 4;
 }
 
 message GetRegionInfoRequest

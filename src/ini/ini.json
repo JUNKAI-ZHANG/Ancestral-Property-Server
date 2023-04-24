@@ -3,7 +3,7 @@
     "Debug_Out" : false,
     "Pressure_Test" : false,
     
-    "Epoll_Wait_Time" : 22,
+    "Epoll_Wait_Time" : 5,
     "Epoll_Listen_Number" : 3072,
 
     "One_Frame_Ms" : 66,
@@ -13,6 +13,10 @@
     "Check_HeartBeat_Time" : 4000,
     "Try_Send_CenterServer_Time" : 5000,
 
-    "LOCAL_IP" : "127.0.0.1"
+    "LOCAL_IP" : "127.0.0.1",
+
+    "Server_Free_Count" : 10,
+    "Server_Common_Count" : 250,
+    "Server_Busy_Count" : 1145
 
 }

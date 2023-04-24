@@ -1,14 +1,14 @@
 {
     "CENTER_SERVER" :
     {
-        "NAME" : "CENTER_SERVER",
+        "NAME": "CENTER_SERVER_OUTER",
         "IP" : "124.223.73.248",
         "PORT" : 10808
     },
 
     "DB_SERVER" :
     {
-        "NAME" : "DB_SERVER",
+        "NAME": "DB_SERVER_OUTER",
         "IP" : "124.223.73.248",
         "PORT" : 10809
     },
@@ -48,47 +48,71 @@
         "ID_6" :
         {
             "NAME" : "LOGIC_SERVER_CHINA_2",
-            "IP": "10.0.128.153",
+            "IP": "10.0.128.152",
             "PORT" : 10816
+        },
+        "ID_7" :
+        {
+            "NAME" : "LOGIC_SERVER_CHINA_3",
+            "IP": "10.0.128.153",
+            "PORT" : 10817
+        },
+        "ID_8" :
+        {
+            "NAME" : "LOGIC_SERVER_CHINA_4",
+            "IP": "10.0.128.153",
+            "PORT" : 10818
         }
     },
     "GATE_SERVER" :
     {
         "ID_1" :
         {
-            "NAME" : "GATE_SERVER_ASIA_1",
+            "NAME" : "ASIA_1",
             "IP": "124.223.73.248",
             "PORT" : 10801
         },
         "ID_2" :
         {
-            "NAME" : "GATE_SERVER_EUROPE_1",
+            "NAME" : "EUROPE_1",
             "IP": "124.223.73.248",
             "PORT" : 10802
         },
         "ID_3" :
         {
-            "NAME" : "GATE_SERVER_AMERICA_1",
+            "NAME" : "AMERICA_1",
             "IP": "124.223.73.248",
             "PORT" : 10803
         },
         "ID_4" :
         {
-            "NAME" : "GATE_SERVER_SOUTHEAST_ASIA_1",
+            "NAME" : "SOUTHEAST_ASIA_1",
             "IP": "124.223.73.248",
             "PORT" : 10804
         },
         "ID_5" :
         {
-            "NAME" : "GATE_SERVER_CHINA_1",
+            "NAME" : "CHINA_1",
             "IP": "10.0.128.152",
             "PORT" : 10805
         },
         "ID_6" :
         {
-            "NAME" : "GATE_SERVER_CHINA_2",
-            "IP": "10.0.128.153",
+            "NAME" : "CHINA_2",
+            "IP": "10.0.128.152",
             "PORT" : 10806
+        },
+        "ID_7" :
+        {
+            "NAME" : "CHINA_3",
+            "IP": "10.0.128.153",
+            "PORT" : 10807
+        },
+        "ID_8" :
+        {
+            "NAME" : "CHINA_4",
+            "IP": "10.0.128.153",
+            "PORT" : 10810
         }
     }
 }

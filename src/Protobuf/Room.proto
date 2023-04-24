@@ -7,6 +7,9 @@ message UserInfo
     string username = 1;
     int32 userid = 2;
     bool is_roomHost = 3;
+    int32 role_id = 4;
+    int32 userpid = 5;
+    bool in_game = 6;
 }
 
 message JoinRoom
@@ -22,7 +25,6 @@ message JoinRoom
 
     Type type = 3;
     bool ret = 4;
-    repeated UserInfo users = 5;
 }
 
 message LeaveRoom
@@ -38,9 +40,6 @@ message LeaveRoom
     }
 
     Type type = 4;
-    int32 userid = 5;
-    int32 userpid = 6;
-    repeated UserInfo users = 7;
 }
 
 message CreateRoom
@@ -82,18 +81,19 @@ message GetRoomList
     Type type = 4;
 }
 
-message RoomStatusChangeRequest
+message NotifyRoomInfo
+{
+    repeated UserInfo users = 1;
+    int32 roomid = 2;
+    bool m_gameStart = 3;
+}
+
+message ChangeRole
 {
     int32 role_id = 1;
 }
 
-message RoomStatusChangeResponse
-{
-    int32 userid = 1;
-    int32 role_id = 2;
-}
-
-message JoinGame           // 用户退出应主动发送的消息
+message JoinGame           // 用户加入应主动发送的消息
 {
     int32 userid = 1;
 }
