@@ -6,7 +6,7 @@
 #include <functional>
 #include <sys/epoll.h>
 
-#include "../Header/Profile.h"
+#include "../Header/EnumHome.h"
 
 /*
  * Epoll 实例管理类

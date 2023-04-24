@@ -23,6 +23,7 @@
 #include <google/protobuf/io/coded_stream.h>
 #include <google/protobuf/arena.h>
 #include <google/protobuf/arenastring.h>
+#include <google/protobuf/generated_message_bases.h>
 #include <google/protobuf/generated_message_table_driven.h>
 #include <google/protobuf/generated_message_util.h>
 #include <google/protobuf/metadata_lite.h>
@@ -47,7 +48,7 @@ struct TableStruct_Server_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[2]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[8]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -55,6 +56,24 @@ struct TableStruct_Server_2eproto {
 };
 extern const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Server_2eproto;
 namespace ServerProto {
+class GetRegionInfoRequest;
+struct GetRegionInfoRequestDefaultTypeInternal;
+extern GetRegionInfoRequestDefaultTypeInternal _GetRegionInfoRequest_default_instance_;
+class GetRegionInfoResponse;
+struct GetRegionInfoResponseDefaultTypeInternal;
+extern GetRegionInfoResponseDefaultTypeInternal _GetRegionInfoResponse_default_instance_;
+class JoinRegionRequest;
+struct JoinRegionRequestDefaultTypeInternal;
+extern JoinRegionRequestDefaultTypeInternal _JoinRegionRequest_default_instance_;
+class JoinRegionResponse;
+struct JoinRegionResponseDefaultTypeInternal;
+extern JoinRegionResponseDefaultTypeInternal _JoinRegionResponse_default_instance_;
+class RegionInfo;
+struct RegionInfoDefaultTypeInternal;
+extern RegionInfoDefaultTypeInternal _RegionInfo_default_instance_;
+class ServerConnChange;
+struct ServerConnChangeDefaultTypeInternal;
+extern ServerConnChangeDefaultTypeInternal _ServerConnChange_default_instance_;
 class ServerInfo;
 struct ServerInfoDefaultTypeInternal;
 extern ServerInfoDefaultTypeInternal _ServerInfo_default_instance_;
@@ -63,6 +82,12 @@ struct UserInfoDefaultTypeInternal;
 extern UserInfoDefaultTypeInternal _UserInfo_default_instance_;
 }  // namespace ServerProto
 PROTOBUF_NAMESPACE_OPEN
+template<> ::ServerProto::GetRegionInfoRequest* Arena::CreateMaybeMessage<::ServerProto::GetRegionInfoRequest>(Arena*);
+template<> ::ServerProto::GetRegionInfoResponse* Arena::CreateMaybeMessage<::ServerProto::GetRegionInfoResponse>(Arena*);
+template<> ::ServerProto::JoinRegionRequest* Arena::CreateMaybeMessage<::ServerProto::JoinRegionRequest>(Arena*);
+template<> ::ServerProto::JoinRegionResponse* Arena::CreateMaybeMessage<::ServerProto::JoinRegionResponse>(Arena*);
+template<> ::ServerProto::RegionInfo* Arena::CreateMaybeMessage<::ServerProto::RegionInfo>(Arena*);
+template<> ::ServerProto::ServerConnChange* Arena::CreateMaybeMessage<::ServerProto::ServerConnChange>(Arena*);
 template<> ::ServerProto::ServerInfo* Arena::CreateMaybeMessage<::ServerProto::ServerInfo>(Arena*);
 template<> ::ServerProto::UserInfo* Arena::CreateMaybeMessage<::ServerProto::UserInfo>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
@@ -118,6 +143,62 @@ inline bool UserInfo_Operation_Parse(
     ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, UserInfo_Operation* value) {
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<UserInfo_Operation>(
     UserInfo_Operation_descriptor(), name, value);
+}
+enum SERVER_TYPE : int {
+  NONE = 0,
+  CENTER = 1,
+  GATE = 2,
+  LOGIC = 3,
+  DATABASE = 4,
+  MATCH = 5,
+  SERVER_TYPE_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  SERVER_TYPE_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+};
+bool SERVER_TYPE_IsValid(int value);
+constexpr SERVER_TYPE SERVER_TYPE_MIN = NONE;
+constexpr SERVER_TYPE SERVER_TYPE_MAX = MATCH;
+constexpr int SERVER_TYPE_ARRAYSIZE = SERVER_TYPE_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* SERVER_TYPE_descriptor();
+template<typename T>
+inline const std::string& SERVER_TYPE_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, SERVER_TYPE>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function SERVER_TYPE_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    SERVER_TYPE_descriptor(), enum_t_value);
+}
+inline bool SERVER_TYPE_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, SERVER_TYPE* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<SERVER_TYPE>(
+    SERVER_TYPE_descriptor(), name, value);
+}
+enum SERVER_FREE_LEVEL : int {
+  FREE = 0,
+  COMMON = 1,
+  BUSY = 2,
+  DOWN = 3,
+  SERVER_FREE_LEVEL_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  SERVER_FREE_LEVEL_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+};
+bool SERVER_FREE_LEVEL_IsValid(int value);
+constexpr SERVER_FREE_LEVEL SERVER_FREE_LEVEL_MIN = FREE;
+constexpr SERVER_FREE_LEVEL SERVER_FREE_LEVEL_MAX = DOWN;
+constexpr int SERVER_FREE_LEVEL_ARRAYSIZE = SERVER_FREE_LEVEL_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* SERVER_FREE_LEVEL_descriptor();
+template<typename T>
+inline const std::string& SERVER_FREE_LEVEL_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, SERVER_FREE_LEVEL>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function SERVER_FREE_LEVEL_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    SERVER_FREE_LEVEL_descriptor(), enum_t_value);
+}
+inline bool SERVER_FREE_LEVEL_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, SERVER_FREE_LEVEL* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<SERVER_FREE_LEVEL>(
+    SERVER_FREE_LEVEL_descriptor(), name, value);
 }
 // ===================================================================
 
@@ -348,6 +429,190 @@ class ServerInfo final :
 };
 // -------------------------------------------------------------------
 
+class ServerConnChange final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ServerProto.ServerConnChange) */ {
+ public:
+  inline ServerConnChange() : ServerConnChange(nullptr) {}
+  ~ServerConnChange() override;
+  explicit constexpr ServerConnChange(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  ServerConnChange(const ServerConnChange& from);
+  ServerConnChange(ServerConnChange&& from) noexcept
+    : ServerConnChange() {
+    *this = ::std::move(from);
+  }
+
+  inline ServerConnChange& operator=(const ServerConnChange& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ServerConnChange& operator=(ServerConnChange&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const ServerConnChange& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const ServerConnChange* internal_default_instance() {
+    return reinterpret_cast<const ServerConnChange*>(
+               &_ServerConnChange_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    1;
+
+  friend void swap(ServerConnChange& a, ServerConnChange& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(ServerConnChange* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ServerConnChange* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  ServerConnChange* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<ServerConnChange>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const ServerConnChange& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const ServerConnChange& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(ServerConnChange* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "ServerProto.ServerConnChange";
+  }
+  protected:
+  explicit ServerConnChange(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kIpFieldNumber = 1,
+    kPortFieldNumber = 2,
+    kChangeFieldNumber = 3,
+    kTypeFieldNumber = 4,
+  };
+  // string ip = 1;
+  void clear_ip();
+  const std::string& ip() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_ip(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_ip();
+  PROTOBUF_NODISCARD std::string* release_ip();
+  void set_allocated_ip(std::string* ip);
+  private:
+  const std::string& _internal_ip() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_ip(const std::string& value);
+  std::string* _internal_mutable_ip();
+  public:
+
+  // int32 port = 2;
+  void clear_port();
+  int32_t port() const;
+  void set_port(int32_t value);
+  private:
+  int32_t _internal_port() const;
+  void _internal_set_port(int32_t value);
+  public:
+
+  // int32 change = 3;
+  void clear_change();
+  int32_t change() const;
+  void set_change(int32_t value);
+  private:
+  int32_t _internal_change() const;
+  void _internal_set_change(int32_t value);
+  public:
+
+  // .ServerProto.SERVER_TYPE type = 4;
+  void clear_type();
+  ::ServerProto::SERVER_TYPE type() const;
+  void set_type(::ServerProto::SERVER_TYPE value);
+  private:
+  ::ServerProto::SERVER_TYPE _internal_type() const;
+  void _internal_set_type(::ServerProto::SERVER_TYPE value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:ServerProto.ServerConnChange)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr ip_;
+  int32_t port_;
+  int32_t change_;
+  int type_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_Server_2eproto;
+};
+// -------------------------------------------------------------------
+
 class UserInfo final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ServerProto.UserInfo) */ {
  public:
@@ -396,7 +661,7 @@ class UserInfo final :
                &_UserInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    1;
+    2;
 
   friend void swap(UserInfo& a, UserInfo& b) {
     a.Swap(&b);
@@ -544,6 +809,766 @@ class UserInfo final :
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_Server_2eproto;
 };
+// -------------------------------------------------------------------
+
+class RegionInfo final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ServerProto.RegionInfo) */ {
+ public:
+  inline RegionInfo() : RegionInfo(nullptr) {}
+  ~RegionInfo() override;
+  explicit constexpr RegionInfo(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  RegionInfo(const RegionInfo& from);
+  RegionInfo(RegionInfo&& from) noexcept
+    : RegionInfo() {
+    *this = ::std::move(from);
+  }
+
+  inline RegionInfo& operator=(const RegionInfo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline RegionInfo& operator=(RegionInfo&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const RegionInfo& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const RegionInfo* internal_default_instance() {
+    return reinterpret_cast<const RegionInfo*>(
+               &_RegionInfo_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    3;
+
+  friend void swap(RegionInfo& a, RegionInfo& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(RegionInfo* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(RegionInfo* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  RegionInfo* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<RegionInfo>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const RegionInfo& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const RegionInfo& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(RegionInfo* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "ServerProto.RegionInfo";
+  }
+  protected:
+  explicit RegionInfo(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kIdFieldNumber = 1,
+    kPeopleCountFieldNumber = 2,
+    kLevelFieldNumber = 3,
+  };
+  // int32 id = 1;
+  void clear_id();
+  int32_t id() const;
+  void set_id(int32_t value);
+  private:
+  int32_t _internal_id() const;
+  void _internal_set_id(int32_t value);
+  public:
+
+  // int32 people_count = 2;
+  void clear_people_count();
+  int32_t people_count() const;
+  void set_people_count(int32_t value);
+  private:
+  int32_t _internal_people_count() const;
+  void _internal_set_people_count(int32_t value);
+  public:
+
+  // .ServerProto.SERVER_FREE_LEVEL level = 3;
+  void clear_level();
+  ::ServerProto::SERVER_FREE_LEVEL level() const;
+  void set_level(::ServerProto::SERVER_FREE_LEVEL value);
+  private:
+  ::ServerProto::SERVER_FREE_LEVEL _internal_level() const;
+  void _internal_set_level(::ServerProto::SERVER_FREE_LEVEL value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:ServerProto.RegionInfo)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  int32_t id_;
+  int32_t people_count_;
+  int level_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_Server_2eproto;
+};
+// -------------------------------------------------------------------
+
+class GetRegionInfoRequest final :
+    public ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase /* @@protoc_insertion_point(class_definition:ServerProto.GetRegionInfoRequest) */ {
+ public:
+  inline GetRegionInfoRequest() : GetRegionInfoRequest(nullptr) {}
+  explicit constexpr GetRegionInfoRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  GetRegionInfoRequest(const GetRegionInfoRequest& from);
+  GetRegionInfoRequest(GetRegionInfoRequest&& from) noexcept
+    : GetRegionInfoRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline GetRegionInfoRequest& operator=(const GetRegionInfoRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline GetRegionInfoRequest& operator=(GetRegionInfoRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const GetRegionInfoRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const GetRegionInfoRequest* internal_default_instance() {
+    return reinterpret_cast<const GetRegionInfoRequest*>(
+               &_GetRegionInfoRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    4;
+
+  friend void swap(GetRegionInfoRequest& a, GetRegionInfoRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(GetRegionInfoRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(GetRegionInfoRequest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  GetRegionInfoRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<GetRegionInfoRequest>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyFrom;
+  inline void CopyFrom(const GetRegionInfoRequest& from) {
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyImpl(this, from);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeFrom;
+  void MergeFrom(const GetRegionInfoRequest& from) {
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeImpl(this, from);
+  }
+  public:
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "ServerProto.GetRegionInfoRequest";
+  }
+  protected:
+  explicit GetRegionInfoRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:ServerProto.GetRegionInfoRequest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_Server_2eproto;
+};
+// -------------------------------------------------------------------
+
+class GetRegionInfoResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ServerProto.GetRegionInfoResponse) */ {
+ public:
+  inline GetRegionInfoResponse() : GetRegionInfoResponse(nullptr) {}
+  ~GetRegionInfoResponse() override;
+  explicit constexpr GetRegionInfoResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  GetRegionInfoResponse(const GetRegionInfoResponse& from);
+  GetRegionInfoResponse(GetRegionInfoResponse&& from) noexcept
+    : GetRegionInfoResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline GetRegionInfoResponse& operator=(const GetRegionInfoResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline GetRegionInfoResponse& operator=(GetRegionInfoResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const GetRegionInfoResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const GetRegionInfoResponse* internal_default_instance() {
+    return reinterpret_cast<const GetRegionInfoResponse*>(
+               &_GetRegionInfoResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    5;
+
+  friend void swap(GetRegionInfoResponse& a, GetRegionInfoResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(GetRegionInfoResponse* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(GetRegionInfoResponse* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  GetRegionInfoResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<GetRegionInfoResponse>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const GetRegionInfoResponse& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const GetRegionInfoResponse& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(GetRegionInfoResponse* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "ServerProto.GetRegionInfoResponse";
+  }
+  protected:
+  explicit GetRegionInfoResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kInfosFieldNumber = 1,
+  };
+  // repeated .ServerProto.RegionInfo infos = 1;
+  int infos_size() const;
+  private:
+  int _internal_infos_size() const;
+  public:
+  void clear_infos();
+  ::ServerProto::RegionInfo* mutable_infos(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ServerProto::RegionInfo >*
+      mutable_infos();
+  private:
+  const ::ServerProto::RegionInfo& _internal_infos(int index) const;
+  ::ServerProto::RegionInfo* _internal_add_infos();
+  public:
+  const ::ServerProto::RegionInfo& infos(int index) const;
+  ::ServerProto::RegionInfo* add_infos();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ServerProto::RegionInfo >&
+      infos() const;
+
+  // @@protoc_insertion_point(class_scope:ServerProto.GetRegionInfoResponse)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ServerProto::RegionInfo > infos_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_Server_2eproto;
+};
+// -------------------------------------------------------------------
+
+class JoinRegionRequest final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ServerProto.JoinRegionRequest) */ {
+ public:
+  inline JoinRegionRequest() : JoinRegionRequest(nullptr) {}
+  ~JoinRegionRequest() override;
+  explicit constexpr JoinRegionRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  JoinRegionRequest(const JoinRegionRequest& from);
+  JoinRegionRequest(JoinRegionRequest&& from) noexcept
+    : JoinRegionRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline JoinRegionRequest& operator=(const JoinRegionRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline JoinRegionRequest& operator=(JoinRegionRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const JoinRegionRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const JoinRegionRequest* internal_default_instance() {
+    return reinterpret_cast<const JoinRegionRequest*>(
+               &_JoinRegionRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    6;
+
+  friend void swap(JoinRegionRequest& a, JoinRegionRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(JoinRegionRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(JoinRegionRequest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  JoinRegionRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<JoinRegionRequest>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const JoinRegionRequest& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const JoinRegionRequest& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(JoinRegionRequest* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "ServerProto.JoinRegionRequest";
+  }
+  protected:
+  explicit JoinRegionRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kIdFieldNumber = 1,
+  };
+  // int32 id = 1;
+  void clear_id();
+  int32_t id() const;
+  void set_id(int32_t value);
+  private:
+  int32_t _internal_id() const;
+  void _internal_set_id(int32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:ServerProto.JoinRegionRequest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  int32_t id_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_Server_2eproto;
+};
+// -------------------------------------------------------------------
+
+class JoinRegionResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:ServerProto.JoinRegionResponse) */ {
+ public:
+  inline JoinRegionResponse() : JoinRegionResponse(nullptr) {}
+  ~JoinRegionResponse() override;
+  explicit constexpr JoinRegionResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  JoinRegionResponse(const JoinRegionResponse& from);
+  JoinRegionResponse(JoinRegionResponse&& from) noexcept
+    : JoinRegionResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline JoinRegionResponse& operator=(const JoinRegionResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline JoinRegionResponse& operator=(JoinRegionResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const JoinRegionResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const JoinRegionResponse* internal_default_instance() {
+    return reinterpret_cast<const JoinRegionResponse*>(
+               &_JoinRegionResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    7;
+
+  friend void swap(JoinRegionResponse& a, JoinRegionResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(JoinRegionResponse* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(JoinRegionResponse* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  JoinRegionResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<JoinRegionResponse>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const JoinRegionResponse& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const JoinRegionResponse& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(JoinRegionResponse* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "ServerProto.JoinRegionResponse";
+  }
+  protected:
+  explicit JoinRegionResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kIpFieldNumber = 2,
+    kRetFieldNumber = 1,
+    kPortFieldNumber = 3,
+  };
+  // string ip = 2;
+  void clear_ip();
+  const std::string& ip() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_ip(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_ip();
+  PROTOBUF_NODISCARD std::string* release_ip();
+  void set_allocated_ip(std::string* ip);
+  private:
+  const std::string& _internal_ip() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_ip(const std::string& value);
+  std::string* _internal_mutable_ip();
+  public:
+
+  // bool ret = 1;
+  void clear_ret();
+  bool ret() const;
+  void set_ret(bool value);
+  private:
+  bool _internal_ret() const;
+  void _internal_set_ret(bool value);
+  public:
+
+  // int32 port = 3;
+  void clear_port();
+  int32_t port() const;
+  void set_port(int32_t value);
+  private:
+  int32_t _internal_port() const;
+  void _internal_set_port(int32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:ServerProto.JoinRegionResponse)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr ip_;
+  bool ret_;
+  int32_t port_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_Server_2eproto;
+};
 // ===================================================================
 
 
@@ -688,6 +1713,121 @@ inline void ServerInfo::set_opt(::ServerProto::ServerInfo_Operation value) {
 
 // -------------------------------------------------------------------
 
+// ServerConnChange
+
+// string ip = 1;
+inline void ServerConnChange::clear_ip() {
+  ip_.ClearToEmpty();
+}
+inline const std::string& ServerConnChange::ip() const {
+  // @@protoc_insertion_point(field_get:ServerProto.ServerConnChange.ip)
+  return _internal_ip();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void ServerConnChange::set_ip(ArgT0&& arg0, ArgT... args) {
+ 
+ ip_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:ServerProto.ServerConnChange.ip)
+}
+inline std::string* ServerConnChange::mutable_ip() {
+  std::string* _s = _internal_mutable_ip();
+  // @@protoc_insertion_point(field_mutable:ServerProto.ServerConnChange.ip)
+  return _s;
+}
+inline const std::string& ServerConnChange::_internal_ip() const {
+  return ip_.Get();
+}
+inline void ServerConnChange::_internal_set_ip(const std::string& value) {
+  
+  ip_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* ServerConnChange::_internal_mutable_ip() {
+  
+  return ip_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* ServerConnChange::release_ip() {
+  // @@protoc_insertion_point(field_release:ServerProto.ServerConnChange.ip)
+  return ip_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void ServerConnChange::set_allocated_ip(std::string* ip) {
+  if (ip != nullptr) {
+    
+  } else {
+    
+  }
+  ip_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ip,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (ip_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    ip_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:ServerProto.ServerConnChange.ip)
+}
+
+// int32 port = 2;
+inline void ServerConnChange::clear_port() {
+  port_ = 0;
+}
+inline int32_t ServerConnChange::_internal_port() const {
+  return port_;
+}
+inline int32_t ServerConnChange::port() const {
+  // @@protoc_insertion_point(field_get:ServerProto.ServerConnChange.port)
+  return _internal_port();
+}
+inline void ServerConnChange::_internal_set_port(int32_t value) {
+  
+  port_ = value;
+}
+inline void ServerConnChange::set_port(int32_t value) {
+  _internal_set_port(value);
+  // @@protoc_insertion_point(field_set:ServerProto.ServerConnChange.port)
+}
+
+// int32 change = 3;
+inline void ServerConnChange::clear_change() {
+  change_ = 0;
+}
+inline int32_t ServerConnChange::_internal_change() const {
+  return change_;
+}
+inline int32_t ServerConnChange::change() const {
+  // @@protoc_insertion_point(field_get:ServerProto.ServerConnChange.change)
+  return _internal_change();
+}
+inline void ServerConnChange::_internal_set_change(int32_t value) {
+  
+  change_ = value;
+}
+inline void ServerConnChange::set_change(int32_t value) {
+  _internal_set_change(value);
+  // @@protoc_insertion_point(field_set:ServerProto.ServerConnChange.change)
+}
+
+// .ServerProto.SERVER_TYPE type = 4;
+inline void ServerConnChange::clear_type() {
+  type_ = 0;
+}
+inline ::ServerProto::SERVER_TYPE ServerConnChange::_internal_type() const {
+  return static_cast< ::ServerProto::SERVER_TYPE >(type_);
+}
+inline ::ServerProto::SERVER_TYPE ServerConnChange::type() const {
+  // @@protoc_insertion_point(field_get:ServerProto.ServerConnChange.type)
+  return _internal_type();
+}
+inline void ServerConnChange::_internal_set_type(::ServerProto::SERVER_TYPE value) {
+  
+  type_ = value;
+}
+inline void ServerConnChange::set_type(::ServerProto::SERVER_TYPE value) {
+  _internal_set_type(value);
+  // @@protoc_insertion_point(field_set:ServerProto.ServerConnChange.type)
+}
+
+// -------------------------------------------------------------------
+
 // UserInfo
 
 // int32 userid = 1;
@@ -750,9 +1890,252 @@ inline void UserInfo::set_opt(::ServerProto::UserInfo_Operation value) {
   // @@protoc_insertion_point(field_set:ServerProto.UserInfo.opt)
 }
 
+// -------------------------------------------------------------------
+
+// RegionInfo
+
+// int32 id = 1;
+inline void RegionInfo::clear_id() {
+  id_ = 0;
+}
+inline int32_t RegionInfo::_internal_id() const {
+  return id_;
+}
+inline int32_t RegionInfo::id() const {
+  // @@protoc_insertion_point(field_get:ServerProto.RegionInfo.id)
+  return _internal_id();
+}
+inline void RegionInfo::_internal_set_id(int32_t value) {
+  
+  id_ = value;
+}
+inline void RegionInfo::set_id(int32_t value) {
+  _internal_set_id(value);
+  // @@protoc_insertion_point(field_set:ServerProto.RegionInfo.id)
+}
+
+// int32 people_count = 2;
+inline void RegionInfo::clear_people_count() {
+  people_count_ = 0;
+}
+inline int32_t RegionInfo::_internal_people_count() const {
+  return people_count_;
+}
+inline int32_t RegionInfo::people_count() const {
+  // @@protoc_insertion_point(field_get:ServerProto.RegionInfo.people_count)
+  return _internal_people_count();
+}
+inline void RegionInfo::_internal_set_people_count(int32_t value) {
+  
+  people_count_ = value;
+}
+inline void RegionInfo::set_people_count(int32_t value) {
+  _internal_set_people_count(value);
+  // @@protoc_insertion_point(field_set:ServerProto.RegionInfo.people_count)
+}
+
+// .ServerProto.SERVER_FREE_LEVEL level = 3;
+inline void RegionInfo::clear_level() {
+  level_ = 0;
+}
+inline ::ServerProto::SERVER_FREE_LEVEL RegionInfo::_internal_level() const {
+  return static_cast< ::ServerProto::SERVER_FREE_LEVEL >(level_);
+}
+inline ::ServerProto::SERVER_FREE_LEVEL RegionInfo::level() const {
+  // @@protoc_insertion_point(field_get:ServerProto.RegionInfo.level)
+  return _internal_level();
+}
+inline void RegionInfo::_internal_set_level(::ServerProto::SERVER_FREE_LEVEL value) {
+  
+  level_ = value;
+}
+inline void RegionInfo::set_level(::ServerProto::SERVER_FREE_LEVEL value) {
+  _internal_set_level(value);
+  // @@protoc_insertion_point(field_set:ServerProto.RegionInfo.level)
+}
+
+// -------------------------------------------------------------------
+
+// GetRegionInfoRequest
+
+// -------------------------------------------------------------------
+
+// GetRegionInfoResponse
+
+// repeated .ServerProto.RegionInfo infos = 1;
+inline int GetRegionInfoResponse::_internal_infos_size() const {
+  return infos_.size();
+}
+inline int GetRegionInfoResponse::infos_size() const {
+  return _internal_infos_size();
+}
+inline void GetRegionInfoResponse::clear_infos() {
+  infos_.Clear();
+}
+inline ::ServerProto::RegionInfo* GetRegionInfoResponse::mutable_infos(int index) {
+  // @@protoc_insertion_point(field_mutable:ServerProto.GetRegionInfoResponse.infos)
+  return infos_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ServerProto::RegionInfo >*
+GetRegionInfoResponse::mutable_infos() {
+  // @@protoc_insertion_point(field_mutable_list:ServerProto.GetRegionInfoResponse.infos)
+  return &infos_;
+}
+inline const ::ServerProto::RegionInfo& GetRegionInfoResponse::_internal_infos(int index) const {
+  return infos_.Get(index);
+}
+inline const ::ServerProto::RegionInfo& GetRegionInfoResponse::infos(int index) const {
+  // @@protoc_insertion_point(field_get:ServerProto.GetRegionInfoResponse.infos)
+  return _internal_infos(index);
+}
+inline ::ServerProto::RegionInfo* GetRegionInfoResponse::_internal_add_infos() {
+  return infos_.Add();
+}
+inline ::ServerProto::RegionInfo* GetRegionInfoResponse::add_infos() {
+  ::ServerProto::RegionInfo* _add = _internal_add_infos();
+  // @@protoc_insertion_point(field_add:ServerProto.GetRegionInfoResponse.infos)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ServerProto::RegionInfo >&
+GetRegionInfoResponse::infos() const {
+  // @@protoc_insertion_point(field_list:ServerProto.GetRegionInfoResponse.infos)
+  return infos_;
+}
+
+// -------------------------------------------------------------------
+
+// JoinRegionRequest
+
+// int32 id = 1;
+inline void JoinRegionRequest::clear_id() {
+  id_ = 0;
+}
+inline int32_t JoinRegionRequest::_internal_id() const {
+  return id_;
+}
+inline int32_t JoinRegionRequest::id() const {
+  // @@protoc_insertion_point(field_get:ServerProto.JoinRegionRequest.id)
+  return _internal_id();
+}
+inline void JoinRegionRequest::_internal_set_id(int32_t value) {
+  
+  id_ = value;
+}
+inline void JoinRegionRequest::set_id(int32_t value) {
+  _internal_set_id(value);
+  // @@protoc_insertion_point(field_set:ServerProto.JoinRegionRequest.id)
+}
+
+// -------------------------------------------------------------------
+
+// JoinRegionResponse
+
+// bool ret = 1;
+inline void JoinRegionResponse::clear_ret() {
+  ret_ = false;
+}
+inline bool JoinRegionResponse::_internal_ret() const {
+  return ret_;
+}
+inline bool JoinRegionResponse::ret() const {
+  // @@protoc_insertion_point(field_get:ServerProto.JoinRegionResponse.ret)
+  return _internal_ret();
+}
+inline void JoinRegionResponse::_internal_set_ret(bool value) {
+  
+  ret_ = value;
+}
+inline void JoinRegionResponse::set_ret(bool value) {
+  _internal_set_ret(value);
+  // @@protoc_insertion_point(field_set:ServerProto.JoinRegionResponse.ret)
+}
+
+// string ip = 2;
+inline void JoinRegionResponse::clear_ip() {
+  ip_.ClearToEmpty();
+}
+inline const std::string& JoinRegionResponse::ip() const {
+  // @@protoc_insertion_point(field_get:ServerProto.JoinRegionResponse.ip)
+  return _internal_ip();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void JoinRegionResponse::set_ip(ArgT0&& arg0, ArgT... args) {
+ 
+ ip_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:ServerProto.JoinRegionResponse.ip)
+}
+inline std::string* JoinRegionResponse::mutable_ip() {
+  std::string* _s = _internal_mutable_ip();
+  // @@protoc_insertion_point(field_mutable:ServerProto.JoinRegionResponse.ip)
+  return _s;
+}
+inline const std::string& JoinRegionResponse::_internal_ip() const {
+  return ip_.Get();
+}
+inline void JoinRegionResponse::_internal_set_ip(const std::string& value) {
+  
+  ip_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* JoinRegionResponse::_internal_mutable_ip() {
+  
+  return ip_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* JoinRegionResponse::release_ip() {
+  // @@protoc_insertion_point(field_release:ServerProto.JoinRegionResponse.ip)
+  return ip_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void JoinRegionResponse::set_allocated_ip(std::string* ip) {
+  if (ip != nullptr) {
+    
+  } else {
+    
+  }
+  ip_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ip,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (ip_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    ip_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:ServerProto.JoinRegionResponse.ip)
+}
+
+// int32 port = 3;
+inline void JoinRegionResponse::clear_port() {
+  port_ = 0;
+}
+inline int32_t JoinRegionResponse::_internal_port() const {
+  return port_;
+}
+inline int32_t JoinRegionResponse::port() const {
+  // @@protoc_insertion_point(field_get:ServerProto.JoinRegionResponse.port)
+  return _internal_port();
+}
+inline void JoinRegionResponse::_internal_set_port(int32_t value) {
+  
+  port_ = value;
+}
+inline void JoinRegionResponse::set_port(int32_t value) {
+  _internal_set_port(value);
+  // @@protoc_insertion_point(field_set:ServerProto.JoinRegionResponse.port)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 
@@ -771,6 +2154,16 @@ template <> struct is_proto_enum< ::ServerProto::UserInfo_Operation> : ::std::tr
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::ServerProto::UserInfo_Operation>() {
   return ::ServerProto::UserInfo_Operation_descriptor();
+}
+template <> struct is_proto_enum< ::ServerProto::SERVER_TYPE> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::ServerProto::SERVER_TYPE>() {
+  return ::ServerProto::SERVER_TYPE_descriptor();
+}
+template <> struct is_proto_enum< ::ServerProto::SERVER_FREE_LEVEL> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::ServerProto::SERVER_FREE_LEVEL>() {
+  return ::ServerProto::SERVER_FREE_LEVEL_descriptor();
 }
 
 PROTOBUF_NAMESPACE_CLOSE

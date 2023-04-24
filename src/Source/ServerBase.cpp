@@ -1,10 +1,13 @@
 #include <thread>
 
-#include "../Header/ServerBase.h"
+#include "../Header/Server/ServerBase.h"
 
 ServerBase::ServerBase()
 {
     listen_epoll = new EpollMgr();
+
+    std::thread th(std::bind(&ServerBase::SendMsgConsumer, this));
+    th.detach();
 }
 
 ServerBase::~ServerBase()
@@ -14,9 +17,18 @@ ServerBase::~ServerBase()
     CloseServer();
 }
 
+ServerProto::SERVER_TYPE ServerBase::TransformType(SERVER_TYPE server_type)
+{
+    if (server_type == SERVER_TYPE::GATE) return ServerProto::SERVER_TYPE::GATE;
+    if (server_type == SERVER_TYPE::LOGIC) return ServerProto::SERVER_TYPE::LOGIC;
+    if (server_type == SERVER_TYPE::DATABASE) return ServerProto::SERVER_TYPE::DATABASE;
+    if (server_type == SERVER_TYPE::CENTER) return ServerProto::SERVER_TYPE::CENTER;
+    if (server_type == SERVER_TYPE::NONE) return ServerProto::SERVER_TYPE::NONE;
+    if (server_type == SERVER_TYPE::MATCH) return ServerProto::SERVER_TYPE::MATCH;
+}
+
 int ServerBase::StartListener(int port)
 {
-
     // 创建 非阻塞监听socket
     listen_fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
     if (listen_fd == -1)
@@ -73,6 +85,8 @@ void ServerBase::HandleListenerEvent(std::map<int, RingBuffer *> &conns, int fd)
 
         std::cout << "Accepted connection from " << inet_ntoa(addr.sin_addr) << ":" << ntohs(addr.sin_port) << std::endl;
 
+        SendConnsChange(TransformType(server_type), listen_ip, listen_port, 1);
+
         // 将 conn_fd 注册到 conn_epoll 实例中
         struct epoll_event event;
         event.events = EPOLLIN;
@@ -89,6 +103,32 @@ void ServerBase::HandleListenerEvent(std::map<int, RingBuffer *> &conns, int fd)
     }
 }
 
+void ServerBase::SendConnsChange(ServerProto::SERVER_TYPE server_type, std::string ip, int port, int change)
+{
+    conns_count += change;
+    if (server_type != ServerProto::SERVER_TYPE::CENTER)
+    {
+        SendToCenterServerConnChange(TransformType(ServerBase::server_type), listen_ip, listen_port, conns_count);
+    }
+}
+
+void ServerBase::SendToCenterServerConnChange(ServerProto::SERVER_TYPE server_type, std::string ip, int port, int change)
+{
+    Message *message = new Message;
+
+    ServerProto::ServerConnChange *body = new ServerProto::ServerConnChange;
+    message->body = new MessageBody;
+    body->set_ip(ip);
+    body->set_port(port);
+    body->set_change(change);
+    body->set_type(server_type);
+    message->body->message = body;
+
+    message->head = new MessageHead(message->length(), BODYTYPE::ServerConnChange, 0);
+
+    SendMsg(message, center_server_client);
+    delete message;
+}
 
 void ServerBase::HandleConnEvent(std::map<int, RingBuffer *> &conn, int conn_fd)
 {
@@ -104,7 +144,8 @@ void ServerBase::HandleConnEvent(std::map<int, RingBuffer *> &conn, int conn_fd)
     }
 
     // Receive data from client
-    while ((tmp_received = recv(conn_fd, tmp, TMP_BUFFER_SIZE, MSG_DONTWAIT)) > 0)
+    uint8_t tmp[JSON.TMP_BUFFER_SIZE];
+    while ((tmp_received = recv(conn_fd, tmp, JSON.TMP_BUFFER_SIZE, MSG_DONTWAIT)) > 0)
     {
         if (!conn[conn_fd]->AddBuffer(tmp, tmp_received))
         {
@@ -156,18 +197,18 @@ void ServerBase::HandleReceivedMsg(RingBuffer *buffer, int fd)
     uint8_t *recv = buffer->GetBuffer(buffer_size);
     uint8_t *begin = recv;
 
-    while (buffer_size >= HEAD_SIZE)
+    while (buffer_size >= JSON.HEAD_SIZE)
     {
         // Todo : 使用对象池对消息进行优化，这里new/delete太频繁了，等服务器跑起来就优化
         Message *message = new Message();
-        message->head = new MessageHead(recv, HEAD_SIZE);
+        message->head = new MessageHead(recv, JSON.HEAD_SIZE);
 
         // 判断反序列化是否正常
         if (CheckHeaderIsValid(message->head))
         {
             int pkgSize = message->head->m_packageSize;
 
-            OnMsgBodyAnalysised(message, recv + HEAD_SIZE, pkgSize - HEAD_SIZE, fd);
+            OnMsgBodyAnalysised(message, recv + JSON.HEAD_SIZE, pkgSize - JSON.HEAD_SIZE, fd);
 
             buffer_size -= pkgSize;
 
@@ -188,14 +229,68 @@ void ServerBase::HandleReceivedMsg(RingBuffer *buffer, int fd)
     delete begin;
 }
 
+#ifdef MULTI_THREAD
+
+bool ServerBase::SendMsg(Message *msg, int fd)
+{
+    MessagePair _pair;
+    _pair.msg = new Message();
+    *_pair.msg = *msg;
+    _pair.fd = fd;
+    _message_queue.Push(_pair);
+}
+
+void ServerBase::SendMsgConsumer()
+{
+    while (true)
+    {
+        usleep(100);
+        MessagePair _pair;
+        if (!_message_queue.TryPop(_pair)) continue;
+        Message *msg = _pair.msg;
+        int fd = _pair.fd;
+        if (connections.count(fd))
+        {
+            int _size = msg->head->m_packageSize;
+            if (_size > MAX_BUFFER_SIZE)
+            {
+                std::cerr << "Send size too big: " << _size << std::endl;
+            }
+            uint8_t resp[_size];
+            if (!msg->SerializeToArray(resp, _size))
+            {
+                std::cerr << "ServerBase : Parse Msg Error (SendMsg)" << std::endl;
+                return;
+            }
+
+            if (send(fd, resp, _size, 0) < 0)
+            {
+                std::cerr << "ServerBase : Could not send msg to client (SendMsg)" << std::endl;
+                CloseClientSocket(fd);
+                return;
+            }
+
+            return;
+        }
+        else
+        {
+            // std::cerr << "ServerBase : Client is not exist (SendMsg)" << std::endl;
+            return;
+        }
+    }
+}
+
+#else
+
 bool ServerBase::SendMsg(Message *msg, int fd)
 {
     if (connections.count(fd))
     {
         int _size = msg->head->m_packageSize;
-        if (_size > MAX_BUFFER_SIZE)
+        if (_size > JSON.MAX_BUFFER_SIZE)
         {
-            std::cerr << "Send size too big: " << _size << std::endl; 
+            std::cerr << "Send size too big: " << _size << std::endl;
+            return false;
         }
         uint8_t resp[_size];
         if (!msg->SerializeToArray(resp, _size))
@@ -215,10 +310,17 @@ bool ServerBase::SendMsg(Message *msg, int fd)
     }
     else
     {
-        std::cerr << "ServerBase : Client is not exist (SendMsg)" << std::endl;
+        // std::cerr << "ServerBase : Client is not exist (SendMsg)" << std::endl;
         return false;
     }
 }
+
+void ServerBase::SendMsgConsumer()
+{
+    
+}
+
+#endif
 
 bool ServerBase::OnListenerStart()
 {
@@ -234,6 +336,7 @@ void ServerBase::CloseClientSocket(int fd)
         connections.erase(fd);
 
         close(fd);
+        SendConnsChange(TransformType(server_type), listen_ip, listen_port, -1);
     }
 }
 
@@ -277,13 +380,19 @@ void ServerBase::BootServer(int port)
             return;
         }
 
+        if (false)
+        {
+            std::thread fires(std::bind(&ServerBase::FireAllEvents, this));
+            fires.detach();
+        }
+
         // 等待连接和数据
-        struct epoll_event events[MAX_CLIENTS];
+        struct epoll_event events[JSON.MAX_CLIENTS];
 
         while (true)
         {
             // 阻塞11ms监听
-            int nfds = epoll_wait(listen_epoll->epoll_fd, events, MAX_CLIENTS, EPOLL_WAIT_TIME);
+            int nfds = epoll_wait(listen_epoll->epoll_fd, events, JSON.MAX_CLIENTS, JSON.EPOLL_WAIT_TIME);
             if (nfds == -1)
             {
                 std::cerr << "Failed to wait for events" << std::endl;
@@ -310,7 +419,7 @@ void ServerBase::BootServer(int port)
                 }
             }
 
-            for (Timer * const _event : m_callfuncList)
+            for (Timer *const _event : m_callfuncList)
             {
                 _event->Tick();
             }
@@ -318,11 +427,28 @@ void ServerBase::BootServer(int port)
 
         // 关闭 epoll 实例
         close(listen_epoll->epoll_fd);
-
     }
     else
     {
         close(listen_fd);
+    }
+}
+
+void ServerBase::FireEvent()
+{
+    for (Timer *const _event : m_callfuncList)
+    {
+        _event->Tick();
+    }
+}
+
+void ServerBase::FireAllEvents()
+{
+    Timer timer(11, CallbackType::ServerBase_FixedTimeFire, std::bind(&ServerBase::FireEvent, this));
+
+    while (true)
+    {
+        timer.Tick();
     }
 }
 
@@ -355,4 +481,12 @@ bool ServerBase::ConnectToOtherServer(std::string ip, int port, int &fd)
     }
 
     return true;
+}
+
+/* 返回当前时间戳的毫秒值 */
+time_t ServerBase::getCurrentTime()
+{
+    auto now = std::chrono::system_clock::now();
+    auto now_ms = std::chrono::time_point_cast<std::chrono::milliseconds>(now);
+    return now_ms.time_since_epoch().count();
 }

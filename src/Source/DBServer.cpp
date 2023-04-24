@@ -1,5 +1,5 @@
-#include "../Header/DBServer.h"
-#include "../Header/Encryption.hpp"
+#include "../Header/Server/DBServer.h"
+#include "../Header/Tool/Encryption.hpp"
 
 DBServer::DBServer()
 {
@@ -389,7 +389,7 @@ int main(int argc, char **argv)
     }
 
     // int port = std::atoi(argv[1]);
-    const int port = DATABASE_SERVER_PORT;
+    const int port = JSON.DATABASE_SERVER_PORT;
 
     DBServer dbServer;
 
