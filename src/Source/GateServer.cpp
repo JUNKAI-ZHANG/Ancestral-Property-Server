@@ -4,10 +4,10 @@ GateServer::GateServer()
 {
     server_type = SERVER_TYPE::GATE;
 
-    if (!PRESSURE_TEST)
+    if (!JSON.PRESSURE_TEST)
     {
         // 注册检查心跳事件
-        Timer *timer = new Timer(CHECK_ALL_CLIENT_CONN, CallbackType::GateServer_CheckAllClientConn, std::bind(&GateServer::CheckAllClientConn, this));
+        Timer *timer = new Timer(JSON.CHECK_ALL_CLIENT_CONN, CallbackType::GateServer_CheckAllClientConn, std::bind(&GateServer::CheckAllClientConn, this));
         timer->Start();
 
         m_callfuncList.push_back(timer);
@@ -103,7 +103,7 @@ void GateServer::CheckAllClientConn()
     for (auto conn = m_user_connections.begin(); conn != m_user_connections.end();)
     {
         auto now = conn++;
-        if (nowMs - now->second->m_lstMs > MAX_HEARTBEAT_DIFF)
+        if (nowMs - now->second->m_lstMs > JSON.MAX_HEARTBEAT_DIFF)
         {
             CloseClientSocket(now->second->m_fd);
             m_user_connections.erase(now);
@@ -139,7 +139,7 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
 {
     FuncServer::OnMsgBodyAnalysised(msg, body, length, fd);
 
-    if (!PRESSURE_TEST)
+    if (!JSON.PRESSURE_TEST)
     {
         if (!CheckMessageValid(msg, fd))
         {
@@ -368,9 +368,15 @@ int main(int argc, char **argv)
     }
 
     // int port = std::atoi(argv[1]);
-    // int port = GATE_SERVER_PORT_1;
 
-    const int ports[] = {GATE_SERVER_PORT_1, GATE_SERVER_PORT_2, GATE_SERVER_PORT_3, GATE_SERVER_PORT_4, GATE_SERVER_PORT_5, GATE_SERVER_PORT_6};
+    const int ports[] = {
+        JSON.GATE_SERVER_PORT_1, 
+        JSON.GATE_SERVER_PORT_2, 
+        JSON.GATE_SERVER_PORT_3, 
+        JSON.GATE_SERVER_PORT_4, 
+        JSON.GATE_SERVER_PORT_5, 
+        JSON.GATE_SERVER_PORT_6
+    };
 
     GateServer gateServer;
 

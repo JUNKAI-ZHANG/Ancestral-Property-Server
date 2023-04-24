@@ -389,7 +389,7 @@ int main(int argc, char **argv)
     }
 
     // int port = std::atoi(argv[1]);
-    const int port = DATABASE_SERVER_PORT;
+    const int port = JSON.DATABASE_SERVER_PORT;
 
     DBServer dbServer;
 

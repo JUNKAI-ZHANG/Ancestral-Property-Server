@@ -144,7 +144,8 @@ void ServerBase::HandleConnEvent(std::map<int, RingBuffer *> &conn, int conn_fd)
     }
 
     // Receive data from client
-    while ((tmp_received = recv(conn_fd, tmp, TMP_BUFFER_SIZE, MSG_DONTWAIT)) > 0)
+    uint8_t tmp[JSON.TMP_BUFFER_SIZE];
+    while ((tmp_received = recv(conn_fd, tmp, JSON.TMP_BUFFER_SIZE, MSG_DONTWAIT)) > 0)
     {
         if (!conn[conn_fd]->AddBuffer(tmp, tmp_received))
         {
@@ -196,18 +197,18 @@ void ServerBase::HandleReceivedMsg(RingBuffer *buffer, int fd)
     uint8_t *recv = buffer->GetBuffer(buffer_size);
     uint8_t *begin = recv;
 
-    while (buffer_size >= HEAD_SIZE)
+    while (buffer_size >= JSON.HEAD_SIZE)
     {
         // Todo : 使用对象池对消息进行优化，这里new/delete太频繁了，等服务器跑起来就优化
         Message *message = new Message();
-        message->head = new MessageHead(recv, HEAD_SIZE);
+        message->head = new MessageHead(recv, JSON.HEAD_SIZE);
 
         // 判断反序列化是否正常
         if (CheckHeaderIsValid(message->head))
         {
             int pkgSize = message->head->m_packageSize;
 
-            OnMsgBodyAnalysised(message, recv + HEAD_SIZE, pkgSize - HEAD_SIZE, fd);
+            OnMsgBodyAnalysised(message, recv + JSON.HEAD_SIZE, pkgSize - JSON.HEAD_SIZE, fd);
 
             buffer_size -= pkgSize;
 
@@ -286,7 +287,7 @@ bool ServerBase::SendMsg(Message *msg, int fd)
     if (connections.count(fd))
     {
         int _size = msg->head->m_packageSize;
-        if (_size > MAX_BUFFER_SIZE)
+        if (_size > JSON.MAX_BUFFER_SIZE)
         {
             std::cerr << "Send size too big: " << _size << std::endl;
             return false;
@@ -386,12 +387,12 @@ void ServerBase::BootServer(int port)
         }
 
         // 等待连接和数据
-        struct epoll_event events[MAX_CLIENTS];
+        struct epoll_event events[JSON.MAX_CLIENTS];
 
         while (true)
         {
             // 阻塞11ms监听
-            int nfds = epoll_wait(listen_epoll->epoll_fd, events, MAX_CLIENTS, EPOLL_WAIT_TIME);
+            int nfds = epoll_wait(listen_epoll->epoll_fd, events, JSON.MAX_CLIENTS, JSON.EPOLL_WAIT_TIME);
             if (nfds == -1)
             {
                 std::cerr << "Failed to wait for events" << std::endl;

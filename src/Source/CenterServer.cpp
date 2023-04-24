@@ -162,8 +162,8 @@ void CenterServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32
 ServerProto::SERVER_FREE_LEVEL CheckFreeLevel(Server_Info *info)
 {
     int count = info->people_count;
-    if (count < SERVER_FREE_COUNT)   return ServerProto::SERVER_FREE_LEVEL::FREE;
-    if (count < SERVER_COMMON_COUNT) return ServerProto::SERVER_FREE_LEVEL::COMMON;
+    if (count < JSON.SERVER_FREE_COUNT)   return ServerProto::SERVER_FREE_LEVEL::FREE;
+    if (count < JSON.SERVER_COMMON_COUNT) return ServerProto::SERVER_FREE_LEVEL::COMMON;
     return ServerProto::SERVER_FREE_LEVEL::BUSY;
 }
 
@@ -298,7 +298,7 @@ int main(int argc, char **argv)
     }
 
     // int port = std::atoi(argv[1]);
-    int port = CENTER_SERVER_PORT;
+    int port = JSON.CENTER_SERVER_PORT;
 
     CenterServer centerServer;
 

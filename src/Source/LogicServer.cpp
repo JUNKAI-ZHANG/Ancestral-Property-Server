@@ -6,10 +6,10 @@ LogicServer::LogicServer()
     server_type = SERVER_TYPE::LOGIC;
 
     // 初始化RoomidPool
-    for (int i = 1; i <= ROOM_POOL_SIZE; i++) roomid_pool.insert(i); 
+    for (int i = 1; i <= JSON.ROOM_POOL_SIZE; i++) roomid_pool.insert(i); 
 
     // 注册广播事件
-    Timer *timer = new Timer(ONE_FRAME_MS, CallbackType::LogicServer_Update, std::bind(&LogicServer::Update, this));
+    Timer *timer = new Timer(JSON.ONE_FRAME_MS, CallbackType::LogicServer_Update, std::bind(&LogicServer::Update, this));
     timer->Start();
 
     m_callfuncList.push_back(timer);
@@ -75,7 +75,7 @@ void LogicServer::Update()
             inGames.insert(room.first);
         }
     }
-    if (DEBUG) if (inGames.size()) std::cout << "inGames = " << inGames.size() << std::endl;
+    if (JSON.DEBUG) if (inGames.size()) std::cout << "inGames = " << inGames.size() << std::endl;
 }
 
 void LogicServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t length, int fd)
@@ -343,7 +343,7 @@ int LogicServer::AddRoom(std::string roomname)
         int roomid = *roomid_pool.begin();
         roomid_pool.erase(roomid);
         roomid_using.insert(roomid);
-        rooms[roomid] = new Room(roomid, roomname, 10);
+        rooms[roomid] = new Room(roomid, roomname, JSON.ROOM_SIZE);
         return roomid;
     }
     int pooledMax = *roomid_pool.rend();
@@ -351,7 +351,7 @@ int LogicServer::AddRoom(std::string roomname)
     if (!roomid_using.empty()) usingMax = *roomid_using.rend();
     int roomid = std::max(pooledMax, usingMax) + 1;
     roomid_using.insert(roomid);
-    rooms[roomid] = new Room(roomid, roomname, 10);
+    rooms[roomid] = new Room(roomid, roomname, JSON.ROOM_SIZE);
     return roomid;
 }
 
@@ -369,7 +369,7 @@ void LogicServer::RemoveRoom(int roomid)
     }
     delete rooms[roomid];
     rooms.erase(roomid);
-    if (roomid <= DEFAULT_ROOM_COUNT) roomid_pool.insert(roomid);
+    if (roomid <= JSON.DEFAULT_ROOM_COUNT) roomid_pool.insert(roomid);
 }
 
 void LogicServer::HandleStartGame(Message *msg)
@@ -428,9 +428,15 @@ int main(int argc, char **argv)
     }
 
     // int port = std::atoi(argv[1]);
-    // int port = LOGIC_SERVER_PORT_1;
 
-    const int ports[] = {LOGIC_SERVER_PORT_1, LOGIC_SERVER_PORT_2, LOGIC_SERVER_PORT_3, LOGIC_SERVER_PORT_4, LOGIC_SERVER_PORT_5, LOGIC_SERVER_PORT_6};
+    const int ports[] = {
+        JSON.LOGIC_SERVER_PORT_1, 
+        JSON.LOGIC_SERVER_PORT_2, 
+        JSON.LOGIC_SERVER_PORT_3, 
+        JSON.LOGIC_SERVER_PORT_4, 
+        JSON.LOGIC_SERVER_PORT_5, 
+        JSON.LOGIC_SERVER_PORT_6
+    };
 
     for (int i = 0; i < 6; i++) 
     {
