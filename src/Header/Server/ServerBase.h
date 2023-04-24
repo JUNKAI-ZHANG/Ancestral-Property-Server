@@ -14,7 +14,7 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 
-#include "../Profile.h"
+#include "../EnumHome.h"
 #include "../Tool/RingBuffer.h"
 #include "../Message/MessageUtils.h"
 
@@ -41,9 +41,6 @@ class ServerBase
 {
 protected:
     int listen_fd = -1;
-
-    /* 临时接收缓冲区内容 */
-    uint8_t tmp[TMP_BUFFER_SIZE];
 
 protected:
     /*

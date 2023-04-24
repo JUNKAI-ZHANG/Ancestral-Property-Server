@@ -6,7 +6,7 @@
 #include "../Tool/Singleton.h"
 #include "FuncServer.h"
 
-class Room;
+class Room; // 前置定义解决循环引用
 class LogicServer : public FuncServer
 {
 private:

@@ -3,6 +3,7 @@
 
 #include "../Proto.h"
 #include "Message.h"
+#include "../Tool/ConstPool.h"
 
 static MessageBody *CreateMessageBody(int type)
 {
@@ -161,22 +162,22 @@ static Message *DecodeMessage(uint8_t *data, int len)
 {
     Message *message = new Message;
 
-    message->head = new MessageHead(data, HEAD_SIZE);
+    message->head = new MessageHead(data, JSON.HEAD_SIZE);
 
     message->body = CreateMessageBody(message->head->m_packageType);
-    message->body->ParseFromArray(data + HEAD_SIZE, len - HEAD_SIZE);
+    message->body->ParseFromArray(data + JSON.HEAD_SIZE, len - JSON.HEAD_SIZE);
 
     return message;
 }
 
 static bool CheckHeaderIsValid(MessageHead *header)
 {
-    if (header->m_packageSize < HEAD_SIZE)
+    if (header->m_packageSize < JSON.HEAD_SIZE)
     {
         return false;
     }
 
-    if (header->m_packageSize > MAX_BUFFER_SIZE)
+    if (header->m_packageSize > JSON.MAX_BUFFER_SIZE)
     {
         return false;
     }

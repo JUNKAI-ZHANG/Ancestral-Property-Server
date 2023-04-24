@@ -4,7 +4,7 @@
 #include <iostream>
 #include <arpa/inet.h>
 
-#include "../Profile.h"
+#include "../EnumHome.h"
 #include "google/protobuf/message_lite.h"
 
 class MessageHead
