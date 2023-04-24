@@ -2,6 +2,7 @@
 .idea
 cmake-build-debug
 cmake-build-debug-jkRemote
+build
 src/CMakeFiles
 src/lib
 src/cmake_install.cmake
@@ -10,5 +11,5 @@ src/CenterServer_jk
 src/DBServer_jk
 src/GateServer_jk
 src/LogicServer_jk
+src/JsonTest
 src/Makefile
-Makefile
