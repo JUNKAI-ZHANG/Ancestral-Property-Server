@@ -3,21 +3,22 @@
 #include <iostream>
 #include <memory>
 
-#include "../Header/Profile.h"
+#include "../Header/EnumHome.h"
+#include "../Header/Tool/ConstPool.h"
 #include "../Header/Tool/RingBuffer.h"
 
 RingBuffer::RingBuffer()
 {
-    _buffer = new uint8_t[MAX_BUFFER_SIZE];
+    _buffer = new uint8_t[JSON.MAX_BUFFER_SIZE];
     _begin = _end = _capacity = 0;
-    _remain = MAX_BUFFER_SIZE;
+    _remain = JSON.MAX_BUFFER_SIZE;
 }
 
 RingBuffer::~RingBuffer()
 {
     std::cout << "Ring Deconstruct" << std::endl;
     _begin = _end = _capacity = 0;
-    _remain = MAX_BUFFER_SIZE;
+    _remain = JSON.MAX_BUFFER_SIZE;
     delete _buffer;
 }
 
@@ -31,7 +32,7 @@ bool RingBuffer::AddBuffer(uint8_t *buffer, uint32_t size)
     for (uint32_t i = 0; i < size; i++)
     {
         _buffer[_end] = buffer[i];
-        _end = (_end + 1) % MAX_BUFFER_SIZE;
+        _end = (_end + 1) % JSON.MAX_BUFFER_SIZE;
     }
 
     _capacity += size;
@@ -47,7 +48,7 @@ bool RingBuffer::PopBuffer(uint32_t size)
         return false;
     }
 
-    _begin = (_begin + size) % MAX_BUFFER_SIZE;
+    _begin = (_begin + size) % JSON.MAX_BUFFER_SIZE;
 
     _capacity -= size;
     _remain += size;
@@ -62,7 +63,7 @@ uint8_t *RingBuffer::GetBuffer(uint32_t len)
     for (uint32_t i = 0; i < len; i++)
     {
         ret[i] = _buffer[start];
-        start = (start + 1) % MAX_BUFFER_SIZE;
+        start = (start + 1) % JSON.MAX_BUFFER_SIZE;
     }
 
     return ret;
@@ -80,7 +81,7 @@ uint32_t RingBuffer::GetCapacity()
 
 uint8_t RingBuffer::operator[](int id)
 {
-    if (id < 0 || id >= MAX_BUFFER_SIZE)
+    if (id < 0 || id >= JSON.MAX_BUFFER_SIZE)
         return 0;
     return _buffer[id];
 }
