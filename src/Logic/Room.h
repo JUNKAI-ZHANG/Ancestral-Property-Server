@@ -21,7 +21,7 @@ public:
     void Resize(int size);
 
     /* 如果游戏已经开始那么不可以join */
-    void JoinRoom(int userid);
+    bool JoinRoom(int userid);
 
     /* 从房间加入到游戏 */
     void JoinGame(int userid);

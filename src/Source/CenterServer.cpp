@@ -239,7 +239,7 @@ void CenterServer::HandleGetRegionInfoRequest(Message *msg, int fd)
         info_back = body->add_infos();
         info_back->set_id(info->id);
         info_back->set_level(CheckFreeLevel(info));
-        info_back->set_people_count(info->people_count);
+        info_back->set_people_count(std::max(0, info->people_count));
     }
     message->body->message = body;
 

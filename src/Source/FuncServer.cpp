@@ -199,8 +199,7 @@ bool FuncServer::OnListenerStart()
     // 定时发送自身信息给CenterServer
     this->SendSelfInfoToCenter();
 
-    Timer *timer = new Timer(JSON.SEND_CENTERSERVER_TIME, CallbackType::FuncServer_SendSelfInfoToCenter, std::bind(&FuncServer::SendSelfInfoToCenter, this));
-    timer->Start();
+    Timer *timer = new Timer(JSON.SEND_CENTERSERVER_TIME, CallbackType::FuncServer_SendSelfInfoToCenter, std::bind(&FuncServer::SendSelfInfoToCenter, this)); timer->Start();
 
     m_callfuncList.push_back(timer);
 

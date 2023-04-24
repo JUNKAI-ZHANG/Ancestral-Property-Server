@@ -302,7 +302,7 @@ void LogicServer::HandleQuitGame(Message *msg)
     if (!userid2roomid.count(userid)) return;
     int roomid = userid2roomid[userid];
     if (!rooms.count(roomid)) return;
-    rooms[roomid]->NotifyUserQuitGame(userid);
+    rooms[roomid]->LeaveFromGame(userid);
 }
 
 void LogicServer::HandleRoomStatusChange(Message *msg)
@@ -333,8 +333,10 @@ void LogicServer::RemovePlayerFromRoom(int userid)
 
 void LogicServer::AddPlayerToRoom(int userid, int roomid)
 {
-    userid2roomid[userid] = roomid;
-    rooms[roomid]->JoinRoom(userid);
+    if (rooms[roomid]->JoinRoom(userid))
+    {
+        userid2roomid[userid] = roomid;
+    }
 }
 
 int LogicServer::AddRoom(std::string roomname)

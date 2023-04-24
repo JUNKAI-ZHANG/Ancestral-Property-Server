@@ -43,6 +43,10 @@ bool ConstPool::ReadINI()
         SEND_CENTERSERVER_TIME = root["Try_Send_CenterServer_Time"].asInt();
 
         LOCAL_IP = root["LOCAL_IP"].asString();
+
+        SERVER_FREE_COUNT = root["Server_Free_Count"].asInt();
+        SERVER_COMMON_COUNT = root["Server_Common_Count"].asInt();
+        SERVER_BUSY_COUNT = root["Server_Busy_Count"].asInt();
     }
 
     in.close();

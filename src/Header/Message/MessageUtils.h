@@ -70,6 +70,9 @@ static MessageBody *CreateMessageBody(int type)
         message = new RoomProto::QuitGame;
         break;
     }
+    case BODYTYPE::GetUserList:
+        message = new RoomProto::GetUserList;
+        break;
     case BODYTYPE::StartGame:
     {
         message = new FrameProto::StartGame;

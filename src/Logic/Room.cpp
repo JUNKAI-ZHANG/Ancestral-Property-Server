@@ -48,7 +48,7 @@ void Room::JoinGame(int userid)
     in_game_id2pid[userid] = userid2userpid[userid];
 }
 
-void Room::JoinRoom(int userid)
+bool Room::JoinRoom(int userid)
 {
     RoomProto::JoinRoom message;
     message.set_type(RoomProto::JoinRoom_Type_RESPONSE);
@@ -90,7 +90,9 @@ void Room::JoinRoom(int userid)
 
 
         BroadCastToRoom(BODYTYPE::JoinRoom, &message);
+        return true;
     }
+    return false;
 }
 
 void Room::Reconnect(int userid)
@@ -166,6 +168,11 @@ void Room::LeaveFromGame(int userid)
 
     NotifyUserQuitGame(userid);
     in_game_id2pid.erase(userid);
+    RoomProto::GetUserList getUserList;
+    auto it = GetRoomUserInfos();
+    getUserList.set_roomid(m_id);
+    getUserList.mutable_users()->Add(it.begin(), it.end());
+    LOGICSERVER.SendToClient(BODYTYPE::GetUserList, &getUserList, userid);
 
     if (in_game_id2pid.empty()) EndGame();
 }
@@ -325,6 +332,7 @@ std::vector<RoomProto::UserInfo> Room::GetRoomUserInfos()
         userInfo[x].set_userid(p.first);
         userInfo[x].set_username(p.second);
         userInfo[x].set_is_roomhost(host_userid == p.first);
+        userInfo[x].set_role_id(userid2roleid[p.first]);
         x++;
     }
     return userInfo;

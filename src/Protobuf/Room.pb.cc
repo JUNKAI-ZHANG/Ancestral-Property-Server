@@ -21,7 +21,8 @@ constexpr UserInfo::UserInfo(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : username_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
   , userid_(0)
-  , is_roomhost_(false){}
+  , is_roomhost_(false)
+  , role_id_(0){}
 struct UserInfoDefaultTypeInternal {
   constexpr UserInfoDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -115,6 +116,19 @@ struct GetRoomListDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT GetRoomListDefaultTypeInternal _GetRoomList_default_instance_;
+constexpr GetUserList::GetUserList(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : users_()
+  , roomid_(0){}
+struct GetUserListDefaultTypeInternal {
+  constexpr GetUserListDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~GetUserListDefaultTypeInternal() {}
+  union {
+    GetUserList _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT GetUserListDefaultTypeInternal _GetUserList_default_instance_;
 constexpr RoomStatusChangeRequest::RoomStatusChangeRequest(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : role_id_(0){}
@@ -165,7 +179,7 @@ struct QuitGameDefaultTypeInternal {
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT QuitGameDefaultTypeInternal _QuitGame_default_instance_;
 }  // namespace RoomProto
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_Room_2eproto[10];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_Room_2eproto[11];
 static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_Room_2eproto[4];
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_Room_2eproto = nullptr;
 
@@ -179,6 +193,7 @@ const uint32_t TableStruct_Room_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(pro
   PROTOBUF_FIELD_OFFSET(::RoomProto::UserInfo, username_),
   PROTOBUF_FIELD_OFFSET(::RoomProto::UserInfo, userid_),
   PROTOBUF_FIELD_OFFSET(::RoomProto::UserInfo, is_roomhost_),
+  PROTOBUF_FIELD_OFFSET(::RoomProto::UserInfo, role_id_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::RoomProto::JoinRoom, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -235,6 +250,14 @@ const uint32_t TableStruct_Room_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(pro
   PROTOBUF_FIELD_OFFSET(::RoomProto::GetRoomList, ret_),
   PROTOBUF_FIELD_OFFSET(::RoomProto::GetRoomList, type_),
   ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::RoomProto::GetUserList, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::RoomProto::GetUserList, users_),
+  PROTOBUF_FIELD_OFFSET(::RoomProto::GetUserList, roomid_),
+  ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::RoomProto::RoomStatusChangeRequest, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
@@ -266,15 +289,16 @@ const uint32_t TableStruct_Room_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(pro
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::RoomProto::UserInfo)},
-  { 9, -1, -1, sizeof(::RoomProto::JoinRoom)},
-  { 20, -1, -1, sizeof(::RoomProto::LeaveRoom)},
-  { 33, -1, -1, sizeof(::RoomProto::CreateRoom)},
-  { 45, -1, -1, sizeof(::RoomProto::RoomInfo)},
-  { 54, -1, -1, sizeof(::RoomProto::GetRoomList)},
-  { 64, -1, -1, sizeof(::RoomProto::RoomStatusChangeRequest)},
-  { 71, -1, -1, sizeof(::RoomProto::RoomStatusChangeResponse)},
-  { 79, -1, -1, sizeof(::RoomProto::JoinGame)},
-  { 86, -1, -1, sizeof(::RoomProto::QuitGame)},
+  { 10, -1, -1, sizeof(::RoomProto::JoinRoom)},
+  { 21, -1, -1, sizeof(::RoomProto::LeaveRoom)},
+  { 34, -1, -1, sizeof(::RoomProto::CreateRoom)},
+  { 46, -1, -1, sizeof(::RoomProto::RoomInfo)},
+  { 55, -1, -1, sizeof(::RoomProto::GetRoomList)},
+  { 65, -1, -1, sizeof(::RoomProto::GetUserList)},
+  { 73, -1, -1, sizeof(::RoomProto::RoomStatusChangeRequest)},
+  { 80, -1, -1, sizeof(::RoomProto::RoomStatusChangeResponse)},
+  { 88, -1, -1, sizeof(::RoomProto::JoinGame)},
+  { 95, -1, -1, sizeof(::RoomProto::QuitGame)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -284,6 +308,7 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::RoomProto::_CreateRoom_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::RoomProto::_RoomInfo_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::RoomProto::_GetRoomList_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::RoomProto::_GetUserList_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::RoomProto::_RoomStatusChangeRequest_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::RoomProto::_RoomStatusChangeResponse_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::RoomProto::_JoinGame_default_instance_),
@@ -291,37 +316,40 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
 };
 
 const char descriptor_table_protodef_Room_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\nRoom.proto\022\tRoomProto\"A\n\010UserInfo\022\020\n\010u"
+  "\n\nRoom.proto\022\tRoomProto\"R\n\010UserInfo\022\020\n\010u"
   "sername\030\001 \001(\t\022\016\n\006userid\030\002 \001(\005\022\023\n\013is_room"
-  "Host\030\003 \001(\010\"\246\001\n\010JoinRoom\022\016\n\006roomid\030\001 \001(\005\022"
-  "\016\n\006result\030\002 \001(\t\022&\n\004type\030\003 \001(\0162\030.RoomProt"
-  "o.JoinRoom.Type\022\013\n\003ret\030\004 \001(\010\022\"\n\005users\030\005 "
-  "\003(\0132\023.RoomProto.UserInfo\"!\n\004Type\022\013\n\007REQU"
-  "EST\020\000\022\014\n\010RESPONSE\020\001\"\311\001\n\tLeaveRoom\022\016\n\006roo"
-  "mid\030\001 \001(\005\022\013\n\003ret\030\002 \001(\010\022\016\n\006result\030\003 \001(\t\022\'"
-  "\n\004type\030\004 \001(\0162\031.RoomProto.LeaveRoom.Type\022"
-  "\016\n\006userid\030\005 \001(\005\022\017\n\007userpid\030\006 \001(\005\022\"\n\005user"
-  "s\030\007 \003(\0132\023.RoomProto.UserInfo\"!\n\004Type\022\013\n\007"
-  "REQUEST\020\000\022\014\n\010RESPONSE\020\001\"\255\001\n\nCreateRoom\022\016"
-  "\n\006roomid\030\001 \001(\005\022\013\n\003ret\030\002 \001(\010\022\016\n\006result\030\003 "
-  "\001(\t\022\020\n\010roomname\030\004 \001(\t\022(\n\004type\030\005 \001(\0162\032.Ro"
-  "omProto.CreateRoom.Type\022\023\n\013is_roomhost\030\006"
-  " \001(\010\"!\n\004Type\022\013\n\007REQUEST\020\000\022\014\n\010RESPONSE\020\001\""
-  "B\n\010RoomInfo\022\016\n\006roomid\030\001 \001(\005\022\024\n\014people_co"
-  "unt\030\002 \001(\005\022\020\n\010roomname\030\003 \001(\t\"\236\001\n\013GetRoomL"
-  "ist\022&\n\troom_list\030\001 \003(\0132\023.RoomProto.RoomI"
-  "nfo\022\014\n\004size\030\002 \001(\005\022\013\n\003ret\030\003 \001(\010\022)\n\004type\030\004"
-  " \001(\0162\033.RoomProto.GetRoomList.Type\"!\n\004Typ"
-  "e\022\013\n\007REQUEST\020\000\022\014\n\010RESPONSE\020\001\"*\n\027RoomStat"
-  "usChangeRequest\022\017\n\007role_id\030\001 \001(\005\";\n\030Room"
-  "StatusChangeResponse\022\016\n\006userid\030\001 \001(\005\022\017\n\007"
-  "role_id\030\002 \001(\005\"\032\n\010JoinGame\022\016\n\006userid\030\001 \001("
-  "\005\"\032\n\010QuitGame\022\016\n\006userid\030\001 \001(\005b\006proto3"
+  "Host\030\003 \001(\010\022\017\n\007role_id\030\004 \001(\005\"\246\001\n\010JoinRoom"
+  "\022\016\n\006roomid\030\001 \001(\005\022\016\n\006result\030\002 \001(\t\022&\n\004type"
+  "\030\003 \001(\0162\030.RoomProto.JoinRoom.Type\022\013\n\003ret\030"
+  "\004 \001(\010\022\"\n\005users\030\005 \003(\0132\023.RoomProto.UserInf"
+  "o\"!\n\004Type\022\013\n\007REQUEST\020\000\022\014\n\010RESPONSE\020\001\"\311\001\n"
+  "\tLeaveRoom\022\016\n\006roomid\030\001 \001(\005\022\013\n\003ret\030\002 \001(\010\022"
+  "\016\n\006result\030\003 \001(\t\022\'\n\004type\030\004 \001(\0162\031.RoomProt"
+  "o.LeaveRoom.Type\022\016\n\006userid\030\005 \001(\005\022\017\n\007user"
+  "pid\030\006 \001(\005\022\"\n\005users\030\007 \003(\0132\023.RoomProto.Use"
+  "rInfo\"!\n\004Type\022\013\n\007REQUEST\020\000\022\014\n\010RESPONSE\020\001"
+  "\"\255\001\n\nCreateRoom\022\016\n\006roomid\030\001 \001(\005\022\013\n\003ret\030\002"
+  " \001(\010\022\016\n\006result\030\003 \001(\t\022\020\n\010roomname\030\004 \001(\t\022("
+  "\n\004type\030\005 \001(\0162\032.RoomProto.CreateRoom.Type"
+  "\022\023\n\013is_roomhost\030\006 \001(\010\"!\n\004Type\022\013\n\007REQUEST"
+  "\020\000\022\014\n\010RESPONSE\020\001\"B\n\010RoomInfo\022\016\n\006roomid\030\001"
+  " \001(\005\022\024\n\014people_count\030\002 \001(\005\022\020\n\010roomname\030\003"
+  " \001(\t\"\236\001\n\013GetRoomList\022&\n\troom_list\030\001 \003(\0132"
+  "\023.RoomProto.RoomInfo\022\014\n\004size\030\002 \001(\005\022\013\n\003re"
+  "t\030\003 \001(\010\022)\n\004type\030\004 \001(\0162\033.RoomProto.GetRoo"
+  "mList.Type\"!\n\004Type\022\013\n\007REQUEST\020\000\022\014\n\010RESPO"
+  "NSE\020\001\"A\n\013GetUserList\022\"\n\005users\030\001 \003(\0132\023.Ro"
+  "omProto.UserInfo\022\016\n\006roomid\030\002 \001(\005\"*\n\027Room"
+  "StatusChangeRequest\022\017\n\007role_id\030\001 \001(\005\";\n\030"
+  "RoomStatusChangeResponse\022\016\n\006userid\030\001 \001(\005"
+  "\022\017\n\007role_id\030\002 \001(\005\"\032\n\010JoinGame\022\016\n\006userid\030"
+  "\001 \001(\005\"\032\n\010QuitGame\022\016\n\006userid\030\001 \001(\005b\006proto"
+  "3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_Room_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Room_2eproto = {
-  false, false, 1037, descriptor_table_protodef_Room_2eproto, "Room.proto", 
-  &descriptor_table_Room_2eproto_once, nullptr, 0, 10,
+  false, false, 1121, descriptor_table_protodef_Room_2eproto, "Room.proto", 
+  &descriptor_table_Room_2eproto_once, nullptr, 0, 11,
   schemas, file_default_instances, TableStruct_Room_2eproto::offsets,
   file_level_metadata_Room_2eproto, file_level_enum_descriptors_Room_2eproto, file_level_service_descriptors_Room_2eproto,
 };
@@ -444,8 +472,8 @@ UserInfo::UserInfo(const UserInfo& from)
       GetArenaForAllocation());
   }
   ::memcpy(&userid_, &from.userid_,
-    static_cast<size_t>(reinterpret_cast<char*>(&is_roomhost_) -
-    reinterpret_cast<char*>(&userid_)) + sizeof(is_roomhost_));
+    static_cast<size_t>(reinterpret_cast<char*>(&role_id_) -
+    reinterpret_cast<char*>(&userid_)) + sizeof(role_id_));
   // @@protoc_insertion_point(copy_constructor:RoomProto.UserInfo)
 }
 
@@ -456,8 +484,8 @@ username_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlr
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
     reinterpret_cast<char*>(&userid_) - reinterpret_cast<char*>(this)),
-    0, static_cast<size_t>(reinterpret_cast<char*>(&is_roomhost_) -
-    reinterpret_cast<char*>(&userid_)) + sizeof(is_roomhost_));
+    0, static_cast<size_t>(reinterpret_cast<char*>(&role_id_) -
+    reinterpret_cast<char*>(&userid_)) + sizeof(role_id_));
 }
 
 UserInfo::~UserInfo() {
@@ -490,8 +518,8 @@ void UserInfo::Clear() {
 
   username_.ClearToEmpty();
   ::memset(&userid_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&is_roomhost_) -
-      reinterpret_cast<char*>(&userid_)) + sizeof(is_roomhost_));
+      reinterpret_cast<char*>(&role_id_) -
+      reinterpret_cast<char*>(&userid_)) + sizeof(role_id_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -523,6 +551,14 @@ const char* UserInfo::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::i
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
           is_roomhost_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 role_id = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
+          role_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -578,6 +614,12 @@ uint8_t* UserInfo::_InternalSerialize(
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(3, this->_internal_is_roomhost(), target);
   }
 
+  // int32 role_id = 4;
+  if (this->_internal_role_id() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(4, this->_internal_role_id(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -611,6 +653,11 @@ size_t UserInfo::ByteSizeLong() const {
     total_size += 1 + 1;
   }
 
+  // int32 role_id = 4;
+  if (this->_internal_role_id() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_role_id());
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
 }
 
@@ -642,6 +689,9 @@ void UserInfo::MergeFrom(const UserInfo& from) {
   if (from._internal_is_roomhost() != 0) {
     _internal_set_is_roomhost(from._internal_is_roomhost());
   }
+  if (from._internal_role_id() != 0) {
+    _internal_set_role_id(from._internal_role_id());
+  }
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -667,8 +717,8 @@ void UserInfo::InternalSwap(UserInfo* other) {
       &other->username_, rhs_arena
   );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(UserInfo, is_roomhost_)
-      + sizeof(UserInfo::is_roomhost_)
+      PROTOBUF_FIELD_OFFSET(UserInfo, role_id_)
+      + sizeof(UserInfo::role_id_)
       - PROTOBUF_FIELD_OFFSET(UserInfo, userid_)>(
           reinterpret_cast<char*>(&userid_),
           reinterpret_cast<char*>(&other->userid_));
@@ -2260,6 +2310,217 @@ void GetRoomList::InternalSwap(GetRoomList* other) {
 
 // ===================================================================
 
+class GetUserList::_Internal {
+ public:
+};
+
+GetUserList::GetUserList(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned),
+  users_(arena) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:RoomProto.GetUserList)
+}
+GetUserList::GetUserList(const GetUserList& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      users_(from.users_) {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  roomid_ = from.roomid_;
+  // @@protoc_insertion_point(copy_constructor:RoomProto.GetUserList)
+}
+
+inline void GetUserList::SharedCtor() {
+roomid_ = 0;
+}
+
+GetUserList::~GetUserList() {
+  // @@protoc_insertion_point(destructor:RoomProto.GetUserList)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void GetUserList::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+}
+
+void GetUserList::ArenaDtor(void* object) {
+  GetUserList* _this = reinterpret_cast< GetUserList* >(object);
+  (void)_this;
+}
+void GetUserList::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void GetUserList::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void GetUserList::Clear() {
+// @@protoc_insertion_point(message_clear_start:RoomProto.GetUserList)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  users_.Clear();
+  roomid_ = 0;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* GetUserList::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // repeated .RoomProto.UserInfo users = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(_internal_add_users(), ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 roomid = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          roomid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* GetUserList::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:RoomProto.GetUserList)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // repeated .RoomProto.UserInfo users = 1;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->_internal_users_size()); i < n; i++) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(1, this->_internal_users(i), target, stream);
+  }
+
+  // int32 roomid = 2;
+  if (this->_internal_roomid() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_roomid(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:RoomProto.GetUserList)
+  return target;
+}
+
+size_t GetUserList::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:RoomProto.GetUserList)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated .RoomProto.UserInfo users = 1;
+  total_size += 1UL * this->_internal_users_size();
+  for (const auto& msg : this->users_) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+  }
+
+  // int32 roomid = 2;
+  if (this->_internal_roomid() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_roomid());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData GetUserList::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    GetUserList::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetUserList::GetClassData() const { return &_class_data_; }
+
+void GetUserList::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+  static_cast<GetUserList *>(to)->MergeFrom(
+      static_cast<const GetUserList &>(from));
+}
+
+
+void GetUserList::MergeFrom(const GetUserList& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:RoomProto.GetUserList)
+  GOOGLE_DCHECK_NE(&from, this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  users_.MergeFrom(from.users_);
+  if (from._internal_roomid() != 0) {
+    _internal_set_roomid(from._internal_roomid());
+  }
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void GetUserList::CopyFrom(const GetUserList& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:RoomProto.GetUserList)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool GetUserList::IsInitialized() const {
+  return true;
+}
+
+void GetUserList::InternalSwap(GetUserList* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  users_.InternalSwap(&other->users_);
+  swap(roomid_, other->roomid_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata GetUserList::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_Room_2eproto_getter, &descriptor_table_Room_2eproto_once,
+      file_level_metadata_Room_2eproto[6]);
+}
+
+// ===================================================================
+
 class RoomStatusChangeRequest::_Internal {
  public:
 };
@@ -2433,7 +2694,7 @@ void RoomStatusChangeRequest::InternalSwap(RoomStatusChangeRequest* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata RoomStatusChangeRequest::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_Room_2eproto_getter, &descriptor_table_Room_2eproto_once,
-      file_level_metadata_Room_2eproto[6]);
+      file_level_metadata_Room_2eproto[7]);
 }
 
 // ===================================================================
@@ -2645,7 +2906,7 @@ void RoomStatusChangeResponse::InternalSwap(RoomStatusChangeResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata RoomStatusChangeResponse::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_Room_2eproto_getter, &descriptor_table_Room_2eproto_once,
-      file_level_metadata_Room_2eproto[7]);
+      file_level_metadata_Room_2eproto[8]);
 }
 
 // ===================================================================
@@ -2823,7 +3084,7 @@ void JoinGame::InternalSwap(JoinGame* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata JoinGame::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_Room_2eproto_getter, &descriptor_table_Room_2eproto_once,
-      file_level_metadata_Room_2eproto[8]);
+      file_level_metadata_Room_2eproto[9]);
 }
 
 // ===================================================================
@@ -3001,7 +3262,7 @@ void QuitGame::InternalSwap(QuitGame* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata QuitGame::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_Room_2eproto_getter, &descriptor_table_Room_2eproto_once,
-      file_level_metadata_Room_2eproto[9]);
+      file_level_metadata_Room_2eproto[10]);
 }
 
 // @@protoc_insertion_point(namespace_scope)
@@ -3024,6 +3285,9 @@ template<> PROTOBUF_NOINLINE ::RoomProto::RoomInfo* Arena::CreateMaybeMessage< :
 }
 template<> PROTOBUF_NOINLINE ::RoomProto::GetRoomList* Arena::CreateMaybeMessage< ::RoomProto::GetRoomList >(Arena* arena) {
   return Arena::CreateMessageInternal< ::RoomProto::GetRoomList >(arena);
+}
+template<> PROTOBUF_NOINLINE ::RoomProto::GetUserList* Arena::CreateMaybeMessage< ::RoomProto::GetUserList >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::RoomProto::GetUserList >(arena);
 }
 template<> PROTOBUF_NOINLINE ::RoomProto::RoomStatusChangeRequest* Arena::CreateMaybeMessage< ::RoomProto::RoomStatusChangeRequest >(Arena* arena) {
   return Arena::CreateMessageInternal< ::RoomProto::RoomStatusChangeRequest >(arena);

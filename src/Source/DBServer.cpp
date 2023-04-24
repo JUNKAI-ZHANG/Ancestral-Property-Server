@@ -4,6 +4,8 @@
 DBServer::DBServer()
 {
     server_type = SERVER_TYPE::DATABASE;
+
+    rng = std::mt19937(std::chrono::system_clock::now().time_since_epoch().count());
 }
 
 DBServer::~DBServer()
@@ -54,10 +56,10 @@ void DBServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t l
 void DBServer::HandleUserLogin(Message *msg, int fd)
 {
     LoginProto::LoginRequest *body = reinterpret_cast<LoginProto::LoginRequest *>(msg->body->message);
-    int ret = -1;
+    int ret = -1, userid = -1;
 
     std::cout << body->username() << ' ' << body->passwd() << " try to login" << std::endl;
-    ret = QueryUser(body->username(), body->passwd());
+    ret = QueryUser(body->username(), body->passwd(), userid);
 
     std::string resp_msg;
 
@@ -87,7 +89,7 @@ void DBServer::HandleUserLogin(Message *msg, int fd)
             // 释放 reply 对象
             freeReplyObject(reply);
 
-            reply = (redisReply *)redisCommand(redis, "EXPIRE %s %d", body->username().c_str(), 600); // 600s过期
+            reply = (redisReply *)redisCommand(redis, "EXPIRE %s %d", body->username().c_str(), rng() % 500 + 500); // 600s过期
 
             if (reply != nullptr)
             {
@@ -96,12 +98,13 @@ void DBServer::HandleUserLogin(Message *msg, int fd)
             }
         }
     }
-
+/*
     int userid = -1;
     if (ret == 1) 
     {
         userid = GetUserid(body->username());
     }
+*/
 
     Message *message = NewLoginResponseMessage(ret, resp_msg, token, userid, msg->head->m_userid, body->username());
 
@@ -125,9 +128,7 @@ void DBServer::HandleUserRegister(Message *msg, int fd)
     {
         std::cout << body->username() << ' ' << body->passwd() << " try to register" << std::endl;
 
-        int userid = GetRowCount("user");
-
-        ret = InsertUser(body->username(), body->passwd(), to_string(userid + 1));
+        ret = InsertUser(body->username(), body->passwd());
     }
 
     std::string resp_msg = "";
@@ -204,7 +205,7 @@ bool DBServer::IsExistUser(const std::string username)
         return false;
     }
 
-    std::string sql = "SELECT * FROM user where username = '" + username + "'";
+    std::string sql = "SELECT username FROM user where username = '" + SQL_Escape(username) + "'";
 
     if (mysql_query(mysql, sql.c_str()))
     {
@@ -230,7 +231,7 @@ bool DBServer::IsExistUser(const std::string username)
     return ret;
 }
 
-int DBServer::QueryUser(const std::string username, const std::string password)
+int DBServer::QueryUser(const std::string username, const std::string password, int &userid)
 {
     std::string key = "user" + username;
 
@@ -256,7 +257,7 @@ int DBServer::QueryUser(const std::string username, const std::string password)
     }
 
     // 执行 SQL 查询
-    std::string sql = "SELECT * FROM user where username = '" + username + "' and passwd = '" + password + "'";
+    std::string sql = "SELECT username, passwd, userid FROM user where username = '" + SQL_Escape(username) + "'";
 
     if (mysql_query(mysql, sql.c_str()))
     {
@@ -272,6 +273,7 @@ int DBServer::QueryUser(const std::string username, const std::string password)
         return -1;
     }
 
+
     // 遍历查询结果
     // MYSQL_ROW row;
     // while ((row = mysql_fetch_row(result))) {
@@ -282,14 +284,18 @@ int DBServer::QueryUser(const std::string username, const std::string password)
     MYSQL_ROW row;
     if ((row = mysql_fetch_row(result)))
     {
-        ret = 1;
+        if (row[1] == password)
+        {
+            ret = 1;
+            userid = std::atoi(row[2]);
+        }
     }
 
     // 释放资源
     mysql_free_result(result);
 
     // 缓存策略,加速下次查询
-    if (ret)
+    if (ret == 1)
     {
         redisReply *reply = (redisReply *)redisCommand(redis, "set %s %s", key.c_str(), password.c_str());
         if (reply != nullptr)
@@ -297,7 +303,7 @@ int DBServer::QueryUser(const std::string username, const std::string password)
             // 释放 reply 对象
             freeReplyObject(reply);
 
-            reply = (redisReply *)redisCommand(redis, "EXPIRE %s %d", key.c_str(), 600); // 600s过期
+            reply = (redisReply *)redisCommand(redis, "EXPIRE %s %d", key.c_str(), rng() % 500 + 500); // ???s过期
 
             if (reply != nullptr)
             {
@@ -310,7 +316,7 @@ int DBServer::QueryUser(const std::string username, const std::string password)
     return ret;
 }
 
-bool DBServer::InsertUser(const std::string username, const std::string password, const std::string userid)
+bool DBServer::InsertUser(const std::string username, const std::string password)
 {
     if (mysql == nullptr)
     {
@@ -319,7 +325,7 @@ bool DBServer::InsertUser(const std::string username, const std::string password
     }
 
     // 执行 SQL 插入用户信息
-    std::string sql = "insert into user (username, passwd, userid) VALUES (\'" + username + "\', \'" + password + "\', \'" + userid + "\')";
+    std::string sql = "insert into user (username, passwd) VALUES ('" + SQL_Escape(username) + "', '" + SQL_Escape(password) + "')";
 
     if (mysql_query(mysql, sql.c_str()) != 0)
     {
@@ -330,52 +336,16 @@ bool DBServer::InsertUser(const std::string username, const std::string password
     return true;
 }
 
-int DBServer::GetUserid(std::string username)
+std::string DBServer::SQL_Escape(std::string sql)
 {
-    std::string sql = "select userid from user where username = '" + username + "'";
-    if (mysql_query(mysql, sql.c_str()))
+    if (mysql == nullptr)
     {
-        std::cerr << "Error: " << mysql_error(mysql) << std::endl;
-        return -1;
+        std::cerr << "Connection with mysql was closed" << std::endl;
+        return false;
     }
-
-    // 获取查询结果
-    MYSQL_RES *result = mysql_store_result(mysql);
-    if (result == nullptr)
-    {
-        std::cerr << "Error: " << mysql_error(mysql) << std::endl;
-        return -1;
-    }
-
-    bool ret = false;
-
-    MYSQL_ROW row;
-    row = mysql_fetch_row(result);
-    return atoi(row[0]);
-}
-
-int DBServer::GetRowCount(std::string tablename)
-{
-    std::string sql = "SELECT COUNT(*) FROM " + tablename;
-    if (mysql_query(mysql, sql.c_str()))
-    {
-        std::cerr << "Error: " << mysql_error(mysql) << std::endl;
-        return -1;
-    }
-
-    // 获取查询结果
-    MYSQL_RES *result = mysql_store_result(mysql);
-    if (result == nullptr)
-    {
-        std::cerr << "Error: " << mysql_error(mysql) << std::endl;
-        return -1;
-    }
-
-    bool ret = false;
-
-    MYSQL_ROW row;
-    row = mysql_fetch_row(result);
-    return atoi(row[0]);
+    char result[sql.size() * 2];
+    mysql_real_escape_string(mysql, result, sql.c_str(), sql.size());
+    return result;
 }
 
 // ---------------------------------------------------------------------
