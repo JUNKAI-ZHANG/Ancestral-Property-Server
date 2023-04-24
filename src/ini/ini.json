@@ -1,0 +1,18 @@
+{
+    "Support_Chase_Frame" : true,
+    "Debug_Out" : false,
+    "Pressure_Test" : false,
+    
+    "Epoll_Wait_Time" : 22,
+    "Epoll_Listen_Number" : 3072,
+
+    "One_Frame_Ms" : 66,
+
+    "Check_All_Client_DropOut_Time" : 500,
+    "Try_Connect_Server_Time" : 1000,
+    "Check_HeartBeat_Time" : 4000,
+    "Try_Send_CenterServer_Time" : 5000,
+
+    "LOCAL_IP" : "127.0.0.1"
+
+}

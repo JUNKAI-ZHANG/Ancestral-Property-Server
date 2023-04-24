@@ -1,11 +1,11 @@
-#include "../Header/FuncServer.h"
+#include "../Header/Server/FuncServer.h"
 
 FuncServer::FuncServer()
 {
     // 无属性服务器
     server_type = SERVER_TYPE::NONE;
 
-    Timer *timer = new Timer(TRY_CONNECT_SERVER_TIME, CallbackType::FuncServer_TryToConnectAvailabeServer, std::bind(&FuncServer::TryToConnectAvailabeServer, this));
+    Timer *timer = new Timer(JSON.TRY_CONNECT_SERVER_TIME, CallbackType::FuncServer_TryToConnectAvailabeServer, std::bind(&FuncServer::TryToConnectAvailabeServer, this));
     timer->SetOnce();
 
     m_callfuncList.push_back(timer);
@@ -22,16 +22,19 @@ void FuncServer::CloseServer()
     if (center_server_client > 0)
     {
         close(center_server_client);
+        SendConnsChange(TransformType(server_type), listen_ip, listen_port, -1);
     }
 
     if (logic_server_client > 0)
     {
         close(logic_server_client);
+        SendConnsChange(TransformType(server_type), listen_ip, listen_port, -1);
     }
 
     if (db_server_client > 0)
     {
         close(db_server_client);
+        SendConnsChange(TransformType(server_type), listen_ip, listen_port, -1);
     }
 }
 
@@ -48,9 +51,19 @@ void FuncServer::OnConnectToCenterServer()
 {
 }
 
+SERVER_FREE_LEVEL FuncServer::DynamicCalcServerFreeLevel(int conns)
+{
+    if (conns == 0)
+        return SERVER_FREE_LEVEL::FREE;
+    if (conns == 1)
+        return SERVER_FREE_LEVEL::COMMON;
+    if (conns >= 2)
+        return SERVER_FREE_LEVEL::BUSY;
+}
+
 void FuncServer::SendSelfInfoToCenter()
 {
-    Message *msg = NewServerInfoMessage(LOCAL_IP, this->listen_port, server_type, ServerProto::ServerInfo_Operation_Register, SERVER_FREE_LEVEL::FREE);
+    Message *msg = NewServerInfoMessage(JSON.LOCAL_IP, this->listen_port, server_type, ServerProto::ServerInfo_Operation_Register, FuncServer::DynamicCalcServerFreeLevel(conns_count));
 
     if (msg == nullptr)
     {
@@ -61,7 +74,7 @@ void FuncServer::SendSelfInfoToCenter()
     if (!SendMsg(msg, center_server_client))
     {
         // 连接中心服务器
-        if (!ConnectToOtherServer(LOCAL_IP, CENTER_SERVER_PORT, center_server_client))
+        if (!ConnectToOtherServer(JSON.LOCAL_IP, JSON.CENTER_SERVER_PORT, center_server_client))
         {
             std::cerr << "Failed to connect center server, boot it first" << std::endl;
             return;
@@ -74,11 +87,11 @@ void FuncServer::SendSelfInfoToCenter()
         }
 
         this->connections[center_server_client] = new RingBuffer();
-        std::cout << "Connect to center server success!" << std::endl;
+        std::cout << "Connect to center server success! " + (std::string)JSON.LOCAL_IP + ":" + to_string(JSON.CENTER_SERVER_PORT) << std::endl;
 
         // 连接成功后立即发送一次自身状态
         this->SendSelfInfoToCenter();
-        
+
         OnConnectToCenterServer();
     }
 
@@ -141,7 +154,8 @@ void FuncServer::HandleServerInfo(Message *msg, int fd)
             }
 
             this->connections[logic_server_client] = new RingBuffer();
-            std::cout << "Connect to logic server success!" << std::endl;;
+            if (server_type != SERVER_TYPE::GATE) SendConnsChange(TransformType(server_type), listen_ip, listen_port, 1);
+            std::cout << "Connect to logic server success! " + body->ip() + ":" + to_string(body->port()) << std::endl;;
         }
 
         else if (static_cast<SERVER_TYPE>(body->server_type()) == SERVER_TYPE::DATABASE)
@@ -165,7 +179,8 @@ void FuncServer::HandleServerInfo(Message *msg, int fd)
             }
 
             this->connections[db_server_client] = new RingBuffer();
-            std::cout << "Connect to database server success!" << std::endl;
+            if (server_type != SERVER_TYPE::GATE) SendConnsChange(TransformType(server_type), listen_ip, listen_port, 1);
+            std::cout << "Connect to database server success! " + body->ip() + ":" + to_string(body->port()) << std::endl;
         }
 
         // 1s 后再次尝试重连一次
@@ -184,7 +199,7 @@ bool FuncServer::OnListenerStart()
     // 定时发送自身信息给CenterServer
     this->SendSelfInfoToCenter();
 
-    Timer *timer = new Timer(SEND_CENTERSERVER_TIME, CallbackType::FuncServer_SendSelfInfoToCenter, std::bind(&FuncServer::SendSelfInfoToCenter, this));
+    Timer *timer = new Timer(JSON.SEND_CENTERSERVER_TIME, CallbackType::FuncServer_SendSelfInfoToCenter, std::bind(&FuncServer::SendSelfInfoToCenter, this));
     timer->Start();
 
     m_callfuncList.push_back(timer);
@@ -197,12 +212,12 @@ void FuncServer::HandleUserInfo(Message *msg, int fd)
     ServerProto::UserInfo *body = reinterpret_cast<ServerProto::UserInfo *>(msg->body->message);
     switch (body->opt()) 
     {
-    case ServerProto::UserInfo_Operation_Register :
+    case ServerProto::UserInfo_Operation_Register:
     {
         user_fd_record[msg->head->m_userid] = body->fd();
         break;
     }
-    case ServerProto::UserInfo_Operation_Logout :
+    case ServerProto::UserInfo_Operation_Logout:
     {
         if (user_fd_record.count(msg->head->m_userid))
         {

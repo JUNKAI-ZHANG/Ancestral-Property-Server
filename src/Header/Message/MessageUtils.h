@@ -1,8 +1,9 @@
 #ifndef _MESSAGE_UTILS_H
 #define _MESSAGE_UTILS_H
 
-#include "Proto.h"
+#include "../Proto.h"
 #include "Message.h"
+#include "../Tool/ConstPool.h"
 
 static MessageBody *CreateMessageBody(int type)
 {
@@ -29,16 +30,6 @@ static MessageBody *CreateMessageBody(int type)
         message = new LoginProto::RegistResponse;
         break;
     }
-    case BODYTYPE::ServerInfo:
-    {
-        message = new ServerProto::ServerInfo;
-        break;
-    }
-    case BODYTYPE::UserInfo:
-    {
-        message = new ServerProto::UserInfo;
-        break;
-    }
     case BODYTYPE::JoinRoom:
     {
         message = new RoomProto::JoinRoom;
@@ -57,6 +48,26 @@ static MessageBody *CreateMessageBody(int type)
     case BODYTYPE::GetRoomList:
     {
         message = new RoomProto::GetRoomList;
+        break;
+    }
+    case BODYTYPE::RoomStatusChangeRequest:
+    {
+        message = new RoomProto::RoomStatusChangeRequest;
+        break;
+    }
+    case BODYTYPE::RoomStatusChangeResponse:
+    {
+        message = new RoomProto::RoomStatusChangeResponse;
+        break;
+    }
+    case BODYTYPE::JoinGame:
+    {
+        message = new RoomProto::JoinGame;
+        break;
+    }
+    case BODYTYPE::QuitGame:
+    {
+        message = new RoomProto::QuitGame;
         break;
     }
     case BODYTYPE::StartGame:
@@ -94,6 +105,46 @@ static MessageBody *CreateMessageBody(int type)
         message = new FrameProto::Reconnect;
         break;
     }
+    case BODYTYPE::UserHeart:
+    {
+        message = new FrameProto::UserHeart;
+        break;
+    }
+    case BODYTYPE::ServerInfo:
+    {
+        message = new ServerProto::ServerInfo;
+        break;
+    }
+    case BODYTYPE::UserInfo:
+    {
+        message = new ServerProto::UserInfo;
+        break;
+    }
+    case BODYTYPE::GetRegionInfoRequest:
+    {
+        message = new ServerProto::GetRegionInfoRequest;
+        break;
+    }
+    case BODYTYPE::GetRegionInfoResponse:
+    {
+        message = new ServerProto::GetRegionInfoResponse;
+        break;
+    }
+    case BODYTYPE::JoinRegionRequest:
+    {
+        message = new ServerProto::JoinRegionRequest;
+        break;
+    }
+    case BODYTYPE::JoinRegionResponse:
+    {
+        message = new ServerProto::JoinRegionResponse;
+        break;
+    }
+    case BODYTYPE::ServerConnChange:
+    {
+        message = new ServerProto::ServerConnChange;
+        break;
+    }
     default:
     {
         message = nullptr;
@@ -111,22 +162,22 @@ static Message *DecodeMessage(uint8_t *data, int len)
 {
     Message *message = new Message;
 
-    message->head = new MessageHead(data, HEAD_SIZE);
+    message->head = new MessageHead(data, JSON.HEAD_SIZE);
 
     message->body = CreateMessageBody(message->head->m_packageType);
-    message->body->ParseFromArray(data + HEAD_SIZE, len - HEAD_SIZE);
+    message->body->ParseFromArray(data + JSON.HEAD_SIZE, len - JSON.HEAD_SIZE);
 
     return message;
 }
 
 static bool CheckHeaderIsValid(MessageHead *header)
 {
-    if (header->m_packageSize < HEAD_SIZE)
+    if (header->m_packageSize < JSON.HEAD_SIZE)
     {
         return false;
     }
 
-    if (header->m_packageSize > MAX_BUFFER_SIZE)
+    if (header->m_packageSize > JSON.MAX_BUFFER_SIZE)
     {
         return false;
     }

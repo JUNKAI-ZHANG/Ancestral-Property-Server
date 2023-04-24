@@ -1,7 +1,7 @@
 #include <chrono>
 #include <functional>
 
-#include "../Header/Profile.h"
+#include "../Header/EnumHome.h"
 
 // 定时完成委托类，new完记得调用->Start()
 class Timer

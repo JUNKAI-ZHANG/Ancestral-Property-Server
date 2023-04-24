@@ -12,6 +12,10 @@ struct Server_Info
     SERVER_FREE_LEVEL level;
 
     SERVER_TYPE type;
+
+    int people_count;
+
+    int id;
 };
 
 /*
@@ -41,7 +45,17 @@ private:
 
     void RemoveServer(const Server_Info *);
 
+private:
     void HandleServerInfo(Message *msg, int fd);
+
+    void HandleUserInfo(Message *msg, int fd);
+
+    void HandleGetRegionInfoRequest(Message *msg, int fd);
+
+    void HandleJoinRegionRequest(Message *msg, int fd);
+
+    void HandleServerConnChange(Message *msg, int fd);
+
 
 protected:
     virtual void OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t length, int fd);

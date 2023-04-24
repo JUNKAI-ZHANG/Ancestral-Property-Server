@@ -6,8 +6,8 @@
 #include <random>
 #include <vector>
 
-#include "LogicServer.h"
-#include "../Header/Message.h"
+#include "../Header/Server/LogicServer.h"
+#include "../Header/Message/Message.h"
 
 class Room
 {
@@ -58,8 +58,7 @@ public:
 
     void SetUserOnline(int userid);
 
-    /* 需要改成对房间广播 */
-    void Tick();
+    bool Tick();
 
     void NotifyGameStartToUser(int userid);
 
@@ -67,23 +66,27 @@ public:
 
     void NotifyGameEnd();
 
+    void UserInfoChange(Message *message);
+
     /* 通知大家某玩家加入游戏，这个消息随frame下发 */
     void NotifyUserJoinGame(int userid);
 
     /* 通知大家某玩家退出游戏，这个消息随frame下发 */
     void NotifyUserQuitGame(int userid);
 
-    inline std::string Name() { return m_name; }
+    std::string Name() { return m_name; }
 
-    inline int PlayerCount() { return userid2userpid.size(); }
+    int PlayerCount() { return userid2userpid.size(); }
 
-    inline int MaxSize() { return m_size; }
+    int MaxSize() { return m_size; }
 
     bool IsFull() { return PlayerCount() >= MaxSize(); }
 
     bool CheckRoomDead();
 
     std::vector<RoomProto::UserInfo> GetRoomUserInfos();
+
+    bool InGame() { return m_gameStarted; }
 
 private:
     void BroadCastToGame(BODYTYPE type, google::protobuf::MessageLite *message);
@@ -106,10 +109,13 @@ private:
     bool m_gameStarted; // 标记是否开始了游戏
 
     /* 房主userid，-1表示没有房主 */
-    int host_userid;
+    int host_userid = -1;
 
     /* 空闲的玩家pid列表 */
     std::set<int> userpid_pool;
+
+    /* 玩家的使用角色列表 */
+    std::map<int, int> userid2roleid;
 
     /* 房间累计帧 */
     std::vector<FrameProto::Frame> all_frames;

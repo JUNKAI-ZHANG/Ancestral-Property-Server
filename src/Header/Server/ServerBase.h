@@ -14,21 +14,33 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 
-#include "Profile.h"
-#include "RingBuffer.h"
-#include "MessageUtils.h"
+#include "../EnumHome.h"
+#include "../Tool/RingBuffer.h"
+#include "../Message/MessageUtils.h"
 
-#include "../Tool/Timer.cpp"
-#include "../Tool/EpollMgr.cpp"
+#include "../../Tool/ThreadSafetyQueue.cpp"
+#include "../../Tool/Timer.cpp"
+#include "../../Tool/EpollMgr.cpp"
 
+class MessagePair
+{
+public:
+    MessagePair() = default;
+
+    MessagePair(Message *_message, int _fd)
+    {
+        msg = _message;
+        fd = _fd;
+    }
+public:
+    Message *msg;
+    int fd;
+};
 
 class ServerBase
 {
 protected:
     int listen_fd = -1;
-
-    /* 临时接收缓冲区内容 */
-    uint8_t tmp[TMP_BUFFER_SIZE];
 
 protected:
     /*
@@ -46,7 +58,12 @@ protected:
     void HandleReceivedMsg(RingBuffer *, int);
 
 protected:
+    /* 用于和中心服务器连接 */
+    int center_server_client = -1;
+
     int listen_port = -1;
+
+    std::string listen_ip = "127.0.0.1";
 
     SERVER_TYPE server_type;
 
@@ -54,6 +71,12 @@ protected:
     std::map<int, RingBuffer *> connections;
 
     EpollMgr *listen_epoll = nullptr;
+
+    ServerProto::SERVER_TYPE TransformType(SERVER_TYPE server_type);
+
+    void SendToCenterServerConnChange(ServerProto::SERVER_TYPE server_type, std::string ip, int port, int change);
+
+    void SendConnsChange(ServerProto::SERVER_TYPE server_type, std::string ip, int port, int change);
 
 
 protected:
@@ -71,6 +94,8 @@ protected:
 
     virtual void Update();
 
+    time_t getCurrentTime();
+
 public:
     explicit ServerBase();
 
@@ -84,8 +109,18 @@ public:
 
     bool SendMsg(Message *msg, int fd);
 
+    void SendMsgConsumer();
+
+    void FireAllEvents();
+
+    void FireEvent();
+
 protected:
     std::vector<Timer *> m_callfuncList;
+
+    int conns_count = 0; // 服务器接收的连接数量
+
+    ThreadSafeQueue<MessagePair> _message_queue;
 
 };
 

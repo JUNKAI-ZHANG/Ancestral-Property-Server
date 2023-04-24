@@ -1,12 +1,11 @@
 #ifndef _SQLHELPER_H
 #define _SQLHELPER_H
 
-#include <map>
-#include <iostream>
+#include <bits/stdc++.h>
+
 #include <mysql/mysql.h>
 #include <hiredis/async.h>
 #include <hiredis/hiredis.h>
-#include <bits/stdc++.h>
 
 // 操作mysql的实例类
 class MysqlInst
