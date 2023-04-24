@@ -102,11 +102,15 @@ void GateServer::CheckAllClientConn()
     time_t nowMs = getCurrentTime();
     for (auto conn = m_user_connections.begin(); conn != m_user_connections.end();)
     {
-        auto now = conn++;
-        if (nowMs - now->second->m_lstMs > JSON.MAX_HEARTBEAT_DIFF)
+        if (nowMs - conn->second->m_lstMs > JSON.MAX_HEARTBEAT_DIFF)
         {
-            CloseClientSocket(now->second->m_fd);
-            m_user_connections.erase(now);
+            CloseClientSocket(conn->second->m_fd);
+            delete m_user_connections[conn->second->m_fd];
+            conn = m_user_connections.erase(conn);
+        }
+        else
+        {
+            conn++;
         }
     }
 }
@@ -145,13 +149,14 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
         {
             return;
         }
-
-        if (fd_user_record.count(fd))
-        {
-            // GateServer 根据fd将userid修改为信任值
-            msg->head->m_userid = fd_user_record[fd];
-        }
     }
+
+    if (fd_user_record.count(fd))
+    {
+        // GateServer 根据fd将userid修改为信任值
+        msg->head->m_userid = fd_user_record[fd];
+    }
+
     switch (msg->head->m_packageType)
     {
     case BODYTYPE::LoginRequest:
@@ -166,19 +171,29 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
     case BODYTYPE::LoginResponse:
     {
         LoginProto::LoginResponse *body = dynamic_cast<LoginProto::LoginResponse *>(msg->body->message);
+
+        // 约定，服务器返回响应时这个位置填写gate传过去的user_fd
+        int user_fd = msg->head->m_userid;
+        int userid = body->userid();
+        msg->head->m_userid = userid;
+
         if (body == nullptr)
             return;
 
         if (body->result())
         {
-            user_fd_record[body->userid()] = msg->head->m_userid;
-            fd_user_record[msg->head->m_userid] = body->userid();
+            if (user_fd_record.count(userid))
+            {
+                CloseClientSocket(user_fd_record[userid]);
+            }
+            user_fd_record[userid] = user_fd;
+            fd_user_record[user_fd] = userid;
 
             /* 如果成功了，那么让logicServer添加userid-username到内存 */
             SendMsg(msg, logic_server_client);
         }
-
-        SendMsg(msg, msg->head->m_userid);
+        
+        SendMsg(msg, user_fd);
         break;
     }
     case BODYTYPE::RegistRequest:
@@ -283,14 +298,9 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
         }
         break;
     }
-    case BODYTYPE::RoomStatusChangeRequest:
+    case BODYTYPE::ChangeRole:
     {
         SendMsg(msg, logic_server_client);
-        break;
-    }
-    case BODYTYPE::RoomStatusChangeResponse:
-    {
-        SendMsg(msg, user_fd_record[msg->head->m_userid]);
         break;
     }
     case BODYTYPE::JoinGame:
@@ -301,6 +311,11 @@ void GateServer::OnMsgBodyAnalysised(Message *msg, const uint8_t *body, uint32_t
     case BODYTYPE::QuitGame:
     {
         SendMsg(msg, logic_server_client);
+        break;
+    }
+    case BODYTYPE::NotifyRoomInfo:
+    {
+        SendMsg(msg, user_fd_record[msg->head->m_userid]);
         break;
     }
     case BODYTYPE::StartGame:
@@ -369,21 +384,48 @@ int main(int argc, char **argv)
 
     // int port = std::atoi(argv[1]);
 
-    const int ports[] = {
+    const std::string ips[] = 
+    {
+        JSON.GATE_SERVER_IP_1, 
+        JSON.GATE_SERVER_IP_2, 
+        JSON.GATE_SERVER_IP_3, 
+        JSON.GATE_SERVER_IP_4, 
+        JSON.GATE_SERVER_IP_5, 
+        JSON.GATE_SERVER_IP_6,
+        JSON.GATE_SERVER_IP_7,
+        JSON.GATE_SERVER_IP_8,
+    };
+
+    const int ports[] = 
+    {
         JSON.GATE_SERVER_PORT_1, 
         JSON.GATE_SERVER_PORT_2, 
         JSON.GATE_SERVER_PORT_3, 
         JSON.GATE_SERVER_PORT_4, 
         JSON.GATE_SERVER_PORT_5, 
-        JSON.GATE_SERVER_PORT_6
+        JSON.GATE_SERVER_PORT_6,
+        JSON.GATE_SERVER_PORT_7,
+        JSON.GATE_SERVER_PORT_8,
+    };
+
+    const std::string names[] = 
+    {
+        JSON.GATE_SERVER_NAME_1,
+        JSON.GATE_SERVER_NAME_2,
+        JSON.GATE_SERVER_NAME_3,
+        JSON.GATE_SERVER_NAME_4,
+        JSON.GATE_SERVER_NAME_5,
+        JSON.GATE_SERVER_NAME_6,
+        JSON.GATE_SERVER_NAME_7,
+        JSON.GATE_SERVER_NAME_8,
     };
 
     GateServer gateServer;
 
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < 8; i++)
     {
         // std::cout << "Start Gate Center Server ing..." << std::endl;
-        gateServer.BootServer(ports[i]);
+        gateServer.BootServer(ips[i], ports[i], names[i]);
     }
 
     return 0;

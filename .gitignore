@@ -3,6 +3,7 @@
 build
 cmake-build-debug
 cmake-build-debug-jkRemote
+build
 src/CMakeFiles
 src/lib
 src/cmake_install.cmake

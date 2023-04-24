@@ -9,6 +9,8 @@ struct Server_Info
 
     int port;
 
+    std::string name;
+
     SERVER_FREE_LEVEL level;
 
     SERVER_TYPE type;

@@ -18,9 +18,10 @@
 #include "../Tool/RingBuffer.h"
 #include "../Message/MessageUtils.h"
 
-#include "../../Tool/ThreadSafetyQueue.cpp"
+#include "../../Tool/WIP.cpp"
 #include "../../Tool/Timer.cpp"
 #include "../../Tool/EpollMgr.cpp"
+#include "../../Tool/ThreadSafetyQueue.cpp"
 
 class MessagePair
 {
@@ -65,6 +66,8 @@ protected:
 
     std::string listen_ip = "127.0.0.1";
 
+    std::string listen_name = "";
+
     SERVER_TYPE server_type;
 
     // 所有客户端连接
@@ -105,7 +108,7 @@ public:
 
     virtual void CloseServer();
 
-    virtual void BootServer(int port);
+    virtual void BootServer(std::string ip, int port, std::string name);
 
     bool SendMsg(Message *msg, int fd);
 
@@ -121,6 +124,8 @@ protected:
     int conns_count = 0; // 服务器接收的连接数量
 
     ThreadSafeQueue<MessagePair> _message_queue;
+
+    IpInfos ipHelper;
 
 };
 

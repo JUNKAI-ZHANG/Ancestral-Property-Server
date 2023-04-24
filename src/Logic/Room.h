@@ -21,7 +21,7 @@ public:
     void Resize(int size);
 
     /* 如果游戏已经开始那么不可以join */
-    void JoinRoom(int userid);
+    bool JoinRoom(int userid);
 
     /* 从房间加入到游戏 */
     void JoinGame(int userid);
@@ -43,6 +43,8 @@ public:
 
     /* 主动离开游戏，返回到房间中*/
     void LeaveFromGame(int userid);
+
+    void SendRoomAllInfo(int userid);
 
     void ChangeRoomHost(int userid);
 
@@ -66,8 +68,6 @@ public:
 
     void NotifyGameEnd();
 
-    void UserInfoChange(Message *message);
-
     /* 通知大家某玩家加入游戏，这个消息随frame下发 */
     void NotifyUserJoinGame(int userid);
 
@@ -83,6 +83,10 @@ public:
     bool IsFull() { return PlayerCount() >= MaxSize(); }
 
     bool CheckRoomDead();
+
+    void UserInfoChange(Message *message);
+
+    void SendRoomAllInfoToAll();
 
     std::vector<RoomProto::UserInfo> GetRoomUserInfos();
 

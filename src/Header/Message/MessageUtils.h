@@ -50,14 +50,9 @@ static MessageBody *CreateMessageBody(int type)
         message = new RoomProto::GetRoomList;
         break;
     }
-    case BODYTYPE::RoomStatusChangeRequest:
+    case BODYTYPE::ChangeRole:
     {
-        message = new RoomProto::RoomStatusChangeRequest;
-        break;
-    }
-    case BODYTYPE::RoomStatusChangeResponse:
-    {
-        message = new RoomProto::RoomStatusChangeResponse;
+        message = new RoomProto::ChangeRole;
         break;
     }
     case BODYTYPE::JoinGame:
@@ -70,6 +65,9 @@ static MessageBody *CreateMessageBody(int type)
         message = new RoomProto::QuitGame;
         break;
     }
+    case BODYTYPE::NotifyRoomInfo:
+        message = new RoomProto::NotifyRoomInfo;
+        break;
     case BODYTYPE::StartGame:
     {
         message = new FrameProto::StartGame;
@@ -233,7 +231,7 @@ static Message *NewRegisterResponseMessage(bool ret, std::string msg, int fd)
 }
 
 // 请手动释放返回值 // 可能存在内存泄漏问题。
-static Message *NewServerInfoMessage(std::string ip, int port, SERVER_TYPE type, ServerProto::ServerInfo_Operation opt, SERVER_FREE_LEVEL level)
+static Message *NewServerInfoMessage(std::string ip, int port, std::string name, SERVER_TYPE type, ServerProto::ServerInfo_Operation opt, SERVER_FREE_LEVEL level)
 {
     Message *message = new Message;
 
@@ -241,6 +239,7 @@ static Message *NewServerInfoMessage(std::string ip, int port, SERVER_TYPE type,
     message->body = new MessageBody;
     body->set_ip(ip);
     body->set_port(port);
+    body->set_server_name(name);
     body->set_server_type(type);
     body->set_opt(opt);
     body->set_server_free_level(level);
